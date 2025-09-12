@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 217 91% 60%; /* Blue */
+    --accent-foreground: 210 40% 98%; /* Almost white */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  body {
+    @apply bg-white text-black;
+  }
+
+  .prose {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      @apply font-semibold text-black;
+    }
+    p,
+    ul,
+    ol,
+    blockquote {
+      @apply text-neutral-800;
+    }
+    a {
+      @apply text-accent font-medium underline decoration-blue-200 underline-offset-2 transition-colors hover:decoration-accent;
+    }
+    strong {
+      @apply font-semibold text-black;
+    }
+    code {
+      @apply bg-neutral-100 text-black px-1 py-0.5 rounded-sm text-sm;
+    }
+    pre {
+      @apply bg-neutral-100 p-4 rounded-md overflow-x-auto;
+    }
+    blockquote {
+      @apply border-l-4 border-neutral-300 pl-4 italic;
+    }
+  }
+}
