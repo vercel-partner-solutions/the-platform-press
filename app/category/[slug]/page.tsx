@@ -1,4 +1,4 @@
-import { getArticles, getCategories, getLatestArticles, getOpinionArticles } from "@/lib/cms"
+import { getArticles, getCategories } from "@/lib/cms"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import CategorySearchClient from "./category-search-client"
@@ -65,9 +65,9 @@ export default async function CategorySearchPage({ params, searchParams }: Props
   if (category === "all") {
     totalArticles = await getArticles({ searchQuery })
   } else if (category === "opinion") {
-    totalArticles = await getOpinionArticles({ searchQuery })
+    totalArticles = await getArticles({ category: "Opinion", searchQuery, sortBy: "datePublished" })
   } else if (category === "latest") {
-    totalArticles = await getLatestArticles({ searchQuery })
+    totalArticles = await getArticles({ searchQuery, sortBy: "datePublished" })
   } else {
     // Check if the category exists (case-insensitive)
     const validCategory = categories.find((cat) => cat.toLowerCase() === category.toLowerCase())

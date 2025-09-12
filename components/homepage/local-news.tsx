@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { getLocalNews } from "@/lib/cms";
+import { getArticles } from "@/lib/cms";
 import LocalNewsSection from "./local-news-section";
 import LocalNewsLoading from "./local-news-loading";
 
@@ -15,7 +15,11 @@ async function getUserLocation(): Promise<string> {
 
 async function LocalNewsContent() {
   const userLocation = await getUserLocation();
-  const localArticles = await getLocalNews(userLocation);
+  const localArticles = await getArticles({
+    category: "Local",
+    location: userLocation,
+    limit: 3,
+  });
 
   return <LocalNewsSection articles={localArticles} location={userLocation} />;
 }

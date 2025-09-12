@@ -1,8 +1,13 @@
 import Link from "next/link"
-import { getBreakingNews } from "@/lib/cms"
+import { getArticles } from "@/lib/cms"
 
 export default async function BreakingNewsBanner() {
-  const article = await getBreakingNews()
+  const breakingArticles = await getArticles({ 
+    isBreaking: true, 
+    limit: 1,
+    sortBy: "datePublished" 
+  })
+  const article = breakingArticles[0]
 
   if (!article) return null
 

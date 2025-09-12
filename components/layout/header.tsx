@@ -1,91 +1,95 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Search, Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useState, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
-import "@/lib/cms"
+import Link from "next/link";
+import { Search, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import "@/lib/cms";
 
 interface HeaderProps {
-  categories: string[]
+  categories: string[];
 }
 
 function StockTicker({ isCompact = false }: { isCompact?: boolean }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isVisible, setIsVisible] = useState(true)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
 
   const stocks = [
     { name: "S&P 500", value: "+0.21%", color: "text-green-600" },
     { name: "Nasdaq", value: "+0.45%", color: "text-green-600" },
     { name: "Dow", value: "-0.12%", color: "text-red-600" },
-  ]
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsVisible(false)
+      setIsVisible(false);
       setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % stocks.length)
-        setIsVisible(true)
-      }, 300)
-    }, 3000)
+        setCurrentIndex((prev) => (prev + 1) % stocks.length);
+        setIsVisible(true);
+      }, 300);
+    }, 3000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
-  const current = stocks[currentIndex]
+  const current = stocks[currentIndex];
 
   return (
     <div
-      className={`transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"} ${isCompact ? "text-xs" : "text-sm"} font-medium text-neutral-700`}
+      className={`transition-opacity duration-300 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      } ${isCompact ? "text-xs" : "text-sm"} font-medium text-neutral-700`}
     >
       {current.name} <span className={current.color}>{current.value}</span>
     </div>
-  )
+  );
 }
 
-function HeaderClient({ categories }: HeaderProps) {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const searchInputRef = useRef<HTMLInputElement>(null)
-  const router = useRouter()
+export function HeaderClient({ categories }: HeaderProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 150)
-    }
+      setIsScrolled(window.scrollY > 150);
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       setTimeout(() => {
-        searchInputRef.current?.focus()
-      }, 0)
+        searchInputRef.current?.focus();
+      }, 0);
     }
-  }, [isSearchOpen])
+  }, [isSearchOpen]);
 
   const handleSearchToggle = () => {
-    setIsSearchOpen(!isSearchOpen)
-  }
+    setIsSearchOpen(!isSearchOpen);
+  };
 
   const handleSearchClose = () => {
-    setIsSearchOpen(false)
-  }
+    setIsSearchOpen(false);
+  };
 
   const handleSearchSubmit = (searchTerm: string) => {
     if (searchTerm.trim()) {
-      router.push(`/category/all?search=${encodeURIComponent(searchTerm.trim())}`)
-      setIsSearchOpen(false)
+      router.push(
+        `/category/all?search=${encodeURIComponent(searchTerm.trim())}`
+      );
+      setIsSearchOpen(false);
     }
-  }
+  };
 
   const handleLiveClick = () => {
-    router.push("/category/latest")
-  }
+    router.push("/category/latest");
+  };
 
   return (
     <>
@@ -112,10 +116,10 @@ function HeaderClient({ categories }: HeaderProps) {
                       className="w-64 px-3 py-1.5 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       onKeyDown={(e) => {
                         if (e.key === "Escape") {
-                          handleSearchClose()
+                          handleSearchClose();
                         }
                         if (e.key === "Enter") {
-                          handleSearchSubmit(e.currentTarget.value)
+                          handleSearchSubmit(e.currentTarget.value);
                         }
                       }}
                     />
@@ -184,10 +188,10 @@ function HeaderClient({ categories }: HeaderProps) {
                     className="w-32 px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     onKeyDown={(e) => {
                       if (e.key === "Escape") {
-                        handleSearchClose()
+                        handleSearchClose();
                       }
                       if (e.key === "Enter") {
-                        handleSearchSubmit(e.currentTarget.value)
+                        handleSearchSubmit(e.currentTarget.value);
                       }
                     }}
                   />
@@ -218,7 +222,9 @@ function HeaderClient({ categories }: HeaderProps) {
                   <span>77°F</span>
                 </div>
               </div>
-              <span className="text-sm font-medium text-neutral-700">Today's Paper</span>
+              <span className="text-sm font-medium text-neutral-700">
+                Today's Paper
+              </span>
             </div>
 
             {/* Logo - responsive sizing */}
@@ -266,7 +272,10 @@ function HeaderClient({ categories }: HeaderProps) {
                     {category}
                   </Link>
                 ))}
-                <Link href="/category/opinion" className="text-sm font-medium text-black py-2">
+                <Link
+                  href="/category/opinion"
+                  className="text-sm font-medium text-black py-2"
+                >
                   Opinion
                 </Link>
                 <span
@@ -306,7 +315,11 @@ function HeaderClient({ categories }: HeaderProps) {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div
-              className={`transition-all duration-300 ease-in-out ${isScrolled ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}`}
+              className={`transition-all duration-300 ease-in-out ${
+                isScrolled
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 -translate-x-4"
+              }`}
             >
               <Link
                 href="/"
@@ -348,7 +361,11 @@ function HeaderClient({ categories }: HeaderProps) {
             </nav>
 
             <div
-              className={`transition-all duration-300 ease-in-out ${isScrolled ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"}`}
+              className={`transition-all duration-300 ease-in-out ${
+                isScrolled
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 translate-x-4"
+              }`}
             >
               <div className="flex items-center gap-2">
                 <Button
@@ -371,12 +388,5 @@ function HeaderClient({ categories }: HeaderProps) {
         </div>
       </header>
     </>
-  )
-}
-
-export default async function Header() {
-  const { getCategories } = await import("@/lib/cms")
-  const categories = await getCategories()
-
-  return <HeaderClient categories={categories} />
+  );
 }

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "../components/layout/header";
+import { HeaderClient } from "../components/layout/header";
 import Footer from "../components/layout/footer";
 
 const poppins = Poppins({
@@ -35,11 +35,18 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.className} ${poppins.variable}`}>
       <body className="bg-white text-black antialiased flex flex-col min-h-screen">
         <Header />
-        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-0">
+        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           {children}
         </main>
         <Footer />
       </body>
     </html>
   );
+}
+
+async function Header() {
+  const { getCategories } = await import("@/lib/cms");
+  const categories = await getCategories();
+
+  return <HeaderClient categories={categories} />;
 }

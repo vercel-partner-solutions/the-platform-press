@@ -15,7 +15,7 @@ function LocalNewsCard({ article }: { article: Article }) {
           <Image
             src={
               article.imageUrl ||
-              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(article.imageQuery || "local news")}`
+              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent("news")}`
             }
             alt={article.title}
             fill

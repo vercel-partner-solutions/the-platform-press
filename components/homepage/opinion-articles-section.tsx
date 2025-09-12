@@ -1,7 +1,7 @@
 import type { Article } from "@/lib/types"
 import Link from "next/link"
 import Image from "next/image"
-import { getOpinionArticles } from "@/lib/cms"
+import { getArticles } from "@/lib/cms"
 
 function OpinionArticleCard({ article }: { article: Article }) {
   return (
@@ -38,8 +38,10 @@ export default async function OpinionArticlesSection({
 }: {
   isHomepage?: boolean
 }) {
-  const articles = await getOpinionArticles({
+  const articles = await getArticles({
     limit: 3,
+    category: "Opinion",
+    sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
   })
 

@@ -21,7 +21,7 @@ export default function LatestArticleListItem({ article }: { article: Article })
             <Image
               src={
                 article.imageUrl ||
-                `/placeholder.svg?width=192&height=108&query=${encodeURIComponent(article.imageQuery || "news")}`
+                `/placeholder.svg?width=192&height=108&query=${encodeURIComponent("news")}`
               }
               alt={article.title}
               fill

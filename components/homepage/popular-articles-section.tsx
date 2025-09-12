@@ -1,6 +1,6 @@
 import type { Article } from "@/lib/types"
 import Link from "next/link"
-import { getPopularArticles } from "@/lib/cms"
+import { getArticles } from "@/lib/cms"
 
 function PopularArticleListItem({ article, index }: { article: Article; index: number }) {
   const formattedDate = new Date(article.datePublished)
@@ -32,8 +32,9 @@ function PopularArticleListItem({ article, index }: { article: Article; index: n
 }
 
 export default async function PopularArticlesSection({ isHomepage = false }: { isHomepage?: boolean }) {
-  const articles = await getPopularArticles({
+  const articles = await getArticles({
     limit: 5,
+    sortBy: "views",
     ...(isHomepage && { excludeFeatured: true }),
   })
 

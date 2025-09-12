@@ -1,14 +1,15 @@
 import LatestArticleListItem from "./latest-article-list-item"
 import Link from "next/link"
-import { getLatestArticles } from "@/lib/cms"
+import { getArticles } from "@/lib/cms"
 
 export default async function LatestArticlesSection({
   isHomepage = false,
 }: {
   isHomepage?: boolean
 }) {
-  const articles = await getLatestArticles({
+  const articles = await getArticles({
     limit: 4,
+    sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
   })
 

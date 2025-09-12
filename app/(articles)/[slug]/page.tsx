@@ -1,4 +1,4 @@
-import { getArticleBySlug, getArticles, getRelatedArticles } from "@/lib/cms";
+import { getArticleBySlug, getArticles } from "@/lib/cms";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -55,7 +55,11 @@ export default async function ArticlePage({ params }: Props) {
   // Parse the markdown content to HTML
   const parsedContent = await marked.parse(article.content);
 
-  const relatedArticles = await getRelatedArticles(article, { limit: 2 });
+  const relatedArticles = await getArticles({ 
+    category: article.category, 
+    excludeIds: [article.id], 
+    limit: 2 
+  });
 
   const formattedDate = new Date(article.datePublished).toLocaleDateString(
     "en-US",
@@ -87,7 +91,7 @@ export default async function ArticlePage({ params }: Props) {
             </div>
             <div className="flex items-center">
               <Clock size={16} className="mr-1.5 text-neutral-500" />
-              <span>{article.readingTimeMinutes} min read</span>
+              <span>{article.readingTime} min read</span>
             </div>
           </div>
         </header>
@@ -97,7 +101,7 @@ export default async function ArticlePage({ params }: Props) {
             src={
               article.imageUrl ||
               `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                article.imageQuery || "news article"
+                "news article"
               )}`
             }
             alt={article.title}

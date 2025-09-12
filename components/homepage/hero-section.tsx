@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Article } from "@/lib/types"
 import CategoryBadge from "../ui/category-badge"
-import { getArticles, getFeaturedArticle } from "@/lib/cms"
+import { getArticles } from "@/lib/cms"
 
 function FeaturedArticleCard({ article }: { article: Article }) {
   return (
@@ -10,7 +10,7 @@ function FeaturedArticleCard({ article }: { article: Article }) {
       <Link href={`/${article.slug}`} className="block w-full h-full">
         <Image
           src={
-            article.imageUrl || `/placeholder.svg?width=800&height=450&query=${article.imageQuery || "news article"}`
+            article.imageUrl || `/placeholder.svg?width=800&height=450&query=${"news"}`
           }
           alt={article.title}
           fill
@@ -50,7 +50,12 @@ function SecondaryArticleCard({ article }: { article: Article }) {
 }
 
 export default async function HeroSection() {
-  const featuredArticle = await getFeaturedArticle()
+  const featuredArticles = await getArticles({ 
+    isFeatured: true, 
+    limit: 1,
+    sortBy: "datePublished" 
+  })
+  const featuredArticle = featuredArticles[0]
 
   const excludedIds: string[] = []
   if (featuredArticle) {

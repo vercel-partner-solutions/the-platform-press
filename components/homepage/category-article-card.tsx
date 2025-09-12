@@ -11,7 +11,7 @@ export default function CategoryArticleCard({ article }: { article: Article }) {
           <Image
             src={
               article.imageUrl ||
-              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(article.imageQuery || "news")}`
+              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent("news")}`
             }
             alt={article.title}
             fill
