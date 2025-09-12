@@ -1,14 +1,23 @@
-import Link from "next/link"
-import Image from "next/image"
-import type { Article } from "@/lib/types"
-import CategoryBadge from "./category-badge"
+import Link from "next/link";
+import Image from "next/image";
+import type { Article } from "@/lib/types";
+import CategoryBadge from "./category-badge";
 
-export default function ArticleCard({ article, priorityImage = false }: { article: Article; priorityImage?: boolean }) {
-  const formattedDate = new Date(article.datePublished).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
+export default function ArticleCard({
+  article,
+  priorityImage = false,
+}: {
+  article: Article;
+  priorityImage?: boolean;
+}) {
+  const formattedDate = new Date(article.datePublished).toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   return (
     <article className="bg-white group flex flex-col">
@@ -17,7 +26,9 @@ export default function ArticleCard({ article, priorityImage = false }: { articl
           <Image
             src={
               article.imageUrl ||
-              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent("news")}`
+              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
+                "news"
+              )}`
             }
             alt={article.title}
             fill
@@ -36,12 +47,14 @@ export default function ArticleCard({ article, priorityImage = false }: { articl
             {article.title}
           </h2>
         </Link>
-        <p className="text-neutral-700 text-sm mb-3 flex-grow line-clamp-3">{article.excerpt}</p>
+        <p className="text-neutral-700 text-sm mb-3 flex-grow line-clamp-3">
+          {article.excerpt}
+        </p>
         <div className="flex items-center justify-between text-xs text-neutral-500 mt-auto">
           <span>{formattedDate}</span>
-          <span>{article.readingTimeMinutes} min read</span>
+          <span>{article.readingTime} min read</span>
         </div>
       </div>
     </article>
-  )
+  );
 }

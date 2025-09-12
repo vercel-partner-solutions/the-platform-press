@@ -1,12 +1,15 @@
-import type { Article } from "@/lib/types"
-import Link from "next/link"
-import Image from "next/image"
+import type { Article } from "@/lib/types";
+import Link from "next/link";
+import Image from "next/image";
 
 function LocalNewsCard({ article }: { article: Article }) {
-  const formattedDate = new Date(article.datePublished).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  })
+  const formattedDate = new Date(article.datePublished).toLocaleDateString(
+    "en-US",
+    {
+      month: "short",
+      day: "numeric",
+    }
+  );
 
   return (
     <article className="group bg-white">
@@ -15,7 +18,9 @@ function LocalNewsCard({ article }: { article: Article }) {
           <Image
             src={
               article.imageUrl ||
-              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent("news")}`
+              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
+                "news"
+              )}`
             }
             alt={article.title}
             fill
@@ -30,23 +35,34 @@ function LocalNewsCard({ article }: { article: Article }) {
             {article.title}
           </h3>
         </Link>
-        <p className="text-neutral-700 text-sm mb-3 line-clamp-2">{article.excerpt}</p>
+        <p className="text-neutral-700 text-sm mb-3 line-clamp-2">
+          {article.excerpt}
+        </p>
         <div className="text-xs text-neutral-500 flex items-center justify-between mt-auto">
           <span>{formattedDate}</span>
-          <span>{article.readingTimeMinutes} min read</span>
+          <span>{article.readingTime} min read</span>
         </div>
       </div>
     </article>
-  )
+  );
 }
 
-export default function LocalNewsSection({ articles, location }: { articles: Article[]; location?: string }) {
-  if (!articles || articles.length === 0) return null
+export default function LocalNewsSection({
+  articles,
+  location,
+}: {
+  articles: Article[];
+  location?: string;
+}) {
+  if (!articles || articles.length === 0) return null;
 
   return (
     <section aria-labelledby="local-news-heading" className="mb-10">
       <div className="border-b-2 border-black pb-2 mb-6">
-        <h2 id="local-news-heading" className="text-2xl font-bold uppercase tracking-tight text-black">
+        <h2
+          id="local-news-heading"
+          className="text-2xl font-bold uppercase tracking-tight text-black"
+        >
           Local News {location && `- ${location}`}
         </h2>
       </div>
@@ -56,5 +72,5 @@ export default function LocalNewsSection({ articles, location }: { articles: Art
         ))}
       </div>
     </section>
-  )
+  );
 }

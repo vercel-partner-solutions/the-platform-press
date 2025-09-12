@@ -1,13 +1,20 @@
-import Link from "next/link"
-import Image from "next/image"
-import type { Article } from "@/lib/types"
-import CategoryBadge from "../ui/category-badge"
+import Link from "next/link";
+import Image from "next/image";
+import type { Article } from "@/lib/types";
+import CategoryBadge from "../ui/category-badge";
 
-export default function LatestArticleListItem({ article }: { article: Article }) {
-  const formattedDate = new Date(article.datePublished).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-  })
+export default function LatestArticleListItem({
+  article,
+}: {
+  article: Article;
+}) {
+  const formattedDate = new Date(article.datePublished).toLocaleDateString(
+    "en-US",
+    {
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   return (
     <li className="relative pl-8 mb-10 last:mb-0">
@@ -16,12 +23,17 @@ export default function LatestArticleListItem({ article }: { article: Article })
 
       <div className="flex flex-col sm:flex-row gap-6 py-2">
         {/* Image */}
-        <Link href={`/${article.slug}`} className="sm:w-40 md:w-48 shrink-0 block">
+        <Link
+          href={`/${article.slug}`}
+          className="sm:w-40 md:w-48 shrink-0 block"
+        >
           <div className="relative w-full aspect-[16/9] rounded-md overflow-hidden">
             <Image
               src={
                 article.imageUrl ||
-                `/placeholder.svg?width=192&height=108&query=${encodeURIComponent("news")}`
+                `/placeholder.svg?width=192&height=108&query=${encodeURIComponent(
+                  "news"
+                )}`
               }
               alt={article.title}
               fill
@@ -43,15 +55,17 @@ export default function LatestArticleListItem({ article }: { article: Article })
             </h3>
           </Link>
 
-          <p className="text-sm text-neutral-700 mb-2 line-clamp-2 flex-grow">{article.excerpt}</p>
+          <p className="text-sm text-neutral-700 mb-2 line-clamp-2 flex-grow">
+            {article.excerpt}
+          </p>
 
           <div className="text-xs text-neutral-500 mt-auto flex items-center gap-x-2">
             <span>{article.author}</span>
             <span className="text-neutral-400">·</span>
-            <span>{article.readingTimeMinutes} min read</span>
+            <span>{article.readingTime} min read</span>
           </div>
         </div>
       </div>
     </li>
-  )
+  );
 }
