@@ -29,17 +29,3 @@ export interface Author {
 export interface CMSData {
   articles: Article[];
 }
-
-// CMS types - same as Article for this reference implementation
-export interface CMSArticle extends Article {}
-
-export interface CMSCategory {
-  slug: string;
-  title: string;
-}
-
-export interface CMSAuthor {
-  slug: string;
-  name: string;
-  title: string;
-}
