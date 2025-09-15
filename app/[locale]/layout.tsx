@@ -32,7 +32,9 @@ export const metadata: Metadata = {
 
 export function generateStaticParams() {
   // Only generate static params for the default locale for balance between SSG and build times
-  return routing.locales.filter((locale) => locale === "en-US").map((locale) => ({ locale }));
+  return routing.locales
+    .filter((locale) => locale === "en-US")
+    .map((locale) => ({ locale }));
 }
 
 export default async function RootLayout({
@@ -61,5 +63,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
-

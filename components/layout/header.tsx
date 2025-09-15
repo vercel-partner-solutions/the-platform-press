@@ -1,14 +1,14 @@
-import { Link } from '@/i18n/navigation';
+import { Link } from "@/i18n/navigation";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
 import LocaleSwitcher from "./locale-switcher";
 import { Today } from "./today";
 import { StockTicker } from "./stock-ticker";
-import { getCategories } from '@/lib/cms';
-import { getLocale } from 'next-intl/server';
-import { getTranslations } from 'next-intl/server';
-import { NextIntlClientProvider } from 'next-intl';
+import { getCategories } from "@/lib/cms";
+import { getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 export async function Header() {
   const categories = await getCategories();

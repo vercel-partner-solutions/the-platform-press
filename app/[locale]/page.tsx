@@ -9,7 +9,11 @@ import OpinionArticlesSection from "@/components/homepage/opinion-articles-secti
 import LocalNews from "@/components/homepage/local-news";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const { locale } = await params;
   setRequestLocale(locale);
 
@@ -21,7 +25,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
   setRequestLocale(locale);
 

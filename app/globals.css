@@ -7,45 +7,54 @@ html {
 }
 
 @keyframes reveal-left {
-	0% { 
-		opacity: 0;
+  0% {
+    opacity: 0;
     transform: translateX(-30px);
-	}
-	100% { 
-		opacity: 1;
+  }
+  100% {
+    opacity: 1;
     transform: translateX(0);
-	}
+  }
 }
 
 @keyframes reveal-right {
-	0% { 
-		opacity: 0;
-		transform: translateX(30px);
-	}
-	100% { 
-		opacity: 1;
-		transform: translateX(0);
-	}
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes fade {
-	0%, 30% { opacity: 0; }
-	35%, 65% { opacity: 1; }
-	70%, 100% { opacity: 0; }
+  0%,
+  30% {
+    opacity: 0;
+  }
+  35%,
+  65% {
+    opacity: 1;
+  }
+  70%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .animate-reveal-left {
-	animation: reveal-left auto ease-out;
-	animation-timeline: --page-scroll;
-	animation-range: 100px 150px;
-	animation-fill-mode: both;
+  animation: reveal-left auto ease-out;
+  animation-timeline: --page-scroll;
+  animation-range: 100px 150px;
+  animation-fill-mode: both;
 }
 
 .animate-reveal-right {
-	animation: reveal-right auto ease-out;
-	animation-timeline: --page-scroll;
-	animation-range: 100px 150px;
-	animation-fill-mode: both;
+  animation: reveal-right auto ease-out;
+  animation-timeline: --page-scroll;
+  animation-range: 100px 150px;
+  animation-fill-mode: both;
 }
 
 .cycling-item {

@@ -5,8 +5,9 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "lint": "biome check",
+    "format": "biome format --write"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -65,6 +66,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -1,7 +1,7 @@
-import type { Article } from "@/lib/types"
-import Link from "next/link"
-import Image from "next/image"
-import { getArticles } from "@/lib/cms"
+import type { Article } from "@/lib/types";
+import Link from "next/link";
+import Image from "next/image";
+import { getArticles } from "@/lib/cms";
 
 function OpinionArticleCard({ article }: { article: Article }) {
   return (
@@ -25,35 +25,46 @@ function OpinionArticleCard({ article }: { article: Article }) {
           {article.title}
         </h3>
       </Link>
-      <p className="text-sm text-neutral-700 line-clamp-2 mb-3">{article.excerpt}</p>
-      <Link href={`/${article.slug}`} className="text-sm text-black hover:underline font-medium">
+      <p className="text-sm text-neutral-700 line-clamp-2 mb-3">
+        {article.excerpt}
+      </p>
+      <Link
+        href={`/${article.slug}`}
+        className="text-sm text-black hover:underline font-medium"
+      >
         Read full opinion &rarr;
       </Link>
     </article>
-  )
+  );
 }
 
 export default async function OpinionArticlesSection({
   isHomepage = false,
 }: {
-  isHomepage?: boolean
+  isHomepage?: boolean;
 }) {
   const articles = await getArticles({
     limit: 3,
     category: "Opinion",
     sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
-  })
+  });
 
-  if (!articles || articles.length === 0) return null
+  if (!articles || articles.length === 0) return null;
 
   return (
     <section aria-labelledby="opinion-heading" className="mb-10">
       <div className="flex items-baseline justify-between border-b-2 border-black pb-2 mb-6">
-        <h2 id="opinion-heading" className="text-2xl font-bold uppercase tracking-tight text-black">
+        <h2
+          id="opinion-heading"
+          className="text-2xl font-bold uppercase tracking-tight text-black"
+        >
           Opinions & Analysis
         </h2>
-        <Link href="/category/opinion" className="text-sm font-medium text-black hover:underline">
+        <Link
+          href="/category/opinion"
+          className="text-sm font-medium text-black hover:underline"
+        >
           View all &rarr;
         </Link>
       </div>
@@ -63,5 +74,5 @@ export default async function OpinionArticlesSection({
         ))}
       </div>
     </section>
-  )
+  );
 }

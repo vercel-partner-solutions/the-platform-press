@@ -9,7 +9,11 @@ import { marked } from "marked"; // Import the markdown parser
 import { getFormatter, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string, locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
   const { locale } = await params;
   setRequestLocale(locale);
 
@@ -46,7 +50,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string, locale: string }> }) {
+export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
 
@@ -70,7 +78,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const relatedArticles = await getArticles({
     category: article.category,
     excludeIds: [article.id],
-    limit: 2
+    limit: 2,
   });
 
   return (
@@ -105,7 +113,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               src={
                 article.imageUrl ||
                 `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                  "news article"
+                  "news article",
                 )}`
               }
               alt={article.title}

@@ -25,5 +25,5 @@ export default function CategorySearchLoading() {
         ))}
       </div>
     </div>
-  )
+  );
 }

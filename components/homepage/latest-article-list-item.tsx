@@ -33,7 +33,7 @@ export default async function LatestArticleListItem({
               src={
                 article.imageUrl ||
                 `/placeholder.svg?width=192&height=108&query=${encodeURIComponent(
-                  "news"
+                  "news",
                 )}`
               }
               alt={article.title}

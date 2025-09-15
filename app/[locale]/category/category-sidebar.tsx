@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Clock, MessageSquareText } from "lucide-react"
-import { usePathname } from "next/navigation"
+import Link from "next/link";
+import { Clock, MessageSquareText } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface CategorySidebarProps {
-  categories: string[]
+  categories: string[];
 }
 
 export default function CategorySidebar({ categories }: CategorySidebarProps) {
-  const pathname = usePathname()
-  const currentCategory = pathname.split("/category/")[1] || ""
+  const pathname = usePathname();
+  const currentCategory = pathname.split("/category/")[1] || "";
 
   return (
     <aside className="lg:w-64 flex-shrink-0">
@@ -29,7 +29,13 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                   : "text-neutral-700 hover:text-black hover:bg-white"
               }`}
             >
-              <span className={currentCategory === "all" ? "" : "group-hover:underline"}>All</span>
+              <span
+                className={
+                  currentCategory === "all" ? "" : "group-hover:underline"
+                }
+              >
+                All
+              </span>
             </Link>
             {categories.map((cat) => (
               <Link
@@ -41,7 +47,13 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                     : "text-neutral-700 hover:text-black hover:bg-white"
                 }`}
               >
-                <span className={cat.toLowerCase() === currentCategory.toLowerCase() ? "" : "group-hover:underline"}>
+                <span
+                  className={
+                    cat.toLowerCase() === currentCategory.toLowerCase()
+                      ? ""
+                      : "group-hover:underline"
+                  }
+                >
                   {cat}
                 </span>
               </Link>
@@ -62,7 +74,13 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
               }`}
             >
               <Clock size={16} className="mr-2" />
-              <span className={currentCategory === "latest" ? "" : "group-hover:underline"}>Latest News</span>
+              <span
+                className={
+                  currentCategory === "latest" ? "" : "group-hover:underline"
+                }
+              >
+                Latest News
+              </span>
             </Link>
             <Link
               href="/category/opinion"
@@ -73,11 +91,17 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
               }`}
             >
               <MessageSquareText size={16} className="mr-2" />
-              <span className={currentCategory === "opinion" ? "" : "group-hover:underline"}>Opinions & Analysis</span>
+              <span
+                className={
+                  currentCategory === "opinion" ? "" : "group-hover:underline"
+                }
+              >
+                Opinions & Analysis
+              </span>
             </Link>
           </nav>
         </div>
       </div>
     </aside>
-  )
+  );
 }
