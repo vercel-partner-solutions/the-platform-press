@@ -1,27 +1,33 @@
-import LatestArticleListItem from "./latest-article-list-item"
-import Link from "next/link"
-import { getArticles } from "@/lib/cms"
+import LatestArticleListItem from "./latest-article-list-item";
+import Link from "next/link";
+import { getArticles } from "@/lib/cms";
 
 export default async function LatestArticlesSection({
   isHomepage = false,
 }: {
-  isHomepage?: boolean
+  isHomepage?: boolean;
 }) {
   const articles = await getArticles({
     limit: 4,
     sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
-  })
+  });
 
-  if (!articles || articles.length === 0) return null
+  if (!articles || articles.length === 0) return null;
 
   return (
     <section aria-labelledby="latest-news-heading">
       <div className="flex items-baseline justify-between border-b-2 border-black pb-2 mb-6">
-        <h2 id="latest-news-heading" className="text-2xl font-bold uppercase tracking-tight text-black">
+        <h2
+          id="latest-news-heading"
+          className="text-2xl font-bold uppercase tracking-tight text-black"
+        >
           Latest News
         </h2>
-        <Link href="/category/latest" className="text-sm font-medium text-black hover:underline">
+        <Link
+          href="/category/latest"
+          className="text-sm font-medium text-black hover:underline"
+        >
           View all &rarr;
         </Link>
       </div>
@@ -31,5 +37,5 @@ export default async function LatestArticlesSection({
         ))}
       </ol>
     </section>
-  )
+  );
 }

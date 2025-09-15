@@ -43,6 +43,7 @@ interface ContentfulArticle {
   publishDate: string;
   readingTime: number;
   isBreakingNews?: boolean;
+  isFeatured?: boolean;
   metaDescription?: string;
   metaKeywords?: string;
   author: ContentfulAuthor;
@@ -129,8 +130,8 @@ function convertRichTextToHtml(richTextDocument: Document): string {
 }
 
 const GET_ARTICLES_QUERY = `
-  query GetArticles($limit: Int, $skip: Int, $preview: Boolean) {
-    articleCollection(limit: $limit, skip: $skip, preview: $preview, order: publishDate_DESC) {
+  query GetArticles($limit: Int, $skip: Int, $where: ArticleFilter, $preview: Boolean) {
+    articleCollection(limit: $limit, skip: $skip, where: $where, preview: $preview, order: publishDate_DESC) {
       total
       items {
         sys {
@@ -173,6 +174,7 @@ const GET_ARTICLES_QUERY = `
         publishDate
         readingTime
         isBreakingNews
+        isFeatured
         metaDescription
         metaKeywords
         author {
@@ -239,6 +241,7 @@ const GET_ARTICLE_BY_SLUG_QUERY = `
         publishDate
         readingTime
         isBreakingNews
+        isFeatured
         metaDescription
         metaKeywords
         author {
@@ -314,7 +317,9 @@ async function fetchContent<T = any>(
   );
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const errorText = await response.text();
+    console.error(`HTTP error! status: ${response.status}, response:`, errorText);
+    throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
   }
 
   const json: ContentfulResponse<T> = await response.json();
@@ -373,7 +378,6 @@ function mergeRichTextLinks(content: any): Document {
   return json;
 }
 
-// Reshape functions
 function reshapeToArticle(item: ContentfulArticle): Article {
   // Merge rich text links and convert to HTML
   const richTextDocument = mergeRichTextLinks(item.content);
@@ -393,7 +397,7 @@ function reshapeToArticle(item: ContentfulArticle): Article {
       item.publishDate || item.sys.firstPublishedAt || new Date().toISOString(),
     readingTime: item.readingTime || 5,
     isBreaking: item.isBreakingNews || false,
-    isFeatured: false, // We can add this field to Contentful later if needed
+    isFeatured: item.isFeatured || false,
     views: Math.floor(Math.random() * 2000) + 100, // Simulated for now
   };
 }
@@ -427,9 +431,30 @@ export async function getArticles({
   searchQuery?: string;
 } = {}): Promise<Article[]> {
   try {
+    // Build GraphQL where clause for server-side filtering
+    const where: any = {};
+    
+    // Add GraphQL-supported filters
+    if (isFeatured !== undefined) {
+      where.isFeatured = isFeatured;
+    }
+    
+    if (isBreaking !== undefined) {
+      where.isBreakingNews = isBreaking;
+    }
+    
+    if (category) {
+      where.category = { title: category };
+    }
+    
+    // Determine if we need client-side filtering for unsupported filters
+    const hasClientSideFilters = searchQuery || location || excludeIds?.length || excludeFeatured;
+    const fetchLimit = hasClientSideFilters ? (limit || 10) * 2 : (limit || 10);
+    
     const response = await fetchContent<ArticleCollection>(GET_ARTICLES_QUERY, {
-      limit: limit || 100,
+      limit: fetchLimit,
       skip: 0,
+      where: Object.keys(where).length > 0 ? where : undefined,
       preview: false,
     });
 
@@ -440,11 +465,7 @@ export async function getArticles({
 
     let articles = response.articleCollection.items.map(reshapeToArticle);
 
-    if (category) {
-      articles = articles.filter(
-        (article) => article.category.toLowerCase() === category.toLowerCase()
-      );
-    }
+    // Category filtering now handled at GraphQL level
 
     if (location) {
       articles = articles.filter(
@@ -462,17 +483,9 @@ export async function getArticles({
       );
     }
 
-    if (isBreaking !== undefined) {
-      articles = articles.filter(
-        (article) => article.isBreaking === isBreaking
-      );
-    }
+    // isBreaking filtering now handled at GraphQL level
 
-    if (isFeatured !== undefined) {
-      articles = articles.filter(
-        (article) => article.isFeatured === isFeatured
-      );
-    }
+    // isFeatured filtering now handled at GraphQL level
 
     if (excludeFeatured) {
       articles = articles.filter((article) => !article.isFeatured);
