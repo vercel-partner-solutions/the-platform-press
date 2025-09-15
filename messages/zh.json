@@ -2,5 +2,9 @@
   "Layout": {
     "subscribe": "每周仅需 $1 订阅",
     "login": "登录"
+  },
+  "Homepage": {
+    "title": "首页 | The Platform Press",
+    "description": "发现最新的新闻、深度分析和引人入胜的故事，来自 The Platform Press。"
   }
 }

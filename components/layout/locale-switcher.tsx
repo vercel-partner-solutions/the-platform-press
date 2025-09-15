@@ -1,3 +1,5 @@
+"use client";
+
 import { Link, usePathname } from "@/i18n/navigation";
 import { localeToLabel, routing } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";

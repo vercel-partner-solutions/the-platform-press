@@ -7,13 +7,19 @@ import LatestArticlesSection from "@/components/homepage/latest-articles-section
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import OpinionArticlesSection from "@/components/homepage/opinion-articles-section";
 import LocalNews from "@/components/homepage/local-news";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Homepage | The Platform Press",
-  description:
-    "Discover the latest news, in-depth analysis, and compelling stories from The Platform Press.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations("Homepage");
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

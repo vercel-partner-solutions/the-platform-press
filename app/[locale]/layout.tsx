@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { Poppins } from "next/font/google";
 import "../globals.css";
 import Footer from "@/components/layout/footer";
-import { Header } from "../header";
+import { Header } from "@/components/layout/header";
 import { routing } from "@/i18n/routing";
 import { setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
@@ -31,7 +31,8 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
+  // Only generate static params for the default locale for balance between SSG and build times
+  return routing.locales.filter((locale) => locale === "en-US").map((locale) => ({ locale }));
 }
 
 export default async function RootLayout({

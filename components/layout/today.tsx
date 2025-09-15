@@ -1,50 +1,17 @@
-"use client"
+import { useFormatter, useNow } from "next-intl"
 
-import { useFormatter, useLocale, useNow } from "next-intl"
-import { useMemo } from "react"
+const weather = getMockWeather();
 
 export function Today() {
     const format = useFormatter()
-    const locale = useLocale()
     const dateTime = useNow()
 
-    const intlDate = useMemo(
-        () =>
-            format.dateTime(dateTime, {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            }),
-        [format, dateTime],
-    )
-
-    const temperatureData = useMemo(() => {
-        const baseTempF = 77 // Base temperature in Fahrenheit
-
-        // More robust locale detection for temperature units
-        const usesMetric = !["en-US", "en-LR", "en-MM"].includes(locale)
-
-        if (usesMetric) {
-            // Convert F to C: (F - 32) × 5/9
-            const tempC = ((baseTempF - 32) * 5) / 9
-            return {
-                value: format.number(tempC, {
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                }),
-                unit: "°C",
-            }
-        } else {
-            return {
-                value: format.number(baseTempF, {
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                }),
-                unit: "°F",
-            }
-        }
-    }, [locale, format])
+    const intlDate = format.dateTime(dateTime, {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    })
 
     return (
         <div className="hidden md:flex flex-col justify-self-start">
@@ -53,12 +20,28 @@ export function Today() {
                 <div className="flex items-center gap-1">
                     <span>☁️</span>
                     <span>
-                        {temperatureData.value}
-                        {temperatureData.unit}
+                        {weather.temperature}
                     </span>
                 </div>
             </div>
             <span className="text-sm font-medium text-neutral-700">Today's Paper</span>
         </div>
     )
+}
+
+interface WeatherData {
+    temperature: number
+    condition: "Sunny" | "Cloudy" | "Rainy" | "Snowy"
+}
+
+function getMockWeather(): WeatherData {
+    new Promise((resolve) => setTimeout(resolve, 1000)) // Simulate network delay
+    const conditions: WeatherData["condition"][] = ["Sunny", "Cloudy", "Rainy"]
+    const randomCondition = conditions[Math.floor(Math.random() * conditions.length)]
+    const randomTemp = Math.floor(Math.random() * (85 - 65 + 1) + 65) // Temp between 65 and 85
+
+    return {
+        temperature: randomTemp,
+        condition: randomCondition,
+    }
 }
