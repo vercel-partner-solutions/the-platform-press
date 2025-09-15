@@ -1,58 +1,31 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from '@/i18n/navigation';
 import { Search, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import "@/lib/cms";
+import LocaleSwitcher from "./locale-switcher";
+import { Today } from "./today";
+import { StockTicker } from "./stock-ticker";
 
 interface HeaderProps {
   categories: string[];
+  translations: {
+    subscribe: string;
+    login: string;
+  };
 }
 
-function StockTicker({ isCompact = false }: { isCompact?: boolean }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
 
-  const stocks = [
-    { name: "S&P 500", value: "+0.21%", color: "text-green-600" },
-    { name: "Nasdaq", value: "+0.45%", color: "text-green-600" },
-    { name: "Dow", value: "-0.12%", color: "text-red-600" },
-  ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsVisible(false);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % stocks.length);
-        setIsVisible(true);
-      }, 300);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const current = stocks[currentIndex];
-
-  return (
-    <div
-      className={`transition-opacity duration-300 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      } ${isCompact ? "text-xs" : "text-sm"} font-medium text-neutral-700`}
-    >
-      {current.name} <span className={current.color}>{current.value}</span>
-    </div>
-  );
-}
-
-export function HeaderClient({ categories }: HeaderProps) {
+export function HeaderClient({ categories, translations }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 150);
@@ -133,18 +106,9 @@ export function HeaderClient({ categories }: HeaderProps) {
                   </div>
                 )}
               </div>
-
-              <nav className="justify-self-center flex items-center gap-6">
-                <span className="text-xs font-medium text-neutral-600 uppercase tracking-wide cursor-default">
-                  English
-                </span>
-                <span className="text-xs font-medium text-neutral-600 uppercase tracking-wide cursor-default">
-                  Español
-                </span>
-                <span className="text-xs font-medium text-neutral-800 tracking-wide cursor-default whitespace-nowrap">
-                  中文
-                </span>
-              </nav>
+              <Suspense>
+                <LocaleSwitcher />
+              </Suspense>
 
               <div className="justify-self-end flex items-center gap-3">
                 <Button
@@ -152,14 +116,14 @@ export function HeaderClient({ categories }: HeaderProps) {
                   size="sm"
                   className="text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2"
                 >
-                  SUBSCRIBE FOR $1/WEEK
+                  {translations.subscribe}
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   className="text-xs font-medium border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-4 py-2 bg-transparent"
                 >
-                  LOG IN
+                  {translations.login}
                 </Button>
               </div>
             </div>
@@ -213,19 +177,7 @@ export function HeaderClient({ categories }: HeaderProps) {
               </button>
             </div>
 
-            {/* Desktop: Date and Today's Paper */}
-            <div className="hidden md:flex flex-col justify-self-start">
-              <div className="flex items-center gap-4 text-sm text-neutral-600 mb-1">
-                <span>Tuesday, September 9, 2025</span>
-                <div className="flex items-center gap-1">
-                  <span>☁️</span>
-                  <span>77°F</span>
-                </div>
-              </div>
-              <span className="text-sm font-medium text-neutral-700">
-                Today's Paper
-              </span>
-            </div>
+            <Today />
 
             {/* Logo - responsive sizing */}
             <Link
@@ -308,18 +260,16 @@ export function HeaderClient({ categories }: HeaderProps) {
 
       {/* Sticky navigation - desktop only */}
       <header
-        className={`bg-white sticky top-0 z-50 border-b border-neutral-200 transition-all duration-300 ease-in-out hidden md:block ${
-          isScrolled ? "shadow-md" : ""
-        }`}
+        className={`bg-white sticky top-0 z-50 border-b border-neutral-200 transition-all duration-300 ease-in-out hidden md:block ${isScrolled ? "shadow-md" : ""
+          }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div
-              className={`transition-all duration-300 ease-in-out ${
-                isScrolled
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 -translate-x-4"
-              }`}
+              className={`transition-all duration-300 ease-in-out ${isScrolled
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-4"
+                }`}
             >
               <Link
                 href="/"
@@ -361,11 +311,10 @@ export function HeaderClient({ categories }: HeaderProps) {
             </nav>
 
             <div
-              className={`transition-all duration-300 ease-in-out ${
-                isScrolled
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-4"
-              }`}
+              className={`transition-all duration-300 ease-in-out ${isScrolled
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-4"
+                }`}
             >
               <div className="flex items-center gap-2">
                 <Button

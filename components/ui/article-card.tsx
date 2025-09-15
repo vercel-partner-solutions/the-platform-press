@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "./category-badge";
+import { useFormatter } from "next-intl";
 
 export default function ArticleCard({
   article,
@@ -10,14 +11,13 @@ export default function ArticleCard({
   article: Article;
   priorityImage?: boolean;
 }) {
-  const formattedDate = new Date(article.datePublished).toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
+  const formatter = useFormatter();
+  const date = new Date(article.datePublished);
+  const dateTime = formatter.dateTime(date, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <article className="bg-white group flex flex-col">
@@ -51,7 +51,7 @@ export default function ArticleCard({
           {article.excerpt}
         </p>
         <div className="flex items-center justify-between text-xs text-neutral-500 mt-auto">
-          <span>{formattedDate}</span>
+          <span>{dateTime}</span>
           <span>{article.readingTime} min read</span>
         </div>
       </div>

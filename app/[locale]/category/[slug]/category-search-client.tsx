@@ -7,13 +7,16 @@ import ArticleCard from "@/components/ui/article-card"
 import { Button } from "@/components/ui/button"
 import CategorySearchInput from "@/components/ui/category-search-input"
 import { searchArticlesAction } from "../actions"
+import { use } from "react"
 
 interface CategorySearchClientProps {
   initialArticles: Article[]
   totalCount: number
   hasMore: boolean
   category: string
-  searchQuery: string // Receive initial search query from server
+  searchParams: Promise<{
+    q?: string
+  }>
 }
 
 export default function CategorySearchClient({
@@ -21,18 +24,20 @@ export default function CategorySearchClient({
   totalCount: initialTotalCount,
   hasMore: initialHasMore,
   category,
-  searchQuery: initialSearchQuery,
+  searchParams,
 }: CategorySearchClientProps) {
   const pathname = usePathname()
   const debounceTimer = useRef<NodeJS.Timeout | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const wasPending = useRef(false)
 
+  const { q } = use(searchParams)
+
   const [articles, setArticles] = useState<Article[]>(initialArticles)
   const [totalCount, setTotalCount] = useState(initialTotalCount)
   const [hasMore, setHasMore] = useState(initialHasMore)
-  const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
-  const [activeSearchQuery, setActiveSearchQuery] = useState(initialSearchQuery)
+  const [searchQuery, setSearchQuery] = useState(q || "")
+  const [activeSearchQuery, setActiveSearchQuery] = useState(q || "")
   const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
@@ -92,9 +97,9 @@ export default function CategorySearchClient({
     setArticles(initialArticles)
     setTotalCount(initialTotalCount)
     setHasMore(initialHasMore)
-    setSearchQuery(initialSearchQuery)
-    setActiveSearchQuery(initialSearchQuery)
-  }, [initialArticles, initialTotalCount, initialHasMore, initialSearchQuery])
+    setSearchQuery(q || "")
+    setActiveSearchQuery(q || "")
+  }, [initialArticles, initialTotalCount, initialHasMore, q])
 
   // Effect for debounced search-as-you-type
   useEffect(() => {
@@ -103,7 +108,7 @@ export default function CategorySearchClient({
     }
 
     // Don't run search for the initial query on load
-    if (searchQuery === initialSearchQuery) {
+    if (searchQuery === q || "") {
       return
     }
 
@@ -124,7 +129,7 @@ export default function CategorySearchClient({
         clearTimeout(debounceTimer.current)
       }
     }
-  }, [searchQuery, category, initialArticles, initialTotalCount, initialHasMore, initialSearchQuery, pathname])
+  }, [searchQuery, category, initialArticles, initialTotalCount, initialHasMore, q, pathname])
 
   const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

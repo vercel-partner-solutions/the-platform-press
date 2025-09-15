@@ -1,15 +1,16 @@
 import type { Article } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";
+import { getFormatter } from "next-intl/server";
 
-function LocalNewsCard({ article }: { article: Article }) {
-  const formattedDate = new Date(article.datePublished).toLocaleDateString(
-    "en-US",
-    {
-      month: "short",
-      day: "numeric",
-    }
-  );
+async function LocalNewsCard({ article }: { article: Article }) {
+  const formatter = await getFormatter();
+  const date = new Date(article.datePublished);
+  const dateTime = formatter.dateTime(date, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
   return (
     <article className="group bg-white">
@@ -39,7 +40,7 @@ function LocalNewsCard({ article }: { article: Article }) {
           {article.excerpt}
         </p>
         <div className="text-xs text-neutral-500 flex items-center justify-between mt-auto">
-          <span>{formattedDate}</span>
+          <span>{dateTime}</span>
           <span>{article.readingTime} min read</span>
         </div>
       </div>

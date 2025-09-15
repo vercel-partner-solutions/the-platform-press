@@ -6,13 +6,13 @@ import CategoryBadge from "@/components/ui/category-badge";
 import ArticleCard from "@/components/ui/article-card";
 import { CalendarDays, UserCircle, Clock } from "lucide-react";
 import { marked } from "marked"; // Import the markdown parser
+import { getFormatter, setRequestLocale } from "next-intl/server";
 
-type Props = {
-  params: { slug: string };
-};
+export async function generateMetadata({ params }: { params: Promise<{ slug: string, locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  setRequestLocale(locale);
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = await getArticleBySlug(params.slug);
+  const article = await getArticleBySlug((await params).slug);
   if (!article) {
     return {
       title: "Article Not Found",
@@ -45,30 +45,32 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ArticlePage({ params }: Props) {
-  const article = await getArticleBySlug(params.slug);
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string, locale: string }> }) {
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     notFound();
   }
 
+  const formatter = await getFormatter();
+  const date = new Date(article.datePublished);
+  const dateTime = formatter.dateTime(date, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
   // Parse the markdown content to HTML
   const parsedContent = await marked.parse(article.content);
 
-  const relatedArticles = await getArticles({ 
-    category: article.category, 
-    excludeIds: [article.id], 
-    limit: 2 
+  const relatedArticles = await getArticles({
+    category: article.category,
+    excludeIds: [article.id],
+    limit: 2
   });
-
-  const formattedDate = new Date(article.datePublished).toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -87,7 +89,7 @@ export default async function ArticlePage({ params }: Props) {
             </div>
             <div className="flex items-center">
               <CalendarDays size={16} className="mr-1.5 text-neutral-500" />
-              <span>{formattedDate}</span>
+              <span>{dateTime}</span>
             </div>
             <div className="flex items-center">
               <Clock size={16} className="mr-1.5 text-neutral-500" />

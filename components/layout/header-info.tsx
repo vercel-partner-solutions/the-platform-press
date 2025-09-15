@@ -2,9 +2,10 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Sun, Cloud, CloudRain, CloudSnow } from "lucide-react"
 import type { LucideProps } from "lucide-react"
+import { useFormatter, useNow } from "next-intl"
 
 interface WeatherData {
   temperature: number
@@ -32,33 +33,24 @@ async function getMockWeather(): Promise<WeatherData> {
 }
 
 export default function HeaderInfo() {
-  const [date, setDate] = useState("")
+  const date = useNow()
   const [weather, setWeather] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    // Set the date string once the component mounts
-    const today = new Date()
-    const dateString = today.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })
-    setDate(dateString)
+  const formatter = useFormatter()
 
-    // Fetch weather data
-    getMockWeather().then((data) => {
-      setWeather(data)
-      setLoading(false)
-    })
-  }, [])
+  const dateTime = formatter.dateTime(date, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 
   const WeatherIcon = weather ? weatherIcons[weather.condition] : null
 
   return (
     <div className="flex items-center gap-4 text-xs text-neutral-600">
-      <span>{date}</span>
+      <span>{dateTime}</span>
       <div className="h-4 w-px bg-neutral-200" />
       {loading ? (
         <div className="flex items-center gap-2 animate-pulse">

@@ -1,6 +1,7 @@
 import type React from "react"
 import { getCategories } from "@/lib/cms"
 import CategorySidebar from "./category-sidebar"
+import { Suspense } from "react"
 
 export default async function CategoryLayout({
   children,
@@ -13,9 +14,7 @@ export default async function CategoryLayout({
     <div className="max-w-8xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-8 py-8">
         <CategorySidebar categories={categories} />
-
-        {/* Main Content */}
-        <main className="flex-1 min-w-0">{children}</main>
+        <main className="flex-1 min-w-0">{children} </main>
       </div>
     </div>
   )

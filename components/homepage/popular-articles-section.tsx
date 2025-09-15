@@ -1,14 +1,16 @@
 import type { Article } from "@/lib/types"
 import Link from "next/link"
 import { getArticles } from "@/lib/cms"
+import { getFormatter } from "next-intl/server";
 
-function PopularArticleListItem({ article, index }: { article: Article; index: number }) {
-  const formattedDate = new Date(article.datePublished)
-    .toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    })
-    .toUpperCase()
+async function PopularArticleListItem({ article, index }: { article: Article; index: number }) {
+  const formatter = await getFormatter();
+  const date = new Date(article.datePublished);
+  const dateTime = formatter.dateTime(date, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
   return (
     <li className="py-5 border-b border-neutral-200 last:border-b-0">
@@ -23,7 +25,7 @@ function PopularArticleListItem({ article, index }: { article: Article; index: n
           <p className="text-xs font-semibold text-neutral-500 mt-1.5 tracking-wider">
             <span>{article.author.toUpperCase()}</span>
             <span className="mx-1.5">&middot;</span>
-            <span>{formattedDate}</span>
+            <span>{dateTime}</span>
           </p>
         </div>
       </div>

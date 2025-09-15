@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import BreakingNewsBanner from "../components/homepage/breaking-news-banner";
+import BreakingNewsBanner from "@/components/homepage/breaking-news-banner";
 import HeroSection from "@/components/homepage/hero-section";
 import CategoryArticlesSection from "@/components/homepage/category-articles-section";
 import LatestArticlesSection from "@/components/homepage/latest-articles-section";
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import OpinionArticlesSection from "@/components/homepage/opinion-articles-section";
 import LocalNews from "@/components/homepage/local-news";
+import { setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Homepage | The Platform Press",
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
     "Discover the latest news, in-depth analysis, and compelling stories from The Platform Press.",
 };
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <>
       <Suspense>

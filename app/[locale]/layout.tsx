@@ -1,10 +1,14 @@
-import type React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Poppins } from "next/font/google";
-import "./globals.css";
-import { HeaderClient } from "../components/layout/header";
-import Footer from "../components/layout/footer";
+import "../globals.css";
+import Footer from "@/components/layout/footer";
+import { Header } from "../header";
+import { routing } from "@/i18n/routing";
+import { setRequestLocale } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,13 +30,26 @@ export const metadata: Metadata = {
   generator: "v0.dev",
 };
 
-export default function RootLayout({
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
   return (
-    <html lang="en" className={`${GeistSans.className} ${poppins.variable}`}>
+    <html className={`${GeistSans.className} ${poppins.variable}`}>
       <body className="bg-white text-black antialiased flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
@@ -44,9 +61,4 @@ export default function RootLayout({
   );
 }
 
-async function Header() {
-  const { getCategories } = await import("@/lib/cms");
-  const categories = await getCategories();
 
-  return <HeaderClient categories={categories} />;
-}
