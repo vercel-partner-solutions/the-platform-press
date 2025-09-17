@@ -39,13 +39,13 @@ export default async function HomePage({
         <BreakingNewsBanner />
       </Suspense>
       <div className="space-y-16 pt-0">
-        <Suspense >
+        <Suspense>
           <HeroSection />
         </Suspense>
 
         <LocalNews />
 
-        <Suspense >
+        <Suspense>
           <CategoryArticlesSection
             title="Technology"
             categorySlug="technology"
@@ -56,22 +56,22 @@ export default async function HomePage({
         {/* Two-column layout for Latest News and Popular This Week */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-10">
           <div className="lg:col-span-2">
-            <Suspense >
+            <Suspense>
               <LatestArticlesSection isHomepage />
             </Suspense>
           </div>
           <div>
-            <Suspense >
+            <Suspense>
               <PopularArticlesSection isHomepage />
             </Suspense>
           </div>
         </div>
 
-        <Suspense >
+        <Suspense>
           <OpinionArticlesSection isHomepage />
         </Suspense>
 
-        <Suspense >
+        <Suspense>
           <CategoryArticlesSection
             title="Business"
             categorySlug="business"
@@ -82,13 +82,3 @@ export default async function HomePage({
     </>
   );
 }
-
-
-
-
-
-
-
-
-
-

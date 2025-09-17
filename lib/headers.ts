@@ -1,6 +1,15 @@
+'use server'
+
 import { headers } from "next/headers";
 
 export async function getVercelGeoHeaders() {
+    if (process.env.NODE_ENV === "development") {
+        return {
+            country: "US",
+            region: "CA",
+            city: "San Francisco",
+        };
+    }
     const h = await headers();
 
     const getDecoded = (name: string) => {

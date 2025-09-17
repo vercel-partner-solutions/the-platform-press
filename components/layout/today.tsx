@@ -9,13 +9,12 @@ const dateOptions = {
 };
 
 export async function Today() {
-  const [weatherResult, formatResult, dateTimeResult] = await Promise.allSettled(
-    [
+  const [weatherResult, formatResult, dateTimeResult] =
+    await Promise.allSettled([
       getLocale().then((locale) => getWeather(locale)),
       getFormatter(),
       getNow(),
-    ],
-  );
+    ]);
 
   const weather =
     weatherResult.status === "fulfilled" ? weatherResult.value : null;
