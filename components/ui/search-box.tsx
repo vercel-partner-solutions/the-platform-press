@@ -143,9 +143,8 @@ export function SearchBox() {
           onKeyDown={handleKeyDown}
           onFocus={handleInputFocus}
           placeholder="Search"
-          className={`w-full rounded-md border border-input bg-background pl-10 py-2 ${
-            query.length > 0 ? "pr-10" : "pr-4"
-          } text-sm placeholder:text-muted-foreground transition-colors duration-200`}
+          className={`w-full rounded-md border border-input bg-background pl-10 py-2 ${query.length > 0 ? "pr-10" : "pr-4"
+            } text-sm placeholder:text-muted-foreground transition-colors duration-200`}
         />
         {query.length > 0 && (
           <button
@@ -171,9 +170,8 @@ export function SearchBox() {
                 type="button"
                 key={article.id}
                 onClick={() => handleArticleSelect(article)}
-                className={`w-full text-left px-4 py-3 text-sm rounded-sm hover:bg-gray-200 transition-colors duration-150 ${
-                  selectedIndex === index ? "bg-gray-200" : ""
-                }`}
+                className={`w-full text-left px-4 py-3 text-sm rounded-sm hover:bg-gray-200 transition-colors duration-150 ${selectedIndex === index ? "bg-gray-200" : ""
+                  }`}
               >
                 <div className="space-y-1">
                   <div className="flex justify-between">
