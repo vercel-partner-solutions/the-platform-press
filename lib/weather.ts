@@ -36,17 +36,17 @@ const WEATHER_CODE_MAP: Array<{
   codes: number[];
   condition: WeatherCondition;
 }> = [
-    { codes: [0], condition: "Sunny" },
-    { codes: [1, 2, 3, 45, 46, 47, 48], condition: "Cloudy" },
-    {
-      codes: [
-        51, 52, 53, 54, 55, 56, 57, 61, 62, 63, 64, 65, 66, 67, 80, 81, 82, 95,
-        96, 99,
-      ],
-      condition: "Rainy",
-    },
-    { codes: [71, 72, 73, 74, 75, 76, 77], condition: "Snowy" },
-  ];
+  { codes: [0], condition: "Sunny" },
+  { codes: [1, 2, 3, 45, 46, 47, 48], condition: "Cloudy" },
+  {
+    codes: [
+      51, 52, 53, 54, 55, 56, 57, 61, 62, 63, 64, 65, 66, 67, 80, 81, 82, 95,
+      96, 99,
+    ],
+    condition: "Rainy",
+  },
+  { codes: [71, 72, 73, 74, 75, 76, 77], condition: "Snowy" },
+];
 
 function mapWeatherCodeToCondition(weatherCode: number): WeatherCondition {
   for (const { codes, condition } of WEATHER_CODE_MAP) {
@@ -139,6 +139,6 @@ export async function getWeather(locale: Locale): Promise<WeatherData> {
       temperature: undefined,
       condition: undefined,
       unit: undefined,
-    }
+    };
   }
 }

@@ -14,11 +14,11 @@ async function LocalNewsContent() {
     return null;
   }
 
-  return <LocalNewsSection articles={localArticles} location={userLocation.city} />;
+  return (
+    <LocalNewsSection articles={localArticles} location={userLocation.city} />
+  );
 }
 
 export default function LocalNews() {
-  return (
-    <LocalNewsContent />
-  );
+  return <LocalNewsContent />;
 }

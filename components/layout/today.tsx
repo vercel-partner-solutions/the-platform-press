@@ -41,7 +41,8 @@ export async function Today() {
 }
 
 const renderWeather = (weather: WeatherData | null) => {
-  if (!weather || !weather.condition || !weather.temperature || !weather.unit) return null;
+  if (!weather || !weather.condition || !weather.temperature || !weather.unit)
+    return null;
 
   return (
     <span>
