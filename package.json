@@ -50,7 +50,7 @@
     "input-otp": "latest",
     "lucide-react": "^0.454.0",
     "marked": "latest",
-    "next": "15.2.4",
+    "next": "15.5.3",
     "next-intl": "^4.3.9",
     "next-themes": "latest",
     "react": "^19",
