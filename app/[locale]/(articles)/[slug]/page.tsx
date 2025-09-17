@@ -43,13 +43,6 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams() {
-  const articles = await getArticles();
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
-
 export default async function ArticlePage({
   params,
 }: {
@@ -125,6 +118,7 @@ export default async function ArticlePage({
 
           <div
             className="prose prose-neutral lg:prose-lg max-w-none"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: <we want to use the parsed HTML>
             dangerouslySetInnerHTML={{ __html: parsedContent }} // Use the parsed HTML
           />
         </article>

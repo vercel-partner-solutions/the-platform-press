@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
-import { getArticles, getCategories } from "@/lib/cms";
+import { getArticles } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
 
 type Props = {
@@ -9,20 +9,6 @@ type Props = {
     q?: string;
   }>;
 };
-
-export async function generateStaticParams() {
-  const categories = await getCategories();
-  const params = categories.map((category) => ({
-    category: category.toLowerCase(),
-  }));
-
-  // Add special routes
-  params.push({ category: "all" });
-  params.push({ category: "opinion" });
-  params.push({ category: "latest" });
-
-  return params;
-}
 
 export default async function CategorySearchPage({
   params,
