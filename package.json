@@ -5,8 +5,9 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "lint": "biome check",
+    "format": "biome format --write"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -50,6 +51,7 @@
     "lucide-react": "^0.454.0",
     "marked": "latest",
     "next": "15.2.4",
+    "next-intl": "^4.3.9",
     "next-themes": "latest",
     "react": "^19",
     "react-day-picker": "latest",
@@ -64,11 +66,12 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "typescript": "^5.9.2"
   }
 }

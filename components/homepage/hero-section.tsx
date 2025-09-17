@@ -1,8 +1,8 @@
-import Link from "next/link"
-import Image from "next/image"
-import type { Article } from "@/lib/types"
-import CategoryBadge from "../ui/category-badge"
-import { getArticles } from "@/lib/cms"
+import Image from "next/image";
+import Link from "next/link";
+import { getArticles } from "@/lib/cms";
+import type { Article } from "@/lib/types";
+import CategoryBadge from "../ui/category-badge";
 
 function FeaturedArticleCard({ article }: { article: Article }) {
   return (
@@ -10,7 +10,8 @@ function FeaturedArticleCard({ article }: { article: Article }) {
       <Link href={`/${article.slug}`} className="block w-full h-full">
         <Image
           src={
-            article.imageUrl || `/placeholder.svg?width=800&height=450&query=${"news"}`
+            article.imageUrl ||
+            `/placeholder.svg?width=800&height=450&query=${"news"}`
           }
           alt={article.title}
           fill
@@ -32,7 +33,7 @@ function FeaturedArticleCard({ article }: { article: Article }) {
         </div>
       </Link>
     </article>
-  )
+  );
 }
 
 function SecondaryArticleCard({ article }: { article: Article }) {
@@ -42,33 +43,37 @@ function SecondaryArticleCard({ article }: { article: Article }) {
         <div className="mb-1.5">
           <CategoryBadge category={article.category} />
         </div>
-        <h3 className="text-lg font-semibold text-black group-hover:underline leading-tight">{article.title}</h3>
-        <p className="text-sm text-neutral-600 mt-1.5 line-clamp-2">By {article.author}</p>
+        <h3 className="text-lg font-semibold text-black group-hover:underline leading-tight">
+          {article.title}
+        </h3>
+        <p className="text-sm text-neutral-600 mt-1.5 line-clamp-2">
+          By {article.author}
+        </p>
       </Link>
     </article>
-  )
+  );
 }
 
 export default async function HeroSection() {
-  const featuredArticles = await getArticles({ 
-    isFeatured: true, 
+  const featuredArticles = await getArticles({
+    isFeatured: true,
     limit: 1,
-    sortBy: "datePublished" 
-  })
-  const featuredArticle = featuredArticles[0]
+    sortBy: "datePublished",
+  });
+  const featuredArticle = featuredArticles[0];
 
-  const excludedIds: string[] = []
+  const excludedIds: string[] = [];
   if (featuredArticle) {
-    excludedIds.push(featuredArticle.id)
+    excludedIds.push(featuredArticle.id);
   }
 
   const secondaryArticles = await getArticles({
     limit: 3,
     excludeIds: excludedIds,
     sortBy: "datePublished",
-  })
+  });
 
-  if (!featuredArticle) return null
+  if (!featuredArticle) return null;
 
   return (
     <section aria-labelledby="hero-heading" className="mb-10">
@@ -91,5 +96,5 @@ export default async function HeroSection() {
         )}
       </div>
     </section>
-  )
+  );
 }

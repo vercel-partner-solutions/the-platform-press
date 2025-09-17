@@ -1,9 +1,9 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect, useRef, useCallback } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Article {
   id: number;
@@ -26,12 +26,12 @@ export function SearchBox() {
   const searchArticles = useCallback(
     async (searchQuery: string): Promise<Article[]> => {
       const response = await fetch(
-        `/api/search?q=${encodeURIComponent(searchQuery)}`
+        `/api/search?q=${encodeURIComponent(searchQuery)}`,
       );
       const data = await response.json();
       return data.articles || [];
     },
-    []
+    [],
   );
 
   // Handle search when query changes
@@ -62,7 +62,7 @@ export function SearchBox() {
     if (!isOpen || results.length === 0) {
       if (e.key === "Enter" && query.length >= 2) {
         e.preventDefault();
-        router.push(`/search?q=${encodeURIComponent(query)}`);
+        router.push(`/category/all?q=${encodeURIComponent(query)}`);
         return;
       }
       return;
@@ -82,7 +82,7 @@ export function SearchBox() {
         if (selectedIndex >= 0 && results[selectedIndex]) {
           handleArticleSelect(results[selectedIndex]);
         } else {
-          router.push(`/search?q=${encodeURIComponent(query)}`);
+          router.push(`/category/all?q=${encodeURIComponent(query)}`);
         }
         break;
       case "Escape":
@@ -143,9 +143,8 @@ export function SearchBox() {
           onKeyDown={handleKeyDown}
           onFocus={handleInputFocus}
           placeholder="Search"
-          className={`w-full rounded-md border border-input bg-background pl-10 py-2 ${
-            query.length > 0 ? "pr-10" : "pr-4"
-          } text-sm placeholder:text-muted-foreground transition-colors duration-200`}
+          className={`w-full rounded-md border border-input bg-background pl-10 py-2 ${query.length > 0 ? "pr-10" : "pr-4"
+            } text-sm placeholder:text-muted-foreground transition-colors duration-200`}
         />
         {query.length > 0 && (
           <button
@@ -168,11 +167,11 @@ export function SearchBox() {
           <div className="p-2">
             {results.map((article, index) => (
               <button
+                type="button"
                 key={article.id}
                 onClick={() => handleArticleSelect(article)}
-                className={`w-full text-left px-4 py-3 text-sm rounded-sm hover:bg-gray-200 transition-colors duration-150 ${
-                  selectedIndex === index ? "bg-gray-200" : ""
-                }`}
+                className={`w-full text-left px-4 py-3 text-sm rounded-sm hover:bg-gray-200 transition-colors duration-150 ${selectedIndex === index ? "bg-gray-200" : ""
+                  }`}
               >
                 <div className="space-y-1">
                   <div className="flex justify-between">
