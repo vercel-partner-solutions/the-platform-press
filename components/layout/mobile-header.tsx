@@ -1,14 +1,12 @@
-import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 
 export function MobileHeader({
   isMobileMenuOpen,
   categories,
-  handleLiveClick,
 }: {
   isMobileMenuOpen: boolean;
   categories: string[];
-  handleLiveClick: () => void;
 }) {
   return (
     <>
@@ -35,8 +33,8 @@ export function MobileHeader({
               >
                 Opinion
               </Link>
-              <span
-                onClick={handleLiveClick}
+              <Link
+                href="/category/latest"
                 className="text-sm font-medium py-2 cursor-pointer hover:underline"
                 style={{
                   color: "#dc2626",
@@ -47,7 +45,7 @@ export function MobileHeader({
                 }}
               >
                 Live
-              </span>
+              </Link>
               <div className="pt-3 border-t border-neutral-200 mt-3">
                 <Button
                   variant="outline"
