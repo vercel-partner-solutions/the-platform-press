@@ -1,4 +1,4 @@
-import { MapPin } from "lucide-react"
+import { MapPin } from "lucide-react";
 
 export default function LocalNewsLoading() {
   return (
@@ -30,5 +30,5 @@ export default function LocalNewsLoading() {
         ))}
       </div>
     </section>
-  )
+  );
 }

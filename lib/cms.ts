@@ -318,8 +318,13 @@ async function fetchContent<T = any>(
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error(`HTTP error! status: ${response.status}, response:`, errorText);
-    throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
+    console.error(
+      `HTTP error! status: ${response.status}, response:`,
+      errorText
+    );
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
   }
 
   const json: ContentfulResponse<T> = await response.json();
@@ -433,24 +438,25 @@ export async function getArticles({
   try {
     // Build GraphQL where clause for server-side filtering
     const where: any = {};
-    
+
     // Add GraphQL-supported filters
     if (isFeatured !== undefined) {
       where.isFeatured = isFeatured;
     }
-    
+
     if (isBreaking !== undefined) {
       where.isBreakingNews = isBreaking;
     }
-    
+
     if (category) {
       where.category = { title: category };
     }
-    
+
     // Determine if we need client-side filtering for unsupported filters
-    const hasClientSideFilters = searchQuery || location || excludeIds?.length || excludeFeatured;
-    const fetchLimit = hasClientSideFilters ? (limit || 10) * 2 : (limit || 10);
-    
+    const hasClientSideFilters =
+      searchQuery || location || excludeIds?.length || excludeFeatured;
+    const fetchLimit = hasClientSideFilters ? (limit || 10) * 2 : limit || 10;
+
     const response = await fetchContent<ArticleCollection>(GET_ARTICLES_QUERY, {
       limit: fetchLimit,
       skip: 0,

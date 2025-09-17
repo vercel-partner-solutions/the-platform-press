@@ -1,20 +1,21 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { getFormatter } from "next-intl/server";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
 
-export default function LatestArticleListItem({
+export default async function LatestArticleListItem({
   article,
 }: {
   article: Article;
 }) {
-  const formattedDate = new Date(article.datePublished).toLocaleDateString(
-    "en-US",
-    {
-      month: "long",
-      day: "numeric",
-    }
-  );
+  const formatter = await getFormatter();
+  const date = new Date(article.datePublished);
+  const dateTime = formatter.dateTime(date, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
   return (
     <li className="relative pl-8 mb-10 last:mb-0">
@@ -32,7 +33,7 @@ export default function LatestArticleListItem({
               src={
                 article.imageUrl ||
                 `/placeholder.svg?width=192&height=108&query=${encodeURIComponent(
-                  "news"
+                  "news",
                 )}`
               }
               alt={article.title}
@@ -46,7 +47,7 @@ export default function LatestArticleListItem({
         <div className="flex flex-col flex-grow mt-2 sm:mt-0">
           <div className="flex items-center gap-3 mb-1.5">
             <CategoryBadge category={article.category} />
-            <time className="text-xs text-neutral-500">{formattedDate}</time>
+            <time className="text-xs text-neutral-500">{dateTime}</time>
           </div>
 
           <Link href={`/${article.slug}`} className="block">

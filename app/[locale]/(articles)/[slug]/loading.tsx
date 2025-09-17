@@ -19,5 +19,5 @@ export default function ArticleLoading() {
         </div>
       </div>
     </div>
-  )
+  );
 }

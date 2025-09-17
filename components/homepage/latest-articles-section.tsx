@@ -1,6 +1,6 @@
-import LatestArticleListItem from "./latest-article-list-item";
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
+import LatestArticleListItem from "./latest-article-list-item";
 
 export default async function LatestArticlesSection({
   isHomepage = false,

@@ -1,7 +1,7 @@
-import Link from "next/link"
-import Image from "next/image"
-import type { Article } from "@/lib/types"
-import CategoryBadge from "../ui/category-badge"
+import Image from "next/image";
+import Link from "next/link";
+import type { Article } from "@/lib/types";
+import CategoryBadge from "../ui/category-badge";
 
 export default function CategoryArticleCard({ article }: { article: Article }) {
   return (
@@ -31,5 +31,5 @@ export default function CategoryArticleCard({ article }: { article: Article }) {
         </Link>
       </div>
     </article>
-  )
+  );
 }

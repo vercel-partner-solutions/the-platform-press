@@ -2,6 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-timeline: --page-scroll block;
+}
+
+@keyframes reveal-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes reveal-right {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade {
+  0%,
+  30% {
+    opacity: 0;
+  }
+  35%,
+  65% {
+    opacity: 1;
+  }
+  70%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-reveal-left {
+  animation: reveal-left auto ease-out;
+  animation-timeline: --page-scroll;
+  animation-range: 100px 150px;
+  animation-fill-mode: both;
+}
+
+.animate-reveal-right {
+  animation: reveal-right auto ease-out;
+  animation-timeline: --page-scroll;
+  animation-range: 100px 150px;
+  animation-fill-mode: both;
+}
+
+.cycling-item {
+  animation: cycleItems 10s infinite;
+}
+
+@keyframes cycleItems {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

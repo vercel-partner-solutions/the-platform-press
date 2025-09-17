@@ -1,19 +1,27 @@
-"use client"
+"use client";
 
-import { useState, useTransition, useEffect, type FormEvent, useRef } from "react"
-import { usePathname } from "next/navigation"
-import type { Article } from "@/lib/types"
-import ArticleCard from "@/components/ui/article-card"
-import { Button } from "@/components/ui/button"
-import CategorySearchInput from "@/components/ui/category-search-input"
-import { searchArticlesAction } from "../actions"
+import { usePathname } from "next/navigation";
+import {
+  type FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
+import ArticleCard from "@/components/ui/article-card";
+import { Button } from "@/components/ui/button";
+import CategorySearchInput from "@/components/ui/category-search-input";
+import type { Article } from "@/lib/types";
+import { searchArticlesAction } from "../actions";
 
 interface CategorySearchClientProps {
-  initialArticles: Article[]
-  totalCount: number
-  hasMore: boolean
-  category: string
-  searchQuery: string // Receive initial search query from server
+  initialArticles: Article[];
+  totalCount: number;
+  hasMore: boolean;
+  category: string;
+  searchParams: {
+    q?: string;
+  };
 }
 
 export default function CategorySearchClient({
@@ -21,38 +29,40 @@ export default function CategorySearchClient({
   totalCount: initialTotalCount,
   hasMore: initialHasMore,
   category,
-  searchQuery: initialSearchQuery,
+  searchParams,
 }: CategorySearchClientProps) {
-  const pathname = usePathname()
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const wasPending = useRef(false)
+  const pathname = usePathname();
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const wasPending = useRef(false);
 
-  const [articles, setArticles] = useState<Article[]>(initialArticles)
-  const [totalCount, setTotalCount] = useState(initialTotalCount)
-  const [hasMore, setHasMore] = useState(initialHasMore)
-  const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
-  const [activeSearchQuery, setActiveSearchQuery] = useState(initialSearchQuery)
-  const [isPending, startTransition] = useTransition()
+  const { q } = searchParams;
+
+  const [articles, setArticles] = useState<Article[]>(initialArticles);
+  const [totalCount, setTotalCount] = useState(initialTotalCount);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [searchQuery, setSearchQuery] = useState(q || "");
+  const [activeSearchQuery, setActiveSearchQuery] = useState(q || "");
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     // When a search transition completes, re-focus the input.
     if (wasPending.current && !isPending) {
-      inputRef.current?.focus()
+      inputRef.current?.focus();
     }
-    wasPending.current = isPending
-  }, [isPending])
+    wasPending.current = isPending;
+  }, [isPending]);
 
   const triggerSearch = (query: string) => {
     // Update URL using browser history API to prevent a page reload
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(window.location.search);
     if (query) {
-      params.set("q", query)
+      params.set("q", query);
     } else {
-      params.delete("q")
+      params.delete("q");
     }
-    window.history.replaceState(null, "", `${pathname}?${params.toString()}`)
-    setActiveSearchQuery(query)
+    window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
+    setActiveSearchQuery(query);
 
     startTransition(async () => {
       const fetchCategory =
@@ -60,85 +70,93 @@ export default function CategorySearchClient({
           ? "Opinion"
           : category === "latest"
             ? undefined
-            : category.charAt(0).toUpperCase() + category.slice(1)
+            : category.charAt(0).toUpperCase() + category.slice(1);
 
       const fetchedArticles = await searchArticlesAction({
         category: fetchCategory,
         sortBy: "datePublished",
         searchQuery: query,
-      })
-      setArticles(fetchedArticles)
-      setTotalCount(fetchedArticles.length)
-      setHasMore(false) // Pagination is disabled for client-side search results
-    })
-  }
+      });
+      setArticles(fetchedArticles);
+      setTotalCount(fetchedArticles.length);
+      setHasMore(false); // Pagination is disabled for client-side search results
+    });
+  };
 
   const clearSearch = () => {
     if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current)
+      clearTimeout(debounceTimer.current);
     }
-    setSearchQuery("")
-    setActiveSearchQuery("")
-    setArticles(initialArticles)
-    setTotalCount(initialTotalCount)
-    setHasMore(initialHasMore)
-    const params = new URLSearchParams(window.location.search)
-    params.delete("q")
-    window.history.replaceState(null, "", `${pathname}?${params.toString()}`)
-  }
+    setSearchQuery("");
+    setActiveSearchQuery("");
+    setArticles(initialArticles);
+    setTotalCount(initialTotalCount);
+    setHasMore(initialHasMore);
+    const params = new URLSearchParams(window.location.search);
+    params.delete("q");
+    window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
+  };
 
   // Effect to update state when navigating between categories (server-provided props change)
   useEffect(() => {
-    setArticles(initialArticles)
-    setTotalCount(initialTotalCount)
-    setHasMore(initialHasMore)
-    setSearchQuery(initialSearchQuery)
-    setActiveSearchQuery(initialSearchQuery)
-  }, [initialArticles, initialTotalCount, initialHasMore, initialSearchQuery])
+    setArticles(initialArticles);
+    setTotalCount(initialTotalCount);
+    setHasMore(initialHasMore);
+    setSearchQuery(q || "");
+    setActiveSearchQuery(q || "");
+  }, [initialArticles, initialTotalCount, initialHasMore, q]);
 
   // Effect for debounced search-as-you-type
   useEffect(() => {
     if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current)
+      clearTimeout(debounceTimer.current);
     }
 
     // Don't run search for the initial query on load
-    if (searchQuery === initialSearchQuery) {
-      return
+    if (searchQuery === q || "") {
+      return;
     }
 
     if (searchQuery.length === 0) {
       // If search is cleared, reset to initial state
-      clearSearch()
-      return
+      clearSearch();
+      return;
     }
 
     if (searchQuery.length >= 3) {
       debounceTimer.current = setTimeout(() => {
-        triggerSearch(searchQuery)
-      }, 500) // 500ms debounce delay
+        triggerSearch(searchQuery);
+      }, 500); // 500ms debounce delay
     }
 
     return () => {
       if (debounceTimer.current) {
-        clearTimeout(debounceTimer.current)
+        clearTimeout(debounceTimer.current);
       }
-    }
-  }, [searchQuery, category, initialArticles, initialTotalCount, initialHasMore, initialSearchQuery, pathname])
+    };
+  }, [
+    searchQuery,
+    category,
+    initialArticles,
+    initialTotalCount,
+    initialHasMore,
+    q,
+    pathname,
+  ]);
 
   const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current)
+      clearTimeout(debounceTimer.current);
     }
     // Hitting enter now performs the search immediately
     if (searchQuery.length > 0) {
-      triggerSearch(searchQuery)
+      triggerSearch(searchQuery);
     } else {
       // If enter is pressed on an empty input, clear/reset
-      clearSearch()
+      clearSearch();
     }
-  }
+  };
 
   const loadMore = () => {
     startTransition(async () => {
@@ -147,38 +165,40 @@ export default function CategorySearchClient({
           ? "Opinion"
           : category === "latest"
             ? undefined
-            : category.charAt(0).toUpperCase() + category.slice(1)
+            : category.charAt(0).toUpperCase() + category.slice(1);
 
       const allArticles = await searchArticlesAction({
         category: fetchCategory,
         sortBy: "datePublished",
-      })
+      });
 
-      const nextBatch = allArticles.slice(articles.length, articles.length + 9)
-      const updatedArticles = [...articles, ...nextBatch]
+      const nextBatch = allArticles.slice(articles.length, articles.length + 9);
+      const updatedArticles = [...articles, ...nextBatch];
 
-      setArticles(updatedArticles)
-      setHasMore(updatedArticles.length < allArticles.length)
-    })
-  }
+      setArticles(updatedArticles);
+      setHasMore(updatedArticles.length < allArticles.length);
+    });
+  };
 
   const getCategoryDisplayName = (category: string) => {
     switch (category) {
       case "all":
-        return "All Articles"
+        return "All Articles";
       case "opinion":
-        return "Opinions & Analysis"
+        return "Opinions & Analysis";
       case "latest":
-        return "Latest News"
+        return "Latest News";
       default:
-        return category.charAt(0).toUpperCase() + category.slice(1)
+        return category.charAt(0).toUpperCase() + category.slice(1);
     }
-  }
+  };
 
   return (
     <>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-black mb-2">{getCategoryDisplayName(category)}</h1>
+        <h1 className="text-3xl font-bold text-black mb-2">
+          {getCategoryDisplayName(category)}
+        </h1>
         <div className="w-16 h-1 bg-blue-600 rounded"></div>
       </div>
 
@@ -198,7 +218,9 @@ export default function CategorySearchClient({
       ) : articles.length === 0 ? (
         <section className="text-center py-12">
           <p className="text-neutral-600 text-lg mb-4">
-            {activeSearchQuery ? `No articles found for "${activeSearchQuery}"` : "No articles found in this section."}
+            {activeSearchQuery
+              ? `No articles found for "${activeSearchQuery}"`
+              : "No articles found in this section."}
           </p>
           <p className="text-neutral-500">
             {activeSearchQuery
@@ -211,7 +233,9 @@ export default function CategorySearchClient({
           {activeSearchQuery && (
             <div className="mb-6 text-sm text-neutral-600">
               Showing {totalCount} {totalCount === 1 ? "result" : "results"} for{" "}
-              <span className="font-semibold text-black">"{activeSearchQuery}"</span>
+              <span className="font-semibold text-black">
+                "{activeSearchQuery}"
+              </span>
             </div>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -236,12 +260,13 @@ export default function CategorySearchClient({
           {!hasMore && !activeSearchQuery && articles.length > 9 && (
             <div className="text-center mt-8">
               <p className="text-neutral-500 text-sm">
-                Showing all {totalCount} {totalCount === 1 ? "article" : "articles"}
+                Showing all {totalCount}{" "}
+                {totalCount === 1 ? "article" : "articles"}
               </p>
             </div>
           )}
         </section>
       )}
     </>
-  )
+  );
 }
