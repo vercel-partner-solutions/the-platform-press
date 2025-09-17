@@ -1,28 +1,27 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import {
+  type FormEvent,
+  useEffect,
+  useRef,
   useState,
   useTransition,
-  useEffect,
-  type FormEvent,
-  useRef,
 } from "react";
-import { usePathname } from "next/navigation";
-import type { Article } from "@/lib/types";
 import ArticleCard from "@/components/ui/article-card";
 import { Button } from "@/components/ui/button";
 import CategorySearchInput from "@/components/ui/category-search-input";
+import type { Article } from "@/lib/types";
 import { searchArticlesAction } from "../actions";
-import { use } from "react";
 
 interface CategorySearchClientProps {
   initialArticles: Article[];
   totalCount: number;
   hasMore: boolean;
   category: string;
-  searchParams: Promise<{
+  searchParams: {
     q?: string;
-  }>;
+  };
 }
 
 export default function CategorySearchClient({
@@ -37,7 +36,7 @@ export default function CategorySearchClient({
   const inputRef = useRef<HTMLInputElement>(null);
   const wasPending = useRef(false);
 
-  const { q } = use(searchParams);
+  const { q } = searchParams;
 
   const [articles, setArticles] = useState<Article[]>(initialArticles);
   const [totalCount, setTotalCount] = useState(initialTotalCount);

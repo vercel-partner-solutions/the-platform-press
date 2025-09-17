@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { Clock, MessageSquareText } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface CategorySidebarProps {

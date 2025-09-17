@@ -1,8 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
-import { getArticles } from "@/lib/cms";
 
 function FeaturedArticleCard({ article }: { article: Article }) {
   return (

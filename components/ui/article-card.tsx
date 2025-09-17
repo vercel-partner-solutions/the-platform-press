@@ -1,8 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useFormatter } from "next-intl";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "./category-badge";
-import { useFormatter } from "next-intl";
 
 export default function ArticleCard({
   article,

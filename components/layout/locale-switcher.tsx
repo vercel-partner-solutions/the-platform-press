@@ -1,12 +1,12 @@
 "use client";
 
-import { Link, usePathname } from "@/i18n/navigation";
-import { localeToLabel, routing } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
+import { localeToLabel, routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
-export default function LocaleSwitcher() {
+export function LocaleSwitcher() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentLocale = useLocale();

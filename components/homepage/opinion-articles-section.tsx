@@ -1,7 +1,7 @@
-import type { Article } from "@/lib/types";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { getArticles } from "@/lib/cms";
+import type { Article } from "@/lib/types";
 
 function OpinionArticleCard({ article }: { article: Article }) {
   return (

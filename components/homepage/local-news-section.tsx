@@ -1,7 +1,7 @@
-import type { Article } from "@/lib/types";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { getFormatter } from "next-intl/server";
+import type { Article } from "@/lib/types";
 
 async function LocalNewsCard({ article }: { article: Article }) {
   const formatter = await getFormatter();

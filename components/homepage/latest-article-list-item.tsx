@@ -1,8 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { getFormatter } from "next-intl/server";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
-import { getFormatter } from "next-intl/server";
 
 export default async function LatestArticleListItem({
   article,

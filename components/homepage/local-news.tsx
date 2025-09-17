@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { getArticles } from "@/lib/cms";
-import LocalNewsSection from "./local-news-section";
 import LocalNewsLoading from "./local-news-loading";
+import LocalNewsSection from "./local-news-section";
 
 // Simulate getting user location (in a real app, this would use geolocation API or IP-based detection)
 async function getUserLocation(): Promise<string> {

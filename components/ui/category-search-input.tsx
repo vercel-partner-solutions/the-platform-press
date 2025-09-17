@@ -1,7 +1,7 @@
 "use client";
 
 import { Search, X } from "lucide-react";
-import { forwardRef, type FormEvent } from "react";
+import { type FormEvent, forwardRef } from "react";
 
 interface CategorySearchInputProps {
   value: string;
@@ -29,7 +29,6 @@ const CategorySearchInput = forwardRef<
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={isSearching}
-        autoFocus
       />
       <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
         {value.length > 0 && (

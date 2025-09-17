@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
 

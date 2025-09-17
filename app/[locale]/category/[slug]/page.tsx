@@ -1,7 +1,7 @@
-import { getArticles, getCategories } from "@/lib/cms";
-import CategorySearchClient from "./category-search-client";
 import { setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
+import { getArticles, getCategories } from "@/lib/cms";
+import CategorySearchClient from "./category-search-client";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
@@ -29,6 +29,7 @@ export default async function CategorySearchPage({
   searchParams,
 }: Props) {
   const { slug, locale } = await params;
+  const { q } = await searchParams;
   setRequestLocale(locale);
 
   const category = decodeURIComponent(slug);
@@ -43,7 +44,7 @@ export default async function CategorySearchPage({
         totalCount={articles.length}
         hasMore={articles.length > 9}
         category={category}
-        searchParams={searchParams}
+        searchParams={q ? { q } : {}}
       />
     </Suspense>
   );

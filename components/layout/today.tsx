@@ -1,10 +1,9 @@
-import { useFormatter, useNow } from "next-intl";
+import { getFormatter, getNow } from "next-intl/server";
 
-const weather = getMockWeather();
-
-export function Today() {
-  const format = useFormatter();
-  const dateTime = useNow();
+export async function Today() {
+  const weather = await getMockWeather();
+  const format = await getFormatter();
+  const dateTime = await getNow();
 
   const intlDate = format.dateTime(dateTime, {
     weekday: "long",
@@ -15,12 +14,11 @@ export function Today() {
 
   return (
     <div className="hidden md:flex flex-col justify-self-start">
-      <div className="flex items-center gap-4 text-sm text-neutral-600 mb-1">
+      <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
         <span>{intlDate}</span>
-        <div className="flex items-center gap-1">
-          <span>☁️</span>
-          <span>{weather.temperature}</span>
-        </div>
+        <span>
+          {renderWeatherIcon(weather.condition)} {weather.temperature}
+        </span>
       </div>
       <span className="text-sm font-medium text-neutral-700">
         Today's Paper
@@ -34,7 +32,7 @@ interface WeatherData {
   condition: "Sunny" | "Cloudy" | "Rainy" | "Snowy";
 }
 
-function getMockWeather(): WeatherData {
+async function getMockWeather(): Promise<WeatherData> {
   new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
   const conditions: WeatherData["condition"][] = ["Sunny", "Cloudy", "Rainy"];
   const randomCondition =
@@ -45,4 +43,19 @@ function getMockWeather(): WeatherData {
     temperature: randomTemp,
     condition: randomCondition,
   };
+}
+
+function renderWeatherIcon(condition: WeatherData["condition"]) {
+  switch (condition) {
+    case "Sunny":
+      return "☀️";
+    case "Cloudy":
+      return "☁️";
+    case "Rainy":
+      return "🌧️";
+    case "Snowy":
+      return "❄️";
+    default:
+      return "🌤️";
+  }
 }

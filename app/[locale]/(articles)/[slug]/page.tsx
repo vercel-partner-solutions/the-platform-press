@@ -1,13 +1,13 @@
-import { getArticleBySlug, getArticles } from "@/lib/cms";
+import { CalendarDays, Clock, UserCircle } from "lucide-react";
+import { marked } from "marked"; // Import the markdown parser
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import CategoryBadge from "@/components/ui/category-badge";
-import ArticleCard from "@/components/ui/article-card";
-import { CalendarDays, UserCircle, Clock } from "lucide-react";
-import { marked } from "marked"; // Import the markdown parser
-import { getFormatter, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import { getFormatter, setRequestLocale } from "next-intl/server";
+import ArticleCard from "@/components/ui/article-card";
+import CategoryBadge from "@/components/ui/category-badge";
+import { getArticleBySlug, getArticles } from "@/lib/cms";
 
 export async function generateMetadata({
   params,

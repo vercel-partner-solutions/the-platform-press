@@ -1,7 +1,7 @@
-import type { Article } from "@/lib/types";
 import Link from "next/link";
-import { getArticles } from "@/lib/cms";
 import { getFormatter } from "next-intl/server";
+import { getArticles } from "@/lib/cms";
+import type { Article } from "@/lib/types";
 
 async function PopularArticleListItem({
   article,

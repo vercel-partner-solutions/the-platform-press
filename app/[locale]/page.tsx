@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
 import BreakingNewsBanner from "@/components/homepage/breaking-news-banner";
-import HeroSection from "@/components/homepage/hero-section";
 import CategoryArticlesSection from "@/components/homepage/category-articles-section";
+import HeroSection from "@/components/homepage/hero-section";
 import LatestArticlesSection from "@/components/homepage/latest-articles-section";
-import PopularArticlesSection from "@/components/homepage/popular-articles-section";
-import OpinionArticlesSection from "@/components/homepage/opinion-articles-section";
 import LocalNews from "@/components/homepage/local-news";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import OpinionArticlesSection from "@/components/homepage/opinion-articles-section";
+import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 
 export async function generateMetadata({
   params,
