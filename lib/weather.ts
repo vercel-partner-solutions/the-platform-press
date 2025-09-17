@@ -71,18 +71,17 @@ async function getCoordinatesFromCity(city: string): Promise<{ latitude: number;
     };
 }
 
-function getTemperatureUnit(country: string | null): 'celsius' | 'fahrenheit' {
-    // US, Bahamas, Belize, Cayman Islands, and Palau use Fahrenheit
-    const fahrenheitCountries = ['US', 'BS', 'BZ', 'KY', 'PW'];
-    return country && fahrenheitCountries.includes(country) ? 'fahrenheit' : 'celsius';
+function getTemperatureUnit(locale: string): 'celsius' | 'fahrenheit' {
+    // US locales use Fahrenheit, all others use Celsius
+    return locale === 'en-US' ? 'fahrenheit' : 'celsius';
 }
 
 function getTemperatureSymbol(unit: 'celsius' | 'fahrenheit'): 'C' | 'F' {
     return unit === 'celsius' ? 'C' : 'F';
 }
 
-async function getWeatherFromCoordinates(latitude: number, longitude: number, country: string | null): Promise<WeatherData> {
-    const temperatureUnit = getTemperatureUnit(country);
+async function getWeatherFromCoordinates(latitude: number, longitude: number, locale: string): Promise<WeatherData> {
+    const temperatureUnit = getTemperatureUnit(locale);
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=${temperatureUnit}`;
 
     const response = await fetch(weatherUrl);
@@ -100,15 +99,15 @@ async function getWeatherFromCoordinates(latitude: number, longitude: number, co
     };
 }
 
-export async function getWeather(): Promise<WeatherData | null> {
+export async function getWeather(locale: string): Promise<WeatherData | null> {
     try {
-        const { city, country } = await getVercelGeoHeaders();
+        const { city } = await getVercelGeoHeaders();
         if (!city) return null;
 
         const coordinates = await getCoordinatesFromCity(city);
         if (!coordinates) return null;
 
-        return await getWeatherFromCoordinates(coordinates.latitude, coordinates.longitude, country);
+        return await getWeatherFromCoordinates(coordinates.latitude, coordinates.longitude, locale);
     } catch (error) {
         console.error("Error fetching weather:", error);
         return null;
