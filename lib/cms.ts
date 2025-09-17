@@ -1,7 +1,10 @@
+"server-only";
+
 import type { Article, Category } from "./types";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import type { Document } from "@contentful/rich-text-types";
+import { draftMode } from "next/headers";
 
 // Contentful-specific types
 interface ContentfulSys {
@@ -293,10 +296,10 @@ const GET_CATEGORIES_QUERY = `
 async function fetchContent<T = any>(
   query: string,
   variables: Record<string, any> = {},
-  preview = false
+  previewEnabled = false
 ): Promise<T> {
   const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
-  const CONTENTFUL_ACCESS_TOKEN = preview
+  const CONTENTFUL_ACCESS_TOKEN = previewEnabled
     ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
     : process.env.CONTENTFUL_ACCESS_TOKEN;
 
@@ -312,7 +315,10 @@ async function fetchContent<T = any>(
         "Content-Type": "application/json",
         Authorization: `Bearer ${CONTENTFUL_ACCESS_TOKEN}`,
       },
-      body: JSON.stringify({ query, variables }),
+      body: JSON.stringify({
+        query,
+        variables: { ...variables, preview: previewEnabled },
+      }),
     }
   );
 
@@ -457,12 +463,17 @@ export async function getArticles({
       searchQuery || location || excludeIds?.length || excludeFeatured;
     const fetchLimit = hasClientSideFilters ? (limit || 10) * 2 : limit || 10;
 
-    const response = await fetchContent<ArticleCollection>(GET_ARTICLES_QUERY, {
-      limit: fetchLimit,
-      skip: 0,
-      where: Object.keys(where).length > 0 ? where : undefined,
-      preview: false,
-    });
+    const { isEnabled: previewEnabled } = await draftMode();
+
+    const response = await fetchContent<ArticleCollection>(
+      GET_ARTICLES_QUERY,
+      {
+        limit: fetchLimit,
+        skip: 0,
+        where: Object.keys(where).length > 0 ? where : undefined,
+      },
+      previewEnabled
+    );
 
     if (!response?.articleCollection?.items) {
       console.warn("No articles found in Contentful response");
@@ -527,12 +538,14 @@ export async function getArticleBySlug(
   slug: string
 ): Promise<Article | undefined> {
   try {
+    const { isEnabled: previewEnabled } = await draftMode();
+
     const response = await fetchContent<ArticleCollection>(
       GET_ARTICLE_BY_SLUG_QUERY,
       {
         slug,
-        preview: false,
-      }
+      },
+      previewEnabled
     );
 
     if (!response?.articleCollection?.items?.length) {
@@ -549,11 +562,12 @@ export async function getArticleBySlug(
 
 export async function getCategories(): Promise<string[]> {
   try {
+    const { isEnabled: previewEnabled } = await draftMode();
+
     const response = await fetchContent<CategoryCollection>(
       GET_CATEGORIES_QUERY,
-      {
-        preview: false,
-      }
+      {},
+      previewEnabled
     );
 
     if (!response?.categoryCollection?.items) {
