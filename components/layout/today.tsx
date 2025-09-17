@@ -1,5 +1,5 @@
 import { getFormatter, getLocale, getNow } from "next-intl/server";
-import { getWeather, renderWeatherIcon } from "@/lib/weather";
+import { getWeather, renderWeatherIcon, type WeatherData } from "@/lib/weather";
 
 const dateOptions = {
   weekday: "long" as const,
@@ -31,12 +31,7 @@ export async function Today() {
     <div className="hidden md:flex flex-col justify-self-start">
       <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
         <span>{safeIntlDate}</span>
-        {weather && (
-          <span>
-            {renderWeatherIcon(weather.condition)} {weather.temperature}°
-            {weather.unit}
-          </span>
-        )}
+        {renderWeather(weather)}
       </div>
       <span className="text-sm font-medium text-neutral-700">
         Today's Paper
@@ -44,3 +39,14 @@ export async function Today() {
     </div>
   );
 }
+
+const renderWeather = (weather: WeatherData | null) => {
+  if (!weather || !weather.condition || !weather.temperature || !weather.unit) return null;
+
+  return (
+    <span>
+      {renderWeatherIcon(weather.condition)} {weather.temperature}°
+      {weather.unit}
+    </span>
+  );
+};

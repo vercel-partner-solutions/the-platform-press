@@ -1,10 +1,10 @@
 import type { Locale } from "next-intl";
-import { getVercelGeoHeaders } from "@/lib/headers";
+import { getLocation } from "@/hooks/server/getLocation";
 
-interface WeatherData {
-  temperature: number;
-  condition: WeatherCondition;
-  unit: "C" | "F";
+export interface WeatherData {
+  temperature?: number;
+  condition?: WeatherCondition;
+  unit?: "C" | "F";
 }
 
 type WeatherCondition = "Sunny" | "Cloudy" | "Rainy" | "Snowy";
@@ -115,13 +115,13 @@ async function getWeatherFromCoordinates(
   };
 }
 
-export async function getWeather(locale: string): Promise<WeatherData | null> {
+export async function getWeather(locale: Locale): Promise<WeatherData> {
   try {
-    const { city } = await getVercelGeoHeaders();
-    if (!city) return null;
+    const { city } = await getLocation();
+    if (!city) throw new Error("City not found");
 
     const coordinates = await getCoordinatesFromCity(city);
-    if (!coordinates) return null;
+    if (!coordinates) throw new Error("Coordinates not found");
 
     return await getWeatherFromCoordinates(
       coordinates.latitude,
@@ -129,7 +129,16 @@ export async function getWeather(locale: string): Promise<WeatherData | null> {
       locale,
     );
   } catch (error) {
-    console.error("Error fetching weather:", error);
-    return null;
+    if (error instanceof Error) {
+      console.error("Error fetching weather:", error.message);
+    } else {
+      console.error("Error fetching weather:", error);
+    }
+
+    return {
+      temperature: undefined,
+      condition: undefined,
+      unit: undefined,
+    }
   }
 }

@@ -2,7 +2,11 @@
 
 import { headers } from "next/headers";
 
-export async function getVercelGeoHeaders() {
+export async function getLocation(): Promise<{
+    country?: string;
+    region?: string;
+    city?: string;
+}> {
     if (process.env.NODE_ENV === "development") {
         return {
             country: "US",
@@ -14,7 +18,7 @@ export async function getVercelGeoHeaders() {
 
     const getDecoded = (name: string) => {
         const value = h.get(name);
-        return value ? decodeURIComponent(value) : null;
+        return value ? decodeURIComponent(value) : undefined;
     };
 
     return {
