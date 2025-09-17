@@ -23,7 +23,7 @@ export function LocaleSwitcher() {
             locale={locale}
             key={locale}
             className={cn(
-              "text-xs font-medium text-neutral-600 uppercase tracking-wide cursor-default",
+              "text-xs font-medium text-neutral-600 hober:font-bold hover:text-neutral-900 uppercase tracking-wide cursor-pointer",
               isActive && "text-bold",
             )}
           >
