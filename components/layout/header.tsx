@@ -196,13 +196,13 @@ export function HeaderClient({ categories }: HeaderProps) {
                 </Link>
                 <span
                   onClick={handleLiveClick}
+                  onKeyDown={(e) => e.key === 'Enter' && handleLiveClick()}
+                  tabIndex={0}
                   className="text-sm font-medium py-2 cursor-pointer hover:underline"
                   style={{
                     color: "#dc2626",
                     backgroundColor: "transparent",
                     border: "none",
-                    outline: "none",
-                    boxShadow: "none",
                   }}
                 >
                   Live
@@ -263,13 +263,13 @@ export function HeaderClient({ categories }: HeaderProps) {
               </Link>
               <span
                 onClick={handleLiveClick}
+                onKeyDown={(e) => e.key === 'Enter' && handleLiveClick()}
+                tabIndex={0}
                 className="text-sm font-medium hover:underline whitespace-nowrap cursor-pointer"
                 style={{
                   color: "#dc2626",
                   backgroundColor: "transparent",
                   border: "none",
-                  outline: "none",
-                  boxShadow: "none",
                 }}
               >
                 Live

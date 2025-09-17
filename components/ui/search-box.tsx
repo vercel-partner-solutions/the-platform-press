@@ -145,13 +145,13 @@ export function SearchBox() {
           placeholder="Search"
           className={`w-full rounded-md border border-input bg-background pl-10 py-2 ${
             query.length > 0 ? "pr-10" : "pr-4"
-          } text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors duration-200`}
+          } text-sm placeholder:text-muted-foreground transition-colors duration-200`}
         />
         {query.length > 0 && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground hover:text-foreground focus:text-foreground transition-colors duration-150 rounded-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground hover:text-foreground transition-colors duration-150 rounded-sm"
             aria-label="Clear search"
           >
             <X className="h-4 w-4" />
@@ -170,7 +170,7 @@ export function SearchBox() {
               <button
                 key={article.id}
                 onClick={() => handleArticleSelect(article)}
-                className={`w-full text-left px-4 py-3 text-sm rounded-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors duration-150 ${
+                className={`w-full text-left px-4 py-3 text-sm rounded-sm hover:bg-gray-200 transition-colors duration-150 ${
                   selectedIndex === index ? "bg-gray-200" : ""
                 }`}
               >
