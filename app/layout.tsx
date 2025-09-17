@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { HeaderClient } from "../components/layout/header";
+import { Header } from "../components/layout/header";
 import Footer from "../components/layout/footer";
 
 const poppins = Poppins({
@@ -42,11 +42,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
-
-async function Header() {
-  const { getCategories } = await import("@/lib/cms");
-  const categories = await getCategories();
-
-  return <HeaderClient categories={categories} />;
 }
