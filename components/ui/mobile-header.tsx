@@ -1,4 +1,7 @@
 import { Menu, Search } from "lucide-react";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
+import { Suspense } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -50,7 +53,8 @@ export async function MobileHeader() {
   );
 }
 
-function MobileMenu({ categories }: { categories: string[] }) {
+async function MobileMenu({ categories }: { categories: string[] }) {
+  const locale = await getLocale();
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -77,6 +81,11 @@ function MobileMenu({ categories }: { categories: string[] }) {
           </div>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
+          <NextIntlClientProvider locale={locale} messages={null}>
+            <Suspense>
+              <LocaleSwitcher />
+            </Suspense>
+          </NextIntlClientProvider>
           {categories.map((category) => (
             <div
               className="block px-3 py-2 text-sm rounded-md transition-colors group w-full"
@@ -93,7 +102,11 @@ function MobileMenu({ categories }: { categories: string[] }) {
           ))}
         </div>
         <SheetFooter>
-          <LocaleSwitcher />
+          <NextIntlClientProvider locale={locale} messages={null}>
+            <Suspense>
+              <LocaleSwitcher />
+            </Suspense>
+          </NextIntlClientProvider>
         </SheetFooter>
       </SheetContent>
     </Sheet>

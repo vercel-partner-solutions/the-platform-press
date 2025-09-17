@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 import { Link } from "@/i18n/navigation";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
@@ -27,7 +28,9 @@ export const DesktopHeader = async () => {
                 <SearchBox />
               </div>
               <NextIntlClientProvider locale={locale} messages={null}>
-                <LocaleSwitcher />
+                <Suspense>
+                  <LocaleSwitcher />
+                </Suspense>
               </NextIntlClientProvider>
               <div className="justify-self-end flex items-center gap-3">
                 <Button
