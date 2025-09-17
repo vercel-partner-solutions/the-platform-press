@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Search, Menu, X } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useRef } from "react";
+import { SearchBox } from "@/components/ui/search-box";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "@/lib/cms";
 
@@ -49,8 +50,6 @@ function StockTicker({ isCompact = false }: { isCompact?: boolean }) {
 export function HeaderClient({ categories }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -62,31 +61,6 @@ export function HeaderClient({ categories }: HeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (isSearchOpen && searchInputRef.current) {
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 0);
-    }
-  }, [isSearchOpen]);
-
-  const handleSearchToggle = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
-
-  const handleSearchClose = () => {
-    setIsSearchOpen(false);
-  };
-
-  const handleSearchSubmit = (searchTerm: string) => {
-    if (searchTerm.trim()) {
-      router.push(
-        `/category/all?search=${encodeURIComponent(searchTerm.trim())}`
-      );
-      setIsSearchOpen(false);
-    }
-  };
-
   const handleLiveClick = () => {
     router.push("/category/latest");
   };
@@ -95,43 +69,11 @@ export function HeaderClient({ categories }: HeaderProps) {
     <>
       <div className="bg-white border-b border-neutral-200">
         {/* Top utility bar - hidden on mobile */}
-        <div className="border-b border-neutral-100 hidden md:block">
+        <div className="border-b border-neutral-200 hidden md:block">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-3 items-center h-12">
-              <div className="justify-self-start relative">
-                {!isSearchOpen ? (
-                  <button
-                    onClick={handleSearchToggle}
-                    className="p-2 text-neutral-600 hover:text-black transition-colors"
-                    aria-label="Search"
-                  >
-                    <Search size={16} />
-                  </button>
-                ) : (
-                  <div className="flex items-center gap-2 transition-all duration-300 ease-in-out">
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      placeholder="Search articles..."
-                      className="w-64 px-3 py-1.5 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      onKeyDown={(e) => {
-                        if (e.key === "Escape") {
-                          handleSearchClose();
-                        }
-                        if (e.key === "Enter") {
-                          handleSearchSubmit(e.currentTarget.value);
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={handleSearchClose}
-                      className="p-1 text-neutral-600 hover:text-black transition-colors"
-                      aria-label="Close search"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
+              <div className="justify-self-start">
+                <SearchBox />
               </div>
 
               <nav className="justify-self-center flex items-center gap-6">
@@ -171,39 +113,13 @@ export function HeaderClient({ categories }: HeaderProps) {
           <div className="grid grid-cols-3 items-center h-16 md:h-20">
             {/* Mobile: Search and Menu */}
             <div className="flex items-center gap-2 md:hidden">
-              {!isSearchOpen ? (
-                <button
-                  onClick={handleSearchToggle}
-                  className="p-2 text-neutral-600 hover:text-black transition-colors"
-                  aria-label="Search"
-                >
-                  <Search size={18} />
-                </button>
-              ) : (
-                <div className="flex items-center gap-1">
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    placeholder="Search..."
-                    className="w-32 px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    onKeyDown={(e) => {
-                      if (e.key === "Escape") {
-                        handleSearchClose();
-                      }
-                      if (e.key === "Enter") {
-                        handleSearchSubmit(e.currentTarget.value);
-                      }
-                    }}
-                  />
-                  <button
-                    onClick={handleSearchClose}
-                    className="p-1 text-neutral-600 hover:text-black transition-colors"
-                    aria-label="Close search"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-              )}
+              <Link
+                href="/category/all"
+                className="p-2 text-neutral-600 hover:text-black transition-colors"
+                aria-label="Search"
+              >
+                <Search width="18" height="18" />
+              </Link>
               <button
                 className="p-2 text-neutral-600 hover:text-black transition-colors"
                 aria-label="Menu"
