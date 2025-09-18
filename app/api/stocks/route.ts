@@ -5,7 +5,7 @@ export async function GET() {
     
   return {
       symbol,
-      change: Number((delta * 100).toFixed(2)), 
+      change: Number(delta.toFixed(4)), 
       isPositive: delta >= 0
     };
   });
