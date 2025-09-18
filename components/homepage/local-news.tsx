@@ -1,5 +1,5 @@
-import { getLocation } from "@/hooks/server/getLocation";
 import { getArticles } from "@/lib/cms";
+import { getLocation } from "@/lib/geo/server";
 import LocalNewsSection from "./local-news-section";
 
 async function LocalNewsContent() {
