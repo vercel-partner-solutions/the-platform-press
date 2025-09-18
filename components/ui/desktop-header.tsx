@@ -65,7 +65,9 @@ export const DesktopHeader = async () => {
             {/* Desktop: Stock ticker */}
             <div className="hidden md:block text-right justify-self-end">
               <div className="w-32 text-right">
-                <StockTicker />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <StockTicker />
+                </Suspense>  
               </div>
             </div>
           </div>

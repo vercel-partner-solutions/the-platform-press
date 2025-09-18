@@ -10,7 +10,6 @@ async function getStocks(): Promise<Stock[]> {
     
     const res = await fetch(`${baseUrl}/api/stocks`, { 
       cache: "no-store",
-      next: { revalidate: 60 } // Revalidate every 60 seconds
     });
     
     if (!res.ok) return [];
@@ -25,16 +24,6 @@ async function getStocks(): Promise<Stock[]> {
 
 export async function StockTicker() {
   const stocks = await getStocks();
-
-  if (stocks.length === 0) {
-    return (
-      <div className="relative text-sm font-medium text-neutral-700 text-center">
-        <div className="h-16 flex items-center justify-center text-foreground/60">
-          Loading…
-        </div>
-      </div>
-    );
-  }
 
   // Total duration of animation
   // The delay between each item is the total duration divided by the number of items
