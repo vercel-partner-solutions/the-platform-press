@@ -1,15 +1,14 @@
-import { getLocale } from "next-intl/server";
+// Removed getLocale import since we're only showing deltas
+import type { Stock } from "@/lib/types";
 
-type ApiStock = { symbol: string; price: number };
-
-async function getStocks(locale: string): Promise<ApiStock[]> {
+async function getStocks(): Promise<Stock[]> {
   try {
     // In a server component, we need to use the full URL
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : 'http://localhost:3000';
     
-    const res = await fetch(`${baseUrl}/api/stocks?locale=${locale}`, { 
+    const res = await fetch(`${baseUrl}/api/stocks`, { 
       cache: "no-store",
       next: { revalidate: 60 } // Revalidate every 60 seconds
     });
@@ -22,22 +21,10 @@ async function getStocks(locale: string): Promise<ApiStock[]> {
   }
 }
 
-function formatPrice(price: number, locale: string) {
-  const currencyMap: Record<string, string> = {
-    "en-US": "USD",
-    "es": "EUR", 
-    "zh": "CNY"
-  };
-  
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: currencyMap[locale] || "USD"
-  }).format(price);
-}
+// Remove formatPrice function since we're only showing deltas
 
 export async function StockTicker() {
-  const locale = await getLocale();
-  const stocks = await getStocks(locale);
+  const stocks = await getStocks();
 
   if (stocks.length === 0) {
     return (
@@ -65,9 +52,13 @@ export async function StockTicker() {
               animationFillMode: 'both'
             }}
           >
-            <div className="flex items-center gap-4">
-              <span>{stock.symbol}</span>
-              <span className="text-neutral-700">{formatPrice(stock.price, locale)}</span>
+            <div className="flex items-center gap-3">
+              <span className="font-medium text-foreground">{stock.symbol}</span>
+              <span className={`text-sm font-medium ${
+                stock.isPositive ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {stock.isPositive ? '+' : ''}{stock.change}%
+              </span>
             </div>
           </div>
         ))}

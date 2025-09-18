@@ -1,29 +1,16 @@
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const locale = searchParams.get('locale') || 'en-US';
+export async function GET() {
 
-  // Base USD prices
-  const baseStocks = [
-    { symbol: "AAPL", basePrice: getRandomPrice(170, 190) },
-    { symbol: "GOOGL", basePrice: getRandomPrice(120, 140) },
-    { symbol: "MSFT", basePrice: getRandomPrice(300, 330) },
-    { symbol: "AMZN", basePrice: getRandomPrice(130, 150) },
-    { symbol: "TSLA", basePrice: getRandomPrice(250, 280) },
-  ];
-
-  // Currency conversion rates (realistic approximations)
-  const currencyRates: Record<string, number> = {
-    "en-US": 1,      // USD base
-    "es": 0.92,      // EUR (1 USD ≈ 0.92 EUR)
-    "zh": 7.25       // CNY (1 USD ≈ 7.25 CNY)
-  };
-
-  const rate = currencyRates[locale] || 1;
+  // Stock symbols
+  const stockSymbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
   
-  const stocks = baseStocks.map(stock => ({
-    symbol: stock.symbol,
-    price: Number((stock.basePrice * rate).toFixed(2))
-  }));
+  const stocks = stockSymbols.map(symbol => {
+    const delta = getRandomDelta();
+    return {
+      symbol,
+      change: Number((delta * 100).toFixed(2)), // Percentage change
+      isPositive: delta >= 0
+    };
+  });
 
   const responseBody = {
     timestamp: new Date().toISOString(),
@@ -38,9 +25,9 @@ export async function GET(request: Request) {
     },
   });
 }
-//Random price (reasonable variance)
-function getRandomPrice(min: number, max: number) {
-  return Number((Math.random() * (max - min) + min).toFixed(2));
+// Generate random delta between -0.05 and +0.05 (5% change max)
+function getRandomDelta() {
+  return (Math.random() - 0.5) * 0.1; // Range: -0.05 to +0.05
 }
 
 
