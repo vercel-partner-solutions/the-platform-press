@@ -58,20 +58,20 @@ html {
 }
 
 .cycling-item {
-  animation: cycleItems 10s infinite;
+  animation: cycleItems 10s infinite both;
 }
 
 @keyframes cycleItems {
   0% {
     opacity: 0;
   }
-  5% {
+  2% {
     opacity: 1;
   }
-  25% {
+  18% {
     opacity: 1;
   }
-  30% {
+  20% {
     opacity: 0;
   }
   100% {

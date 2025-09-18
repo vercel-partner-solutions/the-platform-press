@@ -1,97 +1,69 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useLocale } from "next-intl";
+import { getLocale } from "next-intl/server";
 
 type ApiStock = { symbol: string; price: number };
 
-export function StockTicker() {
-  const [stocks, setStocks] = useState<ApiStock[]>([]);
-  const [active, setActive] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const locale = useLocale();
-
-  // Fetch stocks on load and then again every minute
-  useEffect(() => {
-    let alive = true;
-
-    const fetchStocks = async () => {
-      try {
-        const res = await fetch(`/api/stocks?locale=${locale}`, { cache: "no-store" });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!alive) return;
-        setStocks(Array.isArray(data?.stocks) ? data.stocks : []);
-      } catch {}
-    };
-
-    fetchStocks();
-    const id = setInterval(fetchStocks, 60000);
-    return () => {
-      alive = false;
-      clearInterval(id);
-    };
-  }, [locale]);
-
-  //cycle through stocks, anticipating changes to number of items in stocks array
-  useEffect(() => {
-    if (stocks.length === 0) return;
-
-    let alive = true;
-    let t1: number | undefined;
-    let t2: number | undefined;
-
-    const visibleMs = 5000; 
-    const fadeMs = 700;     
-    const gapMs = 200;     
-
-    const run = () => {
-      t1 = window.setTimeout(() => {
-        if (!alive) return;
-        setVisible(false);
-        t2 = window.setTimeout(() => {
-          if (!alive) return;
-          setActive((i) => (i + 1) % stocks.length);
-          setVisible(true);
-          run();
-        }, fadeMs + gapMs);
-      }, visibleMs);
-    };
-
-    setActive(0);
-    setVisible(true);
-    run();
-
-    return () => {
-      alive = false;
-      if (t1) window.clearTimeout(t1);
-      if (t2) window.clearTimeout(t2);
-    };
-  }, [stocks.length]);
-
-  const formatPrice = (price: number, locale: string) => {
-    const currencyMap: Record<string, string> = {
-      "en-US": "USD",
-      "es": "EUR", 
-      "zh": "CNY"
-    };
+async function getStocks(locale: string): Promise<ApiStock[]> {
+  try {
+    // In a server component, we need to use the full URL
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'http://localhost:3000';
     
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyMap[locale] || "USD"
-    }).format(price);
-  };
+    const res = await fetch(`${baseUrl}/api/stocks?locale=${locale}`, { 
+      cache: "no-store",
+      next: { revalidate: 60 } // Revalidate every 60 seconds
+    });
+    
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data?.stocks) ? data.stocks : [];
+  } catch {
+    return [];
+  }
+}
 
+function formatPrice(price: number, locale: string) {
+  const currencyMap: Record<string, string> = {
+    "en-US": "USD",
+    "es": "EUR", 
+    "zh": "CNY"
+  };
+  
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currencyMap[locale] || "USD"
+  }).format(price);
+}
+
+export async function StockTicker() {
+  const locale = await getLocale();
+  const stocks = await getStocks(locale);
+
+  if (stocks.length === 0) {
+    return (
+      <div className="relative text-sm font-medium text-neutral-700 text-center">
+        <div className="h-16 flex items-center justify-center text-foreground/60">
+          Loading…
+        </div>
+      </div>
+    );
+  }
+
+  // Total duration of animation
+  // The delay between each item is the total duration divided by the number of items
+  const totalDuration = 10; 
+  
   return (
     <div className="relative text-sm font-medium text-neutral-700 text-center">
-      <div className="relative h-16 flex items-center justify-center">
-        {stocks.map((stock, i) => (
+      <div className="relative h-16 flex items-center justify-center overflow-hidden">
+        {stocks.map((stock, index) => (
           <div
             key={stock.symbol}
-            className={
-              "absolute inset-0 flex items-center justify-center font-light text-foreground transition-opacity duration-700 ease-in-out " +
-              (i === active && visible ? "opacity-100" : "opacity-0")
-            }
+            className="cycling-item absolute inset-0 flex items-center justify-center font-light text-foreground opacity-0 will-change-opacity"
+            style={{ 
+              animationDelay: `${index * (totalDuration / stocks.length)}s`,
+              animationFillMode: 'both'
+            }}
           >
             <div className="flex items-center gap-4">
               <span>{stock.symbol}</span>
