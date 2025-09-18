@@ -38,7 +38,7 @@ export async function StockTicker() {
 
   // Total duration of animation
   // The delay between each item is the total duration divided by the number of items
-  const totalDuration = 10; 
+  const totalDuration = 20; 
   
   return (
     <div className="relative text-sm font-medium text-neutral-700 text-center">
