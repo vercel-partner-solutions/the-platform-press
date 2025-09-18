@@ -1,13 +1,11 @@
 export async function GET() {
-
-  // Stock symbols
   const stockSymbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
-  
   const stocks = stockSymbols.map(symbol => {
-    const delta = getRandomDelta();
-    return {
+  const delta = getRandomDelta();
+    
+  return {
       symbol,
-      change: Number((delta * 100).toFixed(2)), // Percentage change
+      change: Number((delta * 100).toFixed(2)), 
       isPositive: delta >= 0
     };
   });
@@ -25,9 +23,8 @@ export async function GET() {
     },
   });
 }
-// Generate random delta between -0.05 and +0.05 (5% change max)
 function getRandomDelta() {
-  return (Math.random() - 0.5) * 0.1; // Range: -0.05 to +0.05
+  return (Math.random() - 0.5) * 0.1; 
 }
 
 
