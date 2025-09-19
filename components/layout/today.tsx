@@ -1,6 +1,4 @@
-
 import { getWeather, renderWeatherIcon, type WeatherData } from "@/lib/weather";
-
 
 const dateOptions = {
   weekday: "long" as const,

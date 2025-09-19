@@ -26,9 +26,7 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
                 <SearchBox />
               </div>
 
-              
-                <LocaleSwitcher />
-              
+              <LocaleSwitcher />
 
               <div className="justify-self-end flex items-center gap-3">
                 <Button
@@ -52,9 +50,8 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
         {/* Desktop header section */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-3 items-center h-16 md:h-20">
-            
             <Today locale={locale} />
-            
+
             <Link
               href="/"
               className="font-heading text-4xl font-bold tracking-tight text-black transition-colors hover:text-neutral-700 justify-self-center text-center leading-tight whitespace-nowrap"
@@ -65,9 +62,7 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
             {/* Desktop: Stock ticker */}
             <div className="hidden md:block text-right justify-self-end">
               <div className="w-32 text-right">
-               
-                  <StockTicker />
-                
+                <StockTicker />
               </div>
             </div>
           </div>

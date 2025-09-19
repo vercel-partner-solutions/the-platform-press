@@ -1,11 +1,11 @@
 import type React from "react";
 import "@/app/globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import { GeistSans } from "geist/font/sans";
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { Analytics } from "@vercel/analytics/next";
-import { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import { GeistSans } from "geist/font/sans";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -46,12 +46,12 @@ export default async function Layout({
       lang={locale}
     >
       <body className="bg-white text-black antialiased flex flex-col min-h-screen">
-      <Header locale={locale} />
-      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        {children}
-      </main>
-      <Footer />
-      <Analytics />
+        <Header locale={locale} />
+        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          {children}
+        </main>
+        <Footer />
+        <Analytics />
       </body>
     </html>
   );

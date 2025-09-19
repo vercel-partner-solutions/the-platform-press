@@ -22,15 +22,13 @@ export default async function CategorySearchPage({
   });
 
   return (
-    
-      <CategorySearchClient
-        initialArticles={articles}
-        totalCount={articles.length}
-        hasMore={articles.length > 9}
-        category={category}
-        searchParams={q ? { q } : {}}
-        locale={locale}
-      />
-    
+    <CategorySearchClient
+      initialArticles={articles}
+      totalCount={articles.length}
+      hasMore={articles.length > 9}
+      category={category}
+      searchParams={q ? { q } : {}}
+      locale={locale}
+    />
   );
 }

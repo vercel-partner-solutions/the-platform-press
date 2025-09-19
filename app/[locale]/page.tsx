@@ -31,49 +31,36 @@ export default async function HomePage({
   const { locale } = await params;
   return (
     <>
-      
-        <BreakingNewsBanner />
-      
+      <BreakingNewsBanner />
+
       <div className="space-y-16 pt-0">
-        
-          <HeroSection />
-        
+        <HeroSection />
 
         <LocalNews locale={locale} />
 
-        
-          <CategoryArticlesSection
-            title="Technology"
-            categorySlug="technology"
-            isHomepage
-          />
-        
+        <CategoryArticlesSection
+          title="Technology"
+          categorySlug="technology"
+          isHomepage
+        />
 
         {/* Two-column layout for Latest News and Popular This Week */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-10">
           <div className="lg:col-span-2">
-            
-              <LatestArticlesSection isHomepage locale={locale} />
-            
+            <LatestArticlesSection isHomepage locale={locale} />
           </div>
           <div>
-            
-              <PopularArticlesSection isHomepage locale={locale} />
-            
+            <PopularArticlesSection isHomepage locale={locale} />
           </div>
         </div>
 
-        
-          <OpinionArticlesSection isHomepage />
-        
+        <OpinionArticlesSection isHomepage />
 
-        
-          <CategoryArticlesSection
-            title="Business"
-            categorySlug="business"
-            isHomepage
-          />
-        
+        <CategoryArticlesSection
+          title="Business"
+          categorySlug="business"
+          isHomepage
+        />
       </div>
     </>
   );
