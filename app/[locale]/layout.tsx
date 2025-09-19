@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { i18n } from "@/i18n.config";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,6 +28,10 @@ export const metadata: Metadata = {
   generator: "v0.dev",
 };
 
+export const generateStaticParams = async () => {
+  return i18n.locales.map((locale) => ({ locale }));
+};
+
 export default async function Layout({
   children,
   params,
@@ -44,7 +49,7 @@ export default async function Layout({
       <body className="bg-white text-black antialiased flex flex-col min-h-screen">
         <Header locale={locale} />
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          {children}
+          {/* {children} */}
         </main>
         <Footer />
         <Analytics />

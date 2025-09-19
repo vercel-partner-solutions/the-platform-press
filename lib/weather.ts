@@ -1,5 +1,4 @@
 import type { Locale } from "@/i18n.config";
-import { getLocation } from "@/lib/geo/server";
 
 export interface WeatherData {
   temperature?: number;
@@ -115,10 +114,16 @@ async function getWeatherFromCoordinates(
   };
 }
 
-export async function getWeather(locale: string): Promise<WeatherData> {
+export async function getWeather(locale: string, location: { city?: string }): Promise<WeatherData> {
   try {
-    const { city } = await getLocation();
-    if (!city) throw new Error("City not found");
+    const { city } = location;
+
+    // This isn't available in dev or build time
+    if (!city) return {
+      temperature: undefined,
+      condition: undefined,
+      unit: undefined,
+    }
 
     const coordinates = await getCoordinatesFromCity(city);
     if (!coordinates) throw new Error("Coordinates not found");
@@ -132,7 +137,7 @@ export async function getWeather(locale: string): Promise<WeatherData> {
     if (error instanceof Error) {
       console.error("Error fetching weather:", error.message);
     } else {
-      console.error("Error fetching weather:", error);
+      console.error("Unknown error fetching weather:", error);
     }
 
     return {

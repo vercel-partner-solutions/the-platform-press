@@ -1,6 +1,5 @@
 import { Menu, Search } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,6 +13,7 @@ import {
 import { getCategories } from "@/lib/cms";
 import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "../layout/locale-switcher";
+import { Suspense } from "react";
 
 export async function MobileHeader() {
   const categories = await getCategories();
@@ -78,7 +78,9 @@ async function MobileMenu({ categories }: { categories: string[] }) {
           </div>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
+          <Suspense fallback={<div>Loading...</div>}>
           <LocaleSwitcher />
+          </Suspense>
 
           {categories.map((category) => (
             <div

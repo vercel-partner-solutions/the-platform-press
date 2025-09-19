@@ -22,7 +22,6 @@ export function LocaleSwitcher() {
           <Link
             href={redirectedPathname(locale)}
             replace
-            locale={locale}
             key={locale}
             className={cn(
               "text-xs font-medium text-neutral-600 hober:font-bold hover:text-neutral-900 uppercase tracking-wide cursor-pointer",

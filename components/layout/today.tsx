@@ -1,3 +1,4 @@
+import { getLocation } from "@/lib/geo/server";
 import { getWeather, renderWeatherIcon, type WeatherData } from "@/lib/weather";
 
 const dateOptions = {
@@ -8,7 +9,8 @@ const dateOptions = {
 };
 
 export async function Today({ locale }: { locale: string }) {
-  const weather = await getWeather(locale);
+  const location = await getLocation();
+  const weather = await getWeather(locale, location);
   const dateTime = new Date();
 
   const safeIntlDate = dateTime.toLocaleDateString("en-US", dateOptions);
