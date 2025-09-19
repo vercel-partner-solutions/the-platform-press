@@ -6,5 +6,13 @@
   "Homepage": {
     "title": "Página de inicio | The Platform Press",
     "description": "Descubre las últimas noticias, análisis en profundidad y historias impactantes de The Platform Press."
+  },
+  "Category": {
+    "title": "{category} | The Platform Press",
+    "description": "Mantente actualizado con las últimas noticias, análisis e insights de {category} de The Platform Press."
+  },
+  "Article": {
+    "notFound": "Artículo No Encontrado",
+    "metaTitle": "{title} | The Platform Press"
   }
 }

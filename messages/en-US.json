@@ -6,5 +6,13 @@
   "Homepage": {
     "title": "Homepage | The Platform Press",
     "description": "Discover the latest news, in-depth analysis, and compelling stories from The Platform Press."
+  },
+  "Category": {
+    "title": "{category} | The Platform Press",
+    "description": "Stay updated with the latest {category} news, analysis, and insights from The Platform Press."
+  },
+  "Article": {
+    "notFound": "Article Not Found",
+    "metaTitle": "{title} | The Platform Press"
   }
 }

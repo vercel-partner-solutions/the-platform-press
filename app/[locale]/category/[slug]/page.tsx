@@ -1,4 +1,5 @@
-import { setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
 import { getArticles } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
@@ -9,6 +10,31 @@ type Props = {
     q?: string;
   }>;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations("Category");
+  const category = decodeURIComponent(slug);
+  
+  const categoryDisplay = category.charAt(0).toUpperCase() + category.slice(1);
+
+  return {
+    title: t("title", { category: categoryDisplay }),
+    description: t("description", { category: categoryDisplay }),
+    openGraph: {
+      title: t("title", { category: categoryDisplay }),
+      description: t("description", { category: categoryDisplay }),
+      type: "website",
+      url: `/${locale}/category/${slug}`,
+    },
+  };
+}
 
 export default async function CategorySearchPage({
   params,

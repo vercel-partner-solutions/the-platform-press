@@ -6,5 +6,13 @@
   "Homepage": {
     "title": "首页 | The Platform Press",
     "description": "发现最新的新闻、深度分析和引人入胜的故事，来自 The Platform Press。"
+  },
+  "Category": {
+    "title": "{category} | The Platform Press",
+    "description": "获取最新的{category}新闻、分析和见解，来自 The Platform Press。"
+  },
+  "Article": {
+    "notFound": "文章未找到",
+    "metaTitle": "{title} | The Platform Press"
   }
 }

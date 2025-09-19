@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { getFormatter, setRequestLocale } from "next-intl/server";
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
@@ -17,17 +17,20 @@ export async function generateMetadata({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const t = await getTranslations("Article");
   const article = await getArticleBySlug((await params).slug);
+  
   if (!article) {
     return {
-      title: "Article Not Found",
+      title: t("notFound"),
     };
   }
+  
   return {
-    title: article.title,
+    title: t("metaTitle", { title: article.title }),
     description: article.excerpt,
     openGraph: {
-      title: article.title,
+      title: t("metaTitle", { title: article.title }),
       description: article.excerpt,
       images: [
         {
