@@ -27,10 +27,6 @@ export const metadata: Metadata = {
   generator: "v0.dev",
 };
 
-export async function generateStaticParams() {
-  return [{ locale: "en" }, { locale: "es" }, { locale: "zh" }];
-}
-
 export default async function Layout({
   children,
   params,

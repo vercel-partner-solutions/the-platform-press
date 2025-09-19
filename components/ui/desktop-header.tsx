@@ -62,9 +62,7 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
             {/* Desktop: Stock ticker */}
             <div className="hidden md:block text-right justify-self-end">
               <div className="w-32 text-right">
-                <Suspense>
-                  <StockTicker />
-                </Suspense>
+                <StockTicker />
               </div>
             </div>
           </div>
