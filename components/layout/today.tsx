@@ -1,4 +1,7 @@
+"use cache"
+
 import { getWeather, renderWeatherIcon, type WeatherData } from "@/lib/weather";
+import { unstable_cacheLife as cacheLife } from 'next/cache'
 
 const dateOptions = {
   weekday: "long" as const,
@@ -8,12 +11,11 @@ const dateOptions = {
 };
 
 export async function Today({ locale }: { locale: string }) {
-const weather = await getWeather(locale);
-const dateTime = new Date();
+  cacheLife('hours')
+  const weather = await getWeather(locale);
+  const dateTime = new Date();
 
-
-  const safeIntlDate =
-    dateTime.toLocaleDateString("en-US", dateOptions);
+  const safeIntlDate = dateTime.toLocaleDateString("en-US", dateOptions);
 
   return (
     <div className="hidden md:flex flex-col justify-self-start">

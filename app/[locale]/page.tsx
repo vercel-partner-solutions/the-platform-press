@@ -14,8 +14,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  
-const { locale } = await params;
+  const { locale } = await params;
   const t = await getDictionary(locale);
 
   return {
@@ -29,7 +28,7 @@ export default async function HomePage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;  
+  const { locale } = await params;
   return (
     <>
       <Suspense>

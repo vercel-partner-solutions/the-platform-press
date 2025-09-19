@@ -13,7 +13,7 @@ export default function ArticleCard({
   locale: string;
 }) {
   const date = new Date(article.datePublished);
-    const dateTime = date.toLocaleDateString(locale, {
+  const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",

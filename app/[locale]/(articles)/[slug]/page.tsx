@@ -13,7 +13,6 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
- 
 
   const article = await getArticleBySlug((await params).slug);
   if (!article) {
@@ -54,7 +53,6 @@ export default async function ArticlePage({
     notFound();
   }
 
-  
   const date = new Date(article.datePublished);
   const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
@@ -127,12 +125,16 @@ export default async function ArticlePage({
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
               {relatedArticles.map((related) => (
-                <ArticleCard key={related.id} article={related} locale={locale} />
+                <ArticleCard
+                  key={related.id}
+                  article={related}
+                  locale={locale}
+                />
               ))}
             </div>
           </section>
         )}
-      </div>  
+      </div>
     </>
   );
 }

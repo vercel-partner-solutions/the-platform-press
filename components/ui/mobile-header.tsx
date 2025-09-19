@@ -1,4 +1,5 @@
 import { Menu, Search } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -10,7 +11,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Link from "next/link";
 import { getCategories } from "@/lib/cms";
 import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "../layout/locale-switcher";
@@ -78,9 +78,9 @@ async function MobileMenu({ categories }: { categories: string[] }) {
           </div>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
-            <Suspense>
-              <LocaleSwitcher />
-            </Suspense>
+          <Suspense>
+            <LocaleSwitcher />
+          </Suspense>
           {categories.map((category) => (
             <div
               className="block px-3 py-2 text-sm rounded-md transition-colors group w-full"
@@ -95,10 +95,10 @@ async function MobileMenu({ categories }: { categories: string[] }) {
             </div>
           ))}
         </div>
-        <SheetFooter>     
-            <Suspense>
-              <LocaleSwitcher />
-            </Suspense>
+        <SheetFooter>
+          <Suspense>
+            <LocaleSwitcher />
+          </Suspense>
         </SheetFooter>
       </SheetContent>
     </Sheet>

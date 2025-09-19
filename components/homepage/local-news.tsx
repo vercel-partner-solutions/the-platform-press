@@ -15,7 +15,11 @@ async function LocalNewsContent({ locale }: { locale: string }) {
   }
 
   return (
-    <LocalNewsSection articles={localArticles} location={userLocation.city} locale={locale} />
+    <LocalNewsSection
+      articles={localArticles}
+      location={userLocation.city}
+      locale={locale}
+    />
   );
 }
 

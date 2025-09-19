@@ -2,7 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Article } from "@/lib/types";
 
-async function LocalNewsCard({ article, locale }: { article: Article; locale: string }) {
+async function LocalNewsCard({
+  article,
+  locale,
+}: {
+  article: Article;
+  locale: string;
+}) {
   const date = new Date(article.datePublished);
   const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",

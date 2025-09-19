@@ -1,12 +1,12 @@
-import { Suspense } from "react";
 import Link from "next/link";
+import { Suspense } from "react";
+import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
 import { Today } from "../layout/today";
 import { Button } from "./button";
 import { SearchBox } from "./search-box";
-import { getDictionary } from "@/dictionaries";
 
 export const DesktopHeader = async ({ locale }: { locale: string }) => {
   const t = await getDictionary(locale);
@@ -25,11 +25,11 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
               <div className="justify-self-start">
                 <SearchBox />
               </div>
-              
-                <Suspense>
-                  <LocaleSwitcher />
-                </Suspense>
-            
+
+              <Suspense>
+                <LocaleSwitcher />
+              </Suspense>
+
               <div className="justify-self-end flex items-center gap-3">
                 <Button
                   variant="default"
@@ -63,9 +63,9 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
             {/* Desktop: Stock ticker */}
             <div className="hidden md:block text-right justify-self-end">
               <div className="w-32 text-right">
-                <Suspense fallback={<div>Loading...</div>}>
+               
                   <StockTicker />
-                </Suspense>  
+               
               </div>
             </div>
           </div>

@@ -1,9 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { i18n, Locale } from "@/i18n.config";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { i18n, type Locale } from "@/i18n.config";
+import { cn } from "@/lib/utils";
 
 export function LocaleSwitcher() {
   const pathname = usePathname();
@@ -29,7 +29,7 @@ export function LocaleSwitcher() {
               isActive && "text-bold",
             )}
           >
-              {locale}
+            {locale}
           </Link>
         );
       })}

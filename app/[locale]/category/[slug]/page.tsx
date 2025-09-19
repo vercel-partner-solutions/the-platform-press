@@ -1,4 +1,3 @@
-
 import { Suspense } from "react";
 import { getArticles } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
@@ -16,7 +15,6 @@ export default async function CategorySearchPage({
 }: Props) {
   const { slug, locale } = await params;
   const { q } = await searchParams;
-
 
   const category = decodeURIComponent(slug);
   const articles = await getArticles({
