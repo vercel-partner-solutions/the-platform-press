@@ -1,6 +1,5 @@
-import { hasLocale, IntlErrorCode } from "next-intl";
+import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
-import { default as enUSMessages } from "@/messages/en-US.json";
 import { routing } from "./routing";
 
 export default getRequestConfig(async ({ requestLocale }) => {

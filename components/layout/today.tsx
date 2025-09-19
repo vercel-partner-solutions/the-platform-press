@@ -1,24 +1,37 @@
-import { getFormatter, getNow } from "next-intl/server";
+import { getFormatter, getLocale, getNow } from "next-intl/server";
+import { getWeather, renderWeatherIcon, type WeatherData } from "@/lib/weather";
+
+const dateOptions = {
+  weekday: "long" as const,
+  year: "numeric" as const,
+  month: "long" as const,
+  day: "numeric" as const,
+};
 
 export async function Today() {
-  const weather = await getMockWeather();
-  const format = await getFormatter();
-  const dateTime = await getNow();
+  const [weatherResult, formatResult, dateTimeResult] =
+    await Promise.allSettled([
+      getLocale().then((locale) => getWeather(locale)),
+      getFormatter(),
+      getNow(),
+    ]);
 
-  const intlDate = format.dateTime(dateTime, {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const weather =
+    weatherResult.status === "fulfilled" ? weatherResult.value : null;
+  const format =
+    formatResult.status === "fulfilled" ? formatResult.value : null;
+  const dateTime =
+    dateTimeResult.status === "fulfilled" ? dateTimeResult.value : new Date();
+
+  const safeIntlDate =
+    format?.dateTime(dateTime, dateOptions) ||
+    dateTime.toLocaleDateString("en-US", dateOptions);
 
   return (
     <div className="hidden md:flex flex-col justify-self-start">
       <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
-        <span>{intlDate}</span>
-        <span>
-          {renderWeatherIcon(weather.condition)} {weather.temperature}
-        </span>
+        <span>{safeIntlDate}</span>
+        {renderWeather(weather)}
       </div>
       <span className="text-sm font-medium text-neutral-700">
         Today's Paper
@@ -27,35 +40,14 @@ export async function Today() {
   );
 }
 
-interface WeatherData {
-  temperature: number;
-  condition: "Sunny" | "Cloudy" | "Rainy" | "Snowy";
-}
+const renderWeather = (weather: WeatherData | null) => {
+  if (!weather || !weather.condition || !weather.temperature || !weather.unit)
+    return null;
 
-async function getMockWeather(): Promise<WeatherData> {
-  new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
-  const conditions: WeatherData["condition"][] = ["Sunny", "Cloudy", "Rainy"];
-  const randomCondition =
-    conditions[Math.floor(Math.random() * conditions.length)];
-  const randomTemp = Math.floor(Math.random() * (85 - 65 + 1) + 65); // Temp between 65 and 85
-
-  return {
-    temperature: randomTemp,
-    condition: randomCondition,
-  };
-}
-
-function renderWeatherIcon(condition: WeatherData["condition"]) {
-  switch (condition) {
-    case "Sunny":
-      return "☀️";
-    case "Cloudy":
-      return "☁️";
-    case "Rainy":
-      return "🌧️";
-    case "Snowy":
-      return "❄️";
-    default:
-      return "🌤️";
-  }
-}
+  return (
+    <span>
+      {renderWeatherIcon(weather.condition)} {weather.temperature}°
+      {weather.unit}
+    </span>
+  );
+};

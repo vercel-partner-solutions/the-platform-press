@@ -53,10 +53,9 @@ export default function LocalNewsSection({
   location,
 }: {
   articles: Article[];
-  location?: string;
+  location: string;
 }) {
   if (!articles || articles.length === 0) return null;
-
   return (
     <section aria-labelledby="local-news-heading" className="mb-10">
       <div className="border-b-2 border-black pb-2 mb-6">
@@ -64,7 +63,7 @@ export default function LocalNewsSection({
           id="local-news-heading"
           className="text-2xl font-bold uppercase tracking-tight text-black"
         >
-          Local News {location && `- ${location}`}
+          Local News - {location}
         </h2>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
