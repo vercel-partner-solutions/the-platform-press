@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+
 import BreakingNewsBanner from "@/components/homepage/breaking-news-banner";
 import CategoryArticlesSection from "@/components/homepage/category-articles-section";
 import HeroSection from "@/components/homepage/hero-section";

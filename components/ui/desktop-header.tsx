@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Suspense } from "react";
+
 import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";

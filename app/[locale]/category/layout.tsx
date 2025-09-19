@@ -1,5 +1,5 @@
 import type React from "react";
-import { Suspense } from "react";
+
 import { getCategories } from "@/lib/cms";
 import CategorySidebar from "./category-sidebar";
 
