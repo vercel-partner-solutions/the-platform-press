@@ -22,14 +22,12 @@ export async function generateMetadata({
   const t = await getTranslations("Category");
   const category = decodeURIComponent(slug);
   
-  const categoryDisplay = category.charAt(0).toUpperCase() + category.slice(1);
-
   return {
-    title: t("title", { category: categoryDisplay }),
-    description: t("description", { category: categoryDisplay }),
+    title: t("title", { category }),
+    description: t("description", { category }),
     openGraph: {
-      title: t("title", { category: categoryDisplay }),
-      description: t("description", { category: categoryDisplay }),
+      title: t("title", { category }),
+      description: t("description", { category }),
       type: "website",
       url: `/${locale}/category/${slug}`,
     },
