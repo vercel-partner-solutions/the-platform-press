@@ -1,11 +1,13 @@
 import { DesktopHeader } from "@/components/ui/desktop-header";
 import { MobileHeader } from "@/components/ui/mobile-header";
 
-export async function Header({ locale }: { locale: string }) {
+export const HEADER_HEIGHT = 400;
+
+export function Header({ locale }: { locale: string }) {
   return (
-    <>
-      <MobileHeader />
+    <div className="border-b border-neutral-200">
       <DesktopHeader locale={locale} />
-    </>
+      <MobileHeader />
+    </div>
   );
 }
