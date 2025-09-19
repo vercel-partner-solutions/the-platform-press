@@ -92,7 +92,6 @@ async function MobileMenu({ categories }: { categories: string[] }) {
               key={category}
             >
               <Link
-                passHref
                 href={`/category/${category.toLowerCase()}`}
                 className="w-full h-full block"
               >
