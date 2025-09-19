@@ -1,7 +1,6 @@
-"use cache"
 
 import { getWeather, renderWeatherIcon, type WeatherData } from "@/lib/weather";
-import { unstable_cacheLife as cacheLife } from 'next/cache'
+
 
 const dateOptions = {
   weekday: "long" as const,
@@ -11,7 +10,6 @@ const dateOptions = {
 };
 
 export async function Today({ locale }: { locale: string }) {
-  cacheLife('hours')
   const weather = await getWeather(locale);
   const dateTime = new Date();
 

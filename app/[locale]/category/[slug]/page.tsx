@@ -22,7 +22,7 @@ export default async function CategorySearchPage({
   });
 
   return (
-    <Suspense>
+    
       <CategorySearchClient
         initialArticles={articles}
         totalCount={articles.length}
@@ -31,6 +31,6 @@ export default async function CategorySearchPage({
         searchParams={q ? { q } : {}}
         locale={locale}
       />
-    </Suspense>
+    
   );
 }

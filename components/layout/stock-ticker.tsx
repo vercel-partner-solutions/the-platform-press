@@ -1,9 +1,6 @@
 import type { Stock } from "@/lib/types";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 
 async function getStocks(): Promise<Stock[]> {
-  "use cache"
-  cacheLife('minutes')
   try {
     // In a server component, we need to use the full URL
     const baseUrl = process.env.VERCEL_URL

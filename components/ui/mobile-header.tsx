@@ -78,9 +78,9 @@ async function MobileMenu({ categories }: { categories: string[] }) {
           </div>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
-          <Suspense>
+          
             <LocaleSwitcher />
-          </Suspense>
+          
           {categories.map((category) => (
             <div
               className="block px-3 py-2 text-sm rounded-md transition-colors group w-full"
@@ -96,9 +96,9 @@ async function MobileMenu({ categories }: { categories: string[] }) {
           ))}
         </div>
         <SheetFooter>
-          <Suspense>
+          
             <LocaleSwitcher />
-          </Suspense>
+          
         </SheetFooter>
       </SheetContent>
     </Sheet>
