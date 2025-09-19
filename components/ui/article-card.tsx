@@ -1,19 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useFormatter } from "next-intl";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "./category-badge";
 
 export default function ArticleCard({
   article,
   priorityImage = false,
+  locale,
 }: {
   article: Article;
   priorityImage?: boolean;
+  locale: string;
 }) {
-  const formatter = useFormatter();
   const date = new Date(article.datePublished);
-  const dateTime = formatter.dateTime(date, {
+    const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",

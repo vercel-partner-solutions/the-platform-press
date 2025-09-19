@@ -1,4 +1,4 @@
-import type { Locale } from "next-intl";
+import type { Locale } from "@/i18n.config";  
 import { getLocation } from "@/lib/geo/server";
 
 export interface WeatherData {
@@ -83,12 +83,12 @@ async function getCoordinatesFromCity(
 }
 
 function getTemperatureUnit(locale: Locale): "celsius" | "fahrenheit" {
-  if (locale === "en-US") return "fahrenheit";
+  if (locale === "en") return "fahrenheit";
   return "celsius";
 }
 
 function getTemperatureSymbol(locale: Locale): "C" | "F" {
-  if (locale === "en-US") return "F";
+  if (locale === "en") return "F";
   return "C";
 }
 
@@ -115,7 +115,7 @@ async function getWeatherFromCoordinates(
   };
 }
 
-export async function getWeather(locale: Locale): Promise<WeatherData> {
+export async function getWeather(locale: string): Promise<WeatherData> {
   try {
     const { city } = await getLocation();
     if (!city) throw new Error("City not found");
@@ -126,7 +126,7 @@ export async function getWeather(locale: Locale): Promise<WeatherData> {
     return await getWeatherFromCoordinates(
       coordinates.latitude,
       coordinates.longitude,
-      locale,
+      locale as Locale,
     );
   } catch (error) {
     if (error instanceof Error) {

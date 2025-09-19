@@ -1,4 +1,3 @@
-import { getFormatter } from "next-intl/server";
 import type { Stock } from "@/lib/types";
 
 async function getStocks(): Promise<Stock[]> {
@@ -22,7 +21,6 @@ async function getStocks(): Promise<Stock[]> {
 
 export async function StockTicker() {
   const stocks = await getStocks();
-  const formatter = await getFormatter();
 
   // Total duration of animation
   // The delay between each item is the total duration divided by the number of items
@@ -45,11 +43,7 @@ export async function StockTicker() {
               <span className={`text-sm font-medium ${
                 stock.isPositive ? 'text-green-600' : 'text-red-600'
               }`}>
-                {stock.isPositive ? '+' : ''}{formatter.number(stock.change, {
-                  style: "percent",
-                  minimumSignificantDigits: 3,
-                  maximumSignificantDigits: 3,
-                })}
+                {stock.isPositive ? '+' : ''}{stock.change.toFixed(4)}
               </span>
             </div>
           </div>

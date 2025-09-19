@@ -3,8 +3,6 @@ import { marked } from "marked"; // Import the markdown parser
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { NextIntlClientProvider } from "next-intl";
-import { getFormatter, setRequestLocale } from "next-intl/server";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
@@ -15,7 +13,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  setRequestLocale(locale);
+ 
 
   const article = await getArticleBySlug((await params).slug);
   if (!article) {
@@ -49,7 +47,6 @@ export default async function ArticlePage({
   params: Promise<{ slug: string; locale: string }>;
 }) {
   const { slug, locale } = await params;
-  setRequestLocale(locale);
 
   const article = await getArticleBySlug(slug);
 
@@ -57,9 +54,9 @@ export default async function ArticlePage({
     notFound();
   }
 
-  const formatter = await getFormatter();
+  
   const date = new Date(article.datePublished);
-  const dateTime = formatter.dateTime(date, {
+  const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -75,7 +72,7 @@ export default async function ArticlePage({
   });
 
   return (
-    <NextIntlClientProvider locale={locale} messages={null}>
+    <>
       <div className="max-w-3xl mx-auto">
         <article className="bg-white py-6 sm:py-8">
           <header className="mb-6">
@@ -130,12 +127,12 @@ export default async function ArticlePage({
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
               {relatedArticles.map((related) => (
-                <ArticleCard key={related.id} article={related} />
+                <ArticleCard key={related.id} article={related} locale={locale} />
               ))}
             </div>
           </section>
         )}
-      </div>
-    </NextIntlClientProvider>
+      </div>  
+    </>
   );
 }

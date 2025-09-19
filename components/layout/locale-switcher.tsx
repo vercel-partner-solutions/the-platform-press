@@ -1,24 +1,26 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useLocale } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
-import { localeToLabel, routing } from "@/i18n/routing";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { i18n, Locale } from "@/i18n.config";
+import Link from "next/link";
 
 export function LocaleSwitcher() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentLocale = useLocale();
-  const fullUrl = `${pathname}?${searchParams.toString()}`;
+  const redirectedPathname = (locale: Locale) => {
+    if (!pathname) return "/";
+    const segments = pathname.split("/");
+    segments[1] = locale;
+    return segments.join("/");
+  };
 
   return (
     <nav className="justify-self-center flex items-center gap-6">
-      {routing.locales.map((locale) => {
-        const isActive = locale === currentLocale;
+      {i18n.locales.map((locale) => {
+        const isActive = locale === locale;
         return (
           <Link
-            href={fullUrl}
+            href={redirectedPathname(locale)}
             replace
             locale={locale}
             key={locale}
@@ -27,7 +29,7 @@ export function LocaleSwitcher() {
               isActive && "text-bold",
             )}
           >
-            {localeToLabel.get(locale)}
+              {locale}
           </Link>
         );
       })}

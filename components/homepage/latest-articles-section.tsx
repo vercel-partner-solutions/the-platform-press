@@ -4,8 +4,10 @@ import LatestArticleListItem from "./latest-article-list-item";
 
 export default async function LatestArticlesSection({
   isHomepage = false,
+  locale,
 }: {
   isHomepage?: boolean;
+  locale: string;
 }) {
   const articles = await getArticles({
     limit: 4,
@@ -33,7 +35,7 @@ export default async function LatestArticlesSection({
       </div>
       <ol className="relative border-l-2 border-neutral-200">
         {articles.map((article) => (
-          <LatestArticleListItem key={article.id} article={article} />
+          <LatestArticleListItem key={article.id} article={article} locale={locale} />
         ))}
       </ol>
     </section>

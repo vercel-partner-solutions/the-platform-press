@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+
 import { Suspense } from "react";
 import { getArticles } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
@@ -16,7 +16,7 @@ export default async function CategorySearchPage({
 }: Props) {
   const { slug, locale } = await params;
   const { q } = await searchParams;
-  setRequestLocale(locale);
+
 
   const category = decodeURIComponent(slug);
   const articles = await getArticles({
@@ -31,6 +31,7 @@ export default async function CategorySearchPage({
         hasMore={articles.length > 9}
         category={category}
         searchParams={q ? { q } : {}}
+        locale={locale}
       />
     </Suspense>
   );
