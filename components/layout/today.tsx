@@ -1,4 +1,3 @@
-import { getFormatter, getLocale, getNow } from "next-intl/server";
 import { getWeather, renderWeatherIcon, type WeatherData } from "@/lib/weather";
 
 const dateOptions = {
@@ -8,24 +7,11 @@ const dateOptions = {
   day: "numeric" as const,
 };
 
-export async function Today() {
-  const [weatherResult, formatResult, dateTimeResult] =
-    await Promise.allSettled([
-      getLocale().then((locale) => getWeather(locale)),
-      getFormatter(),
-      getNow(),
-    ]);
+export async function Today({ locale }: { locale: string }) {
+  const weather = await getWeather(locale);
+  const dateTime = new Date();
 
-  const weather =
-    weatherResult.status === "fulfilled" ? weatherResult.value : null;
-  const format =
-    formatResult.status === "fulfilled" ? formatResult.value : null;
-  const dateTime =
-    dateTimeResult.status === "fulfilled" ? dateTimeResult.value : new Date();
-
-  const safeIntlDate =
-    format?.dateTime(dateTime, dateOptions) ||
-    dateTime.toLocaleDateString("en-US", dateOptions);
+  const safeIntlDate = dateTime.toLocaleDateString("en-US", dateOptions);
 
   return (
     <div className="hidden md:flex flex-col justify-self-start">

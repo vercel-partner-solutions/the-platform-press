@@ -1,4 +1,4 @@
-import type { Locale } from "next-intl";
+import type { Locale } from "@/i18n.config";
 import { getLocation } from "@/lib/geo/server";
 
 export interface WeatherData {
@@ -36,17 +36,17 @@ const WEATHER_CODE_MAP: Array<{
   codes: number[];
   condition: WeatherCondition;
 }> = [
-    { codes: [0], condition: "Sunny" },
-    { codes: [1, 2, 3, 45, 46, 47, 48], condition: "Cloudy" },
-    {
-      codes: [
-        51, 52, 53, 54, 55, 56, 57, 61, 62, 63, 64, 65, 66, 67, 80, 81, 82, 95,
-        96, 99,
-      ],
-      condition: "Rainy",
-    },
-    { codes: [71, 72, 73, 74, 75, 76, 77], condition: "Snowy" },
-  ];
+  { codes: [0], condition: "Sunny" },
+  { codes: [1, 2, 3, 45, 46, 47, 48], condition: "Cloudy" },
+  {
+    codes: [
+      51, 52, 53, 54, 55, 56, 57, 61, 62, 63, 64, 65, 66, 67, 80, 81, 82, 95,
+      96, 99,
+    ],
+    condition: "Rainy",
+  },
+  { codes: [71, 72, 73, 74, 75, 76, 77], condition: "Snowy" },
+];
 
 function mapWeatherCodeToCondition(weatherCode: number): WeatherCondition {
   for (const { codes, condition } of WEATHER_CODE_MAP) {
@@ -83,12 +83,12 @@ async function getCoordinatesFromCity(
 }
 
 function getTemperatureUnit(locale: Locale): "celsius" | "fahrenheit" {
-  if (locale === "en-US") return "fahrenheit";
+  if (locale === "en") return "fahrenheit";
   return "celsius";
 }
 
 function getTemperatureSymbol(locale: Locale): "C" | "F" {
-  if (locale === "en-US") return "F";
+  if (locale === "en") return "F";
   return "C";
 }
 
@@ -115,7 +115,7 @@ async function getWeatherFromCoordinates(
   };
 }
 
-export async function getWeather(locale: Locale): Promise<WeatherData> {
+export async function getWeather(locale: string): Promise<WeatherData> {
   try {
     const { city } = await getLocation();
     if (!city) throw new Error("City not found");
@@ -126,7 +126,7 @@ export async function getWeather(locale: Locale): Promise<WeatherData> {
     return await getWeatherFromCoordinates(
       coordinates.latitude,
       coordinates.longitude,
-      locale,
+      locale as Locale,
     );
   } catch (error) {
     if (error instanceof Error) {

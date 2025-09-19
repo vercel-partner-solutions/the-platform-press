@@ -1,7 +1,6 @@
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getTranslations } from "next-intl/server";
-import { Suspense } from "react";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
+
+import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
@@ -9,12 +8,11 @@ import { Today } from "../layout/today";
 import { Button } from "./button";
 import { SearchBox } from "./search-box";
 
-export const DesktopHeader = async () => {
-  const t = await getTranslations("Layout");
-  const locale = await getLocale();
+export const DesktopHeader = async ({ locale }: { locale: string }) => {
+  const t = await getDictionary(locale);
   const translations = {
-    subscribe: t("subscribe"),
-    login: t("login"),
+    subscribe: t.Layout.subscribe,
+    login: t.Layout.login,
   };
   const categories = await getCategories();
   return (
@@ -27,11 +25,9 @@ export const DesktopHeader = async () => {
               <div className="justify-self-start">
                 <SearchBox />
               </div>
-              <NextIntlClientProvider locale={locale} messages={null}>
-                <Suspense>
-                  <LocaleSwitcher />
-                </Suspense>
-              </NextIntlClientProvider>
+
+              <LocaleSwitcher />
+
               <div className="justify-self-end flex items-center gap-3">
                 <Button
                   variant="default"
@@ -54,7 +50,8 @@ export const DesktopHeader = async () => {
         {/* Desktop header section */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-3 items-center h-16 md:h-20">
-            <Today />
+            <Today locale={locale} />
+
             <Link
               href="/"
               className="font-heading text-4xl font-bold tracking-tight text-black transition-colors hover:text-neutral-700 justify-self-center text-center leading-tight whitespace-nowrap"
@@ -65,9 +62,7 @@ export const DesktopHeader = async () => {
             {/* Desktop: Stock ticker */}
             <div className="hidden md:block text-right justify-self-end">
               <div className="w-32 text-right">
-                <Suspense fallback={<div>Loading...</div>}>
-                  <StockTicker />
-                </Suspense>  
+                <StockTicker />
               </div>
             </div>
           </div>
