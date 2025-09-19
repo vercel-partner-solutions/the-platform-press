@@ -26,6 +26,12 @@ export interface Author {
   title: string;
 }
 
+export interface Stock {
+  symbol: string;
+  change: number;
+  isPositive: boolean;
+}
+
 export interface CMSData {
   articles: Article[];
 }
