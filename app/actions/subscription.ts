@@ -34,8 +34,9 @@ export async function toggleSubscription(currentPath?: string): Promise<boolean>
   const hasSubscription = cookieStore.has("platform-press-subscription");
 
   if (hasSubscription) {
-    // Unsubscribing
+    // Unsubscribing - delete both subscription and visited articles cookies
     cookieStore.delete("platform-press-subscription");
+    cookieStore.delete("platform-press-visited-articles");
 
     // If on article page, redirect to trigger middleware (which will rewrite to paywall)
     if (currentPath && currentPath.includes('/articles/') && !currentPath.includes('/paywall')) {
