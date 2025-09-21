@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   const articles = results.map((article) => ({
     id: parseInt(article.id, 10),
     title: article.title,
-    url: `/${article.slug}`,
+    url: `/articles/${article.slug}`,
     category: article.category,
     excerpt: article.excerpt,
   }));

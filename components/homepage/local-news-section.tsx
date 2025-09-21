@@ -14,13 +14,13 @@ async function LocalNewsCard({ article }: { article: Article }) {
 
   return (
     <article className="group bg-white">
-      <Link href={`/${article.slug}`} className="block">
+      <Link href={`/articles/${article.slug}`} className="block">
         <div className="relative w-full aspect-[16/9] overflow-hidden rounded-md mb-3">
           <Image
             src={
               article.imageUrl ||
               `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
-                "news",
+                "news"
               )}`
             }
             alt={article.title}
@@ -31,7 +31,7 @@ async function LocalNewsCard({ article }: { article: Article }) {
         </div>
       </Link>
       <div className="flex flex-col">
-        <Link href={`/${article.slug}`} className="block">
+        <Link href={`/articles/${article.slug}`} className="block">
           <h3 className="text-lg font-semibold text-black group-hover:underline transition-colors mb-2 leading-tight line-clamp-2">
             {article.title}
           </h3>

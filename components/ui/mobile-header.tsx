@@ -2,7 +2,7 @@ import { Menu, Search } from "lucide-react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { Suspense } from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -14,46 +14,44 @@ import {
 } from "@/components/ui/sheet";
 import { Link } from "@/i18n/navigation";
 import { getCategories } from "@/lib/cms";
-import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "../layout/locale-switcher";
+import { SubscribeButton } from "./subscribe-button";
+import { isSubscribed } from "@/app/actions/subscription";
 
 export async function MobileHeader() {
   const categories = await getCategories();
+  const subscribed = await isSubscribed();
+
   return (
     <div className="md:hidden flex items-center justify-between w-full h-16 px-4">
-      {/* Left: menu and search */}
-      <div className="flex flex-1 items-center">
-        <MobileMenu categories={categories} />
+      <div className="flex flex-1 items-center px-2">
         <Link href="/category/all">
           <Search size={16} />
         </Link>
       </div>
 
       <div className="flex flex-1 justify-center">
-        <Link href="/" passHref>
+        <Link href="/">
           <h1 className="text-2xl font-bold text-center whitespace-nowrap">
             The Platform Press
           </h1>
         </Link>
       </div>
 
-      {/* Right: subscribe button */}
       <div className="items-center justify-end flex flex-1">
-        <Link
-          className={cn(
-            buttonVariants({ variant: "default" }),
-            "hidden sm:block",
-          )}
-          href="/subscribe"
-        >
-          Subscribe
-        </Link>
+        <MobileMenu categories={categories} subscribed={subscribed} />
       </div>
     </div>
   );
 }
 
-async function MobileMenu({ categories }: { categories: string[] }) {
+async function MobileMenu({
+  categories,
+  subscribed,
+}: {
+  categories: string[];
+  subscribed: boolean;
+}) {
   const locale = await getLocale();
   return (
     <Sheet>
@@ -65,19 +63,12 @@ async function MobileMenu({ categories }: { categories: string[] }) {
       <SheetContent side="right" className="w-full">
         <SheetHeader>
           <SheetTitle>The Platform Press</SheetTitle>
-          <div className="flex flex-col gap-2 px-4">
-            <Link
-              href="/sign-in"
-              className={cn(buttonVariants({ variant: "default" }), "w-full")}
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/subscribe"
-              className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
-            >
-              Subscribe
-            </Link>
+          <div className="flex flex-col gap-2 px-4 items-center">
+            <SubscribeButton
+              key={subscribed ? "subscribed" : "unsubscribed"}
+              initialState={subscribed}
+              className="max-w-[200px]"
+            />
           </div>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
@@ -92,7 +83,6 @@ async function MobileMenu({ categories }: { categories: string[] }) {
               key={category}
             >
               <Link
-                passHref
                 href={`/category/${category.toLowerCase()}`}
                 className="w-full h-full block"
               >

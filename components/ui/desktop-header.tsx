@@ -1,21 +1,18 @@
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { Suspense } from "react";
 import { Link } from "@/i18n/navigation";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
 import { Today } from "../layout/today";
-import { Button } from "./button";
 import { SearchBox } from "./search-box";
+import { SubscribeButton } from "./subscribe-button";
+import { isSubscribed } from "@/app/actions/subscription";
 
 export const DesktopHeader = async () => {
-  const t = await getTranslations("Layout");
   const locale = await getLocale();
-  const translations = {
-    subscribe: t("subscribe"),
-    login: t("login"),
-  };
+  const subscribed = await isSubscribed();
   const categories = await getCategories();
   return (
     <>
@@ -33,20 +30,11 @@ export const DesktopHeader = async () => {
                 </Suspense>
               </NextIntlClientProvider>
               <div className="justify-self-end flex items-center gap-3">
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2"
-                >
-                  {translations.subscribe}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs font-medium border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-4 py-2 bg-transparent"
-                >
-                  {translations.login}
-                </Button>
+                <SubscribeButton
+                  key={subscribed ? "subscribed" : "unsubscribed"}
+                  initialState={subscribed}
+                  className="px-4 py-2"
+                />
               </div>
             </div>
           </div>
@@ -71,12 +59,18 @@ export const DesktopHeader = async () => {
           </div>
         </div>
       </div>
-      <StickyCategories categories={categories} />
+      <StickyCategories categories={categories} subscribed={subscribed} />
     </>
   );
 };
 
-export const StickyCategories = ({ categories }: { categories: string[] }) => {
+export const StickyCategories = ({
+  categories,
+  subscribed,
+}: {
+  categories: string[];
+  subscribed: boolean;
+}) => {
   return (
     <div className="bg-white sticky top-0 z-50 border-b border-neutral-200 shadow-sm hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,22 +116,12 @@ export const StickyCategories = ({ categories }: { categories: string[] }) => {
           </nav>
 
           <div className="animate-reveal-right">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="default"
-                size="sm"
-                className="text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
-              >
-                SUBSCRIBE
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs font-medium border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-3 py-1.5 bg-transparent"
-              >
-                LOG IN
-              </Button>
-            </div>
+            <SubscribeButton
+              key={subscribed ? "subscribed" : "unsubscribed"}
+              initialState={subscribed}
+              size="sm"
+              className="text-xs font-medium px-3 py-1.5"
+            />
           </div>
         </div>
       </div>

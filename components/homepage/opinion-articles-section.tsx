@@ -9,7 +9,9 @@ function OpinionArticleCard({ article }: { article: Article }) {
       <div className="flex items-start gap-3 mb-2">
         <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
           <Image
-            src={`/placeholder.svg?width=48&height=48&query=author ${article.author.split(" ")[0]}`}
+            src={`/placeholder.svg?width=48&height=48&query=author ${
+              article.author.split(" ")[0]
+            }`}
             alt={article.author}
             fill
             className="object-cover"
@@ -20,7 +22,7 @@ function OpinionArticleCard({ article }: { article: Article }) {
           <p className="text-xs text-neutral-600">Opinion Contributor</p>
         </div>
       </div>
-      <Link href={`/${article.slug}`}>
+      <Link href={`/articles/${article.slug}`}>
         <h3 className="text-lg font-semibold text-black group-hover:underline mb-1 leading-tight line-clamp-3">
           {article.title}
         </h3>
@@ -29,7 +31,7 @@ function OpinionArticleCard({ article }: { article: Article }) {
         {article.excerpt}
       </p>
       <Link
-        href={`/${article.slug}`}
+        href={`/articles/${article.slug}`}
         className="text-sm text-black hover:underline font-medium"
       >
         Read full opinion &rarr;
