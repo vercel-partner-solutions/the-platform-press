@@ -527,8 +527,6 @@ The future of AI points towards even more integration into our daily lives. Adva
     readingTime: 7,
     views: 1320,
   },
-
-  // Local News Articles (simulated for different locations)
   {
     id: "36",
     slug: "downtown-revitalization-project",
@@ -542,7 +540,6 @@ The future of AI points towards even more integration into our daily lives. Adva
     datePublished: "2025-06-26T14:00:00Z",
     readingTime: 4,
     views: 450,
-    location: "San Francisco",
   },
   {
     id: "37",
@@ -557,7 +554,6 @@ The future of AI points towards even more integration into our daily lives. Adva
     datePublished: "2025-06-25T16:30:00Z",
     readingTime: 5,
     views: 320,
-    location: "San Francisco",
   },
   {
     id: "38",
@@ -572,7 +568,6 @@ The future of AI points towards even more integration into our daily lives. Adva
     datePublished: "2025-06-24T11:15:00Z",
     readingTime: 3,
     views: 280,
-    location: "San Francisco",
   },
   {
     id: "39",
@@ -587,7 +582,6 @@ The future of AI points towards even more integration into our daily lives. Adva
     datePublished: "2025-06-23T09:45:00Z",
     readingTime: 4,
     views: 380,
-    location: "New York",
   },
   {
     id: "40",
@@ -602,7 +596,6 @@ The future of AI points towards even more integration into our daily lives. Adva
     datePublished: "2025-06-22T13:20:00Z",
     readingTime: 5,
     views: 520,
-    location: "New York",
   },
   {
     id: "41",
@@ -617,13 +610,12 @@ The future of AI points towards even more integration into our daily lives. Adva
     datePublished: "2025-06-21T10:00:00Z",
     readingTime: 3,
     views: 290,
-    location: "New York",
   },
 ];
 
 async function fetchContent<T = any>(
   query: string,
-  variables: Record<string, any> = {},
+  variables: Record<string, any> = {}
 ): Promise<T[]> {
   if (query === "article") {
     return placeholderArticles as T[];
@@ -631,7 +623,7 @@ async function fetchContent<T = any>(
 
   if (query === "category") {
     const categories = Array.from(
-      new Set(placeholderArticles.map((a) => a.category)),
+      new Set(placeholderArticles.map((a) => a.category))
     ).map((cat) => ({
       slug: cat.toLowerCase(),
       title: cat,
@@ -676,13 +668,13 @@ export async function getArticles({
 
   if (category) {
     articles = articles.filter(
-      (article) => article.category.toLowerCase() === category.toLowerCase(),
+      (article) => article.category.toLowerCase() === category.toLowerCase()
     );
   }
 
   if (location) {
     articles = articles.filter(
-      (article) => (article as any).location === location,
+      (article) => (article as any).location === location
     );
   }
 
@@ -692,7 +684,7 @@ export async function getArticles({
       (article) =>
         article.title.toLowerCase().includes(lowerQuery) ||
         article.excerpt.toLowerCase().includes(lowerQuery) ||
-        article.author.toLowerCase().includes(lowerQuery),
+        article.author.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -716,7 +708,7 @@ export async function getArticles({
     articles.sort(
       (a, b) =>
         new Date(b.datePublished).getTime() -
-        new Date(a.datePublished).getTime(),
+        new Date(a.datePublished).getTime()
     );
   }
 
@@ -727,7 +719,7 @@ export async function getArticles({
 }
 
 export async function getArticleBySlug(
-  slug: string,
+  slug: string
 ): Promise<Article | undefined> {
   const cmsArticles = await fetchContent<CMSArticle>("article");
   const articles = cmsArticles.map(reshapeToArticle);

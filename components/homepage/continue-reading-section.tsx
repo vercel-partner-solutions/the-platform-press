@@ -1,8 +1,11 @@
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { isSubscribed } from "@/app/actions/subscription";
+import { getArticleBySlug, getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 
-async function LocalNewsCard({
+async function ContinueReadingCard({
   article,
   locale,
 }: {
@@ -52,29 +55,72 @@ async function LocalNewsCard({
   );
 }
 
-export default function LocalNewsSection({
-  articles,
-  location,
+export default async function ContinueReadingSection({
+  fallbackCategory,
   locale,
 }: {
-  articles: Article[];
-  location: string;
+  fallbackCategory: string;
   locale: string;
 }) {
+  const subscribed = await isSubscribed();
+  let articles: Article[] = [];
+  let sectionTitle = fallbackCategory;
+
+  if (subscribed) {
+    // Get visited articles for subscribed users
+    const cookieStore = await cookies();
+    const visitedCookie = cookieStore.get("platform-press-visited-articles");
+
+    if (visitedCookie?.value) {
+      try {
+        const visitedSlugs: string[] = JSON.parse(visitedCookie.value);
+
+        if (visitedSlugs.length > 0) {
+          // Fetch articles by slug in parallel
+          const articlePromises = visitedSlugs.map((slug) =>
+            getArticleBySlug(slug)
+          );
+          const fetchedArticles = await Promise.all(articlePromises);
+
+          // Filter out any undefined results
+          articles = fetchedArticles.filter(
+            (article): article is Article => article !== undefined
+          );
+
+          if (articles.length > 0) {
+            sectionTitle = "Continue Reading";
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing visited articles cookie:", error);
+      }
+    }
+  }
+
+  // If no visited articles or not subscribed, use fallback category
+  if (articles.length === 0) {
+    articles = await getArticles({ category: fallbackCategory, limit: 3 });
+  }
+
   if (!articles || articles.length === 0) return null;
+
   return (
-    <section aria-labelledby="local-news-heading" className="mb-10">
+    <section aria-labelledby="continue-reading-heading" className="mb-10">
       <div className="border-b-2 border-black pb-2 mb-6">
         <h2
-          id="local-news-heading"
+          id="continue-reading-heading"
           className="text-2xl font-bold uppercase tracking-tight text-black"
         >
-          Local News - {location}
+          {sectionTitle}
         </h2>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <LocalNewsCard key={article.id} article={article} locale={locale} />
+          <ContinueReadingCard
+            key={article.id}
+            article={article}
+            locale={locale}
+          />
         ))}
       </div>
     </section>
