@@ -45,8 +45,10 @@ export async function generateMetadata({
 
 export default async function ArticlePage({
   params,
+  previewOnly = false,
 }: {
   params: Promise<{ slug: string; locale: string }>;
+  previewOnly?: boolean;
 }) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
@@ -116,11 +118,13 @@ export default async function ArticlePage({
             />
           </div>
 
-          <div
-            className="prose prose-neutral lg:prose-lg max-w-none"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: <we want to use the parsed HTML>
-            dangerouslySetInnerHTML={{ __html: parsedContent }} // Use the parsed HTML
-          />
+          {!previewOnly && (
+            <div
+              className="prose prose-neutral lg:prose-lg max-w-none"
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: <we want to use the parsed HTML>
+              dangerouslySetInnerHTML={{ __html: parsedContent }} // Use the parsed HTML
+            />
+          )}
         </article>
 
         {relatedArticles.length > 0 && (

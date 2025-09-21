@@ -6,8 +6,8 @@ export { generateMetadata };
 export default function PaywalledArticlePage(props: any) {
   return (
     <div>
-      <PaywallWrapper previewLength={300}>
-        <ArticlePage {...props} />
+      <PaywallWrapper previewLength={500}>
+        <ArticlePage {...props} previewOnly />
       </PaywallWrapper>
       <SubscribeModal />
     </div>
@@ -16,7 +16,7 @@ export default function PaywalledArticlePage(props: any) {
 
 function PaywallWrapper({
   children,
-  previewLength = 300,
+  previewLength,
 }: {
   children: React.ReactNode;
   previewLength?: number;
