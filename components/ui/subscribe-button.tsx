@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, startTransition } from "react";
+import { usePathname } from "next/navigation";
 import { toggleSubscription } from "@/app/actions/subscription";
 import { Button } from "./button";
 import { Loader2 } from "lucide-react";
@@ -17,8 +18,10 @@ export function SubscribeButton({
   size = "sm",
   className,
 }: SubscribeButtonProps) {
+  const pathname = usePathname();
+
   const [isSubscribed, action, pending] = useActionState(
-    toggleSubscription,
+    () => toggleSubscription(pathname),
     initialState
   );
 

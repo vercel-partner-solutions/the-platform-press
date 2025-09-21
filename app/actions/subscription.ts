@@ -29,14 +29,22 @@ export async function subscribeUser(formData: FormData) {
   redirect(redirectPath);
 }
 
-export async function toggleSubscription(): Promise<boolean> {
+export async function toggleSubscription(currentPath?: string): Promise<boolean> {
   const cookieStore = await cookies();
   const hasSubscription = cookieStore.has("platform-press-subscription");
 
   if (hasSubscription) {
+    // Unsubscribing
     cookieStore.delete("platform-press-subscription");
+
+    // If on article page, redirect to trigger middleware (which will rewrite to paywall)
+    if (currentPath && currentPath.includes('/articles/') && !currentPath.includes('/paywall')) {
+      redirect(currentPath); // This will trigger middleware to rewrite to paywall
+    }
+
     return false;
   } else {
+    // Subscribing
     cookieStore.set("platform-press-subscription", "true", {
       httpOnly: true,
       secure: true,
@@ -44,6 +52,12 @@ export async function toggleSubscription(): Promise<boolean> {
       maxAge: 60 * 60 * 24 * 365,
       path: "/",
     });
+
+    // If on paywall, redirect to article page
+    if (currentPath && currentPath.includes('/paywall')) {
+      redirect(currentPath.replace('/paywall', ''));
+    }
+
     return true;
   }
 }
