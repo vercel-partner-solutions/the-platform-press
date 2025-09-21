@@ -44,6 +44,7 @@ html {
 }
 
 .animate-reveal-left {
+  opacity: 0;
   animation: reveal-left auto ease-out;
   animation-timeline: --page-scroll;
   animation-range: 100px 150px;
@@ -51,6 +52,7 @@ html {
 }
 
 .animate-reveal-right {
+  opacity: 0;
   animation: reveal-right auto ease-out;
   animation-timeline: --page-scroll;
   animation-range: 100px 150px;
