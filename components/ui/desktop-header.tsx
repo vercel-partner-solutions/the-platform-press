@@ -1,7 +1,6 @@
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale } from "next-intl/server";
-import { Suspense } from "react";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
+
+import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
@@ -10,8 +9,12 @@ import { SearchBox } from "./search-box";
 import { SubscribeButton } from "./subscribe-button";
 import { isSubscribed } from "@/app/actions/subscription";
 
-export const DesktopHeader = async () => {
-  const locale = await getLocale();
+export const DesktopHeader = async ({ locale }: { locale: string }) => {
+  const t = await getDictionary(locale);
+  const translations = {
+    subscribe: t.Layout.subscribe,
+    login: t.Layout.login,
+  };
   const subscribed = await isSubscribed();
   const categories = await getCategories();
   return (
@@ -24,11 +27,9 @@ export const DesktopHeader = async () => {
               <div className="justify-self-start">
                 <SearchBox />
               </div>
-              <NextIntlClientProvider locale={locale} messages={null}>
-                <Suspense>
-                  <LocaleSwitcher />
-                </Suspense>
-              </NextIntlClientProvider>
+
+              <LocaleSwitcher />
+
               <div className="justify-self-end flex items-center gap-3">
                 <SubscribeButton
                   key={subscribed ? "subscribed" : "unsubscribed"}
@@ -42,7 +43,8 @@ export const DesktopHeader = async () => {
         {/* Desktop header section */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-3 items-center h-16 md:h-20">
-            <Today />
+            <Today locale={locale} />
+
             <Link
               href="/"
               className="font-heading text-4xl font-bold tracking-tight text-black transition-colors hover:text-neutral-700 justify-self-center text-center leading-tight whitespace-nowrap"

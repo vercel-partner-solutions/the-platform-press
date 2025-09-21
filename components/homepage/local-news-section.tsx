@@ -1,12 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getFormatter } from "next-intl/server";
 import type { Article } from "@/lib/types";
 
-async function LocalNewsCard({ article }: { article: Article }) {
-  const formatter = await getFormatter();
+async function LocalNewsCard({
+  article,
+  locale,
+}: {
+  article: Article;
+  locale: string;
+}) {
   const date = new Date(article.datePublished);
-  const dateTime = formatter.dateTime(date, {
+  const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -51,12 +55,13 @@ async function LocalNewsCard({ article }: { article: Article }) {
 export default function LocalNewsSection({
   articles,
   location,
+  locale,
 }: {
   articles: Article[];
-  location?: string;
+  location: string;
+  locale: string;
 }) {
   if (!articles || articles.length === 0) return null;
-
   return (
     <section aria-labelledby="local-news-heading" className="mb-10">
       <div className="border-b-2 border-black pb-2 mb-6">
@@ -64,12 +69,12 @@ export default function LocalNewsSection({
           id="local-news-heading"
           className="text-2xl font-bold uppercase tracking-tight text-black"
         >
-          Local News {location && `- ${location}`}
+          Local News - {location}
         </h2>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <LocalNewsCard key={article.id} article={article} />
+          <LocalNewsCard key={article.id} article={article} locale={locale} />
         ))}
       </div>
     </section>
