@@ -1,5 +1,5 @@
 import { CalendarDays, Clock, UserCircle } from "lucide-react";
-import { marked } from "marked"; // Import the markdown parser
+import { marked } from "marked";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -73,74 +73,68 @@ export default async function ArticlePage({
   });
 
   return (
-    <>
-      <div className="max-w-3xl mx-auto">
-        <article className="bg-white py-6 sm:py-8">
-          <header className="mb-6">
-            <div className="mb-3">
-              <CategoryBadge category={article.category} />
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-black mb-3 leading-tight">
-              {article.title}
-            </h1>
-            <div className="flex flex-wrap items-center text-sm text-neutral-600 gap-x-4 gap-y-1.5">
-              <div className="flex items-center">
-                <UserCircle size={16} className="mr-1.5 text-neutral-500" />
-                <span>By {article.author}</span>
-              </div>
-              <div className="flex items-center">
-                <CalendarDays size={16} className="mr-1.5 text-neutral-500" />
-                <span>{dateTime}</span>
-              </div>
-              <div className="flex items-center">
-                <Clock size={16} className="mr-1.5 text-neutral-500" />
-                <span>{article.readingTime} min read</span>
-              </div>
-            </div>
-          </header>
-
-          <div className="relative w-full aspect-[16/9] mb-6 rounded-lg overflow-hidden">
-            <Image
-              src={
-                article.imageUrl ||
-                `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                  "news article",
-                )}`
-              }
-              alt={article.title}
-              fill
-              className="object-cover"
-              priority
-            />
+    <div className="max-w-3xl mx-auto">
+      <article className="bg-white py-6 sm:py-8">
+        <header className="mb-6">
+          <div className="mb-3">
+            <CategoryBadge category={article.category} />
           </div>
-
-          {!previewOnly && (
-            <div
-              className="prose prose-neutral lg:prose-lg max-w-none"
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: <we want to use the parsed HTML>
-              dangerouslySetInnerHTML={{ __html: parsedContent }} // Use the parsed HTML
-            />
-          )}
-        </article>
-
-        {relatedArticles.length > 0 && (
-          <section className="mt-10 pt-6">
-            <h2 className="text-2xl font-semibold text-black mb-4">
-              Related Articles
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
-              {relatedArticles.map((related) => (
-                <ArticleCard
-                  key={related.id}
-                  article={related}
-                  locale={locale}
-                />
-              ))}
+          <h1 className="text-3xl sm:text-4xl font-bold text-black mb-3 leading-tight">
+            {article.title}
+          </h1>
+          <div className="flex flex-wrap items-center text-sm text-neutral-600 gap-x-4 gap-y-1.5">
+            <div className="flex items-center">
+              <UserCircle size={16} className="mr-1.5 text-neutral-500" />
+              <span>By {article.author}</span>
             </div>
-          </section>
+            <div className="flex items-center">
+              <CalendarDays size={16} className="mr-1.5 text-neutral-500" />
+              <span>{dateTime}</span>
+            </div>
+            <div className="flex items-center">
+              <Clock size={16} className="mr-1.5 text-neutral-500" />
+              <span>{article.readingTime} min read</span>
+            </div>
+          </div>
+        </header>
+
+        <div className="relative w-full aspect-[16/9] mb-6 rounded-lg overflow-hidden">
+          <Image
+            src={
+              article.imageUrl ||
+              `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
+                "news article"
+              )}`
+            }
+            alt={article.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        {!previewOnly && (
+          <div
+            className="prose prose-neutral lg:prose-lg max-w-none"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: <we want to use the parsed HTML>
+            dangerouslySetInnerHTML={{ __html: parsedContent }} // Use the parsed HTML
+          />
         )}
-      </div>
+      </article>
+
+      {relatedArticles.length > 0 && (
+        <section className="mt-10 pt-6">
+          <h2 className="text-2xl font-semibold text-black mb-4">
+            Related Articles
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
+            {relatedArticles.map((related) => (
+              <ArticleCard key={related.id} article={related} locale={locale} />
+            ))}
+          </div>
+        </section>
+      )}
       <ArticleTracker slug={slug} />
-    </>
+    </div>
   );
 }
