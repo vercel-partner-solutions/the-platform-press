@@ -31,7 +31,8 @@ function handleArticlePaywall(request: NextRequest, pathname: string): NextRespo
   }
 
   const slug = articlesMatch[1];
-  const hasSubscription = request.cookies.has("platform-press-subscription");
+  const subscriptionCookie = request.cookies.get("platform-press-subscription");
+  const hasSubscription = subscriptionCookie?.value === "true";
 
   if (hasSubscription) {
     return null;
