@@ -3,6 +3,7 @@ import { marked } from "marked"; // Import the markdown parser
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
@@ -139,6 +140,7 @@ export default async function ArticlePage({
           </section>
         )}
       </div>
+      <ArticleTracker slug={slug} />
     </>
   );
 }

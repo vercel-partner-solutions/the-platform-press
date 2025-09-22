@@ -9,6 +9,8 @@ import OpinionArticlesSection from "@/components/homepage/opinion-articles-secti
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import { getDictionary } from "@/dictionaries";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {

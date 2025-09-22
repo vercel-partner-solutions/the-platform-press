@@ -47,6 +47,7 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
 
             <Link
               href="/"
+              prefetch={false}
               className="font-heading text-4xl font-bold tracking-tight text-black transition-colors hover:text-neutral-700 justify-self-center text-center leading-tight whitespace-nowrap"
             >
               The Platform Press

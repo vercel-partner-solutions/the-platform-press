@@ -37,10 +37,7 @@ function handleArticlePaywall(
   const hasSubscription = request.cookies.has("platform-press-subscription");
 
   if (hasSubscription) {
-    // Track visited article for subscribed users
-    const response = NextResponse.next();
-    trackVisitedArticle(request, response, slug);
-    return response;
+    return null;
   }
 
   // User doesn't have subscription, rewrite to paywall
@@ -55,46 +52,6 @@ function handleArticlePaywall(
   return NextResponse.rewrite(paywallUrl);
 }
 
-function trackVisitedArticle(
-  request: NextRequest,
-  response: NextResponse,
-  slug: string
-): void {
-  try {
-    const existingCookie = request.cookies.get(
-      "platform-press-visited-articles"
-    );
-    let visitedArticles: string[] = [];
-
-    if (existingCookie?.value) {
-      visitedArticles = JSON.parse(existingCookie.value);
-    }
-
-    // Remove the slug if it already exists to move it to the front
-    visitedArticles = visitedArticles.filter((s) => s !== slug);
-
-    // Add the current slug to the front
-    visitedArticles.unshift(slug);
-
-    // Keep only the latest 3 articles
-    visitedArticles = visitedArticles.slice(0, 3);
-
-    // Set the updated cookie
-    response.cookies.set(
-      "platform-press-visited-articles",
-      JSON.stringify(visitedArticles),
-      {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 30,
-        path: "/",
-      }
-    );
-  } catch (error) {
-    console.error("Error tracking visited article:", error);
-  }
-}
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
