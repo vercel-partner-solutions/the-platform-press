@@ -3,8 +3,6 @@ import { marked } from "marked"; // Import the markdown parser
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { NextIntlClientProvider } from "next-intl";
-import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
@@ -14,22 +12,18 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug, locale } = await params;
-  setRequestLocale(locale);
-  const t = await getTranslations("Article");
+  const { slug } = await params;
   
-  const article = await getArticleBySlug((await params).slug);
+  const article = await getArticleBySlug(slug);
   if (!article) {
-    return {
-      title: t("notFound"),
-    };
+    notFound();
   }
   
   return {
-    title: t("metaTitle", { title: article.title }),
+    title: `${article.title} | The Platform Press`,
     description: article.excerpt,
     openGraph: {
-      title: t("metaTitle", { title: article.title }),
+      title: `${article.title} | The Platform Press`,
       description: article.excerpt,
       images: [
         {

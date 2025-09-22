@@ -1,7 +1,5 @@
-import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Suspense } from "react";
 
+import type { Metadata } from "next";
 import { getArticles } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
 
@@ -17,20 +15,17 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug, locale } = await params;
-  setRequestLocale(locale);
-
-  const t = await getTranslations("Category");
+  const { slug } = await params;
   const category = decodeURIComponent(slug);
   
   return {
-    title: t("title", { category }),
-    description: t("description", { category }),
+    title: `${category} | The Platform Press`,
+    description: `Stay updated with the latest ${category} news, analysis, and insights from The Platform Press.`,
     openGraph: {
-      title: t("title", { category }),
-      description: t("description", { category }),
+      title: `${category} | The Platform Press`,
+      description: `Stay updated with the latest ${category} news, analysis, and insights from The Platform Press.`,
       type: "website",
-      url: `/${locale}/category/${slug}`,
+      url: `/category/${slug}`,
     },
   };
 }
