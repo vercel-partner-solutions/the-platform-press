@@ -42,7 +42,7 @@ export function SubscribeButton({
       )}
       disabled={pending}
     >
-      <div className="flex w-full justify-center gap-2">
+      <div className="flex w-full justify-center items-center gap-2">
         {pending && <Loader2 className="w-3 h-3 animate-spin" />}
         {isSubscribed ? unsubscribeText : subscribeText}
       </div>
