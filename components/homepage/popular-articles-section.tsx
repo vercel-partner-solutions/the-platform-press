@@ -1,18 +1,18 @@
 import Link from "next/link";
-import { getFormatter } from "next-intl/server";
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 
 async function PopularArticleListItem({
   article,
   index,
+  locale,
 }: {
   article: Article;
   index: number;
+  locale: string;
 }) {
-  const formatter = await getFormatter();
   const date = new Date(article.datePublished);
-  const dateTime = formatter.dateTime(date, {
+  const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -43,8 +43,10 @@ async function PopularArticleListItem({
 
 export default async function PopularArticlesSection({
   isHomepage = false,
+  locale,
 }: {
   isHomepage?: boolean;
+  locale: string;
 }) {
   const articles = await getArticles({
     limit: 5,
@@ -69,6 +71,7 @@ export default async function PopularArticlesSection({
         <ol>
           {articles.map((article, index) => (
             <PopularArticleListItem
+              locale={locale}
               key={article.id}
               article={article}
               index={index}

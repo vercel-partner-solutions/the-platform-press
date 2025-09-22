@@ -1,17 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getFormatter } from "next-intl/server";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
 
 export default async function LatestArticleListItem({
   article,
+  locale,
 }: {
   article: Article;
+  locale: string;
 }) {
-  const formatter = await getFormatter();
   const date = new Date(article.datePublished);
-  const dateTime = formatter.dateTime(date, {
+  const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",

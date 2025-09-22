@@ -1,6 +1,5 @@
 import { Menu, Search } from "lucide-react";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale } from "next-intl/server";
+import Link from "next/link";
 import { Suspense } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -12,7 +11,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Link } from "@/i18n/navigation";
 import { getCategories } from "@/lib/cms";
 import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "../layout/locale-switcher";
@@ -30,7 +28,7 @@ export async function MobileHeader() {
       </div>
 
       <div className="flex flex-1 justify-center">
-        <Link href="/" passHref>
+        <Link href="/">
           <h1 className="text-2xl font-bold text-center whitespace-nowrap">
             The Platform Press
           </h1>
@@ -54,7 +52,6 @@ export async function MobileHeader() {
 }
 
 async function MobileMenu({ categories }: { categories: string[] }) {
-  const locale = await getLocale();
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -81,18 +78,14 @@ async function MobileMenu({ categories }: { categories: string[] }) {
           </div>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
-          <NextIntlClientProvider locale={locale} messages={null}>
-            <Suspense>
-              <LocaleSwitcher />
-            </Suspense>
-          </NextIntlClientProvider>
+          <LocaleSwitcher />
+
           {categories.map((category) => (
             <div
               className="block px-3 py-2 text-sm rounded-md transition-colors group w-full"
               key={category}
             >
               <Link
-                passHref
                 href={`/category/${category.toLowerCase()}`}
                 className="w-full h-full block"
               >
@@ -102,11 +95,7 @@ async function MobileMenu({ categories }: { categories: string[] }) {
           ))}
         </div>
         <SheetFooter>
-          <NextIntlClientProvider locale={locale} messages={null}>
-            <Suspense>
-              <LocaleSwitcher />
-            </Suspense>
-          </NextIntlClientProvider>
+          <LocaleSwitcher />
         </SheetFooter>
       </SheetContent>
     </Sheet>

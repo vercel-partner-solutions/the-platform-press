@@ -1,13 +1,11 @@
+import type React from "react";
+import "@/app/globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import type React from "react";
-import "@/app/globals.css";
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { routing } from "@/i18n/routing";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,7 +27,7 @@ export const metadata: Metadata = {
   generator: "v0.dev",
 };
 
-export default async function RootLayout({
+export default async function Layout({
   children,
   params,
 }: {
@@ -38,21 +36,18 @@ export default async function RootLayout({
 }) {
   const { locale } = await params;
 
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
-
   return (
     <html
       className={`${GeistSans.className} ${poppins.variable}`}
       lang={locale}
     >
       <body className="bg-white text-black antialiased flex flex-col min-h-screen">
-        <Header />
+        <Header locale={locale} />
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
