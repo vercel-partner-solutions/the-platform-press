@@ -6,6 +6,7 @@ type Dictionary = {
   Layout: {
     subscribe: string;
     login: string;
+    unsubscribe: string;
   };
   Homepage: {
     title: string;

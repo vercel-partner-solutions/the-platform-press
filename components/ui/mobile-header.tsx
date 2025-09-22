@@ -1,6 +1,5 @@
 import { Menu, Search } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,12 +12,10 @@ import {
 } from "@/components/ui/sheet";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
-import { SubscribeButton } from "./subscribe-button";
-import { isSubscribed } from "@/app/actions/subscription";
+import { Subscribe } from "./subscribe";
 
 export async function MobileHeader() {
   const categories = await getCategories();
-  const subscribed = await isSubscribed();
 
   return (
     <div className="md:hidden flex items-center justify-between w-full h-16 px-4">
@@ -37,19 +34,13 @@ export async function MobileHeader() {
       </div>
 
       <div className="items-center justify-end flex flex-1">
-        <MobileMenu categories={categories} subscribed={subscribed} />
+        <MobileMenu categories={categories} />
       </div>
     </div>
   );
 }
 
-async function MobileMenu({
-  categories,
-  subscribed,
-}: {
-  categories: string[];
-  subscribed: boolean;
-}) {
+async function MobileMenu({ categories }: { categories: string[] }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -61,10 +52,10 @@ async function MobileMenu({
         <SheetHeader>
           <SheetTitle>The Platform Press</SheetTitle>
           <div className="flex flex-col gap-2 px-4 items-center">
-            <SubscribeButton
-              key={subscribed ? "subscribed" : "unsubscribed"}
-              initialState={subscribed}
+            <Subscribe
               className="max-w-[200px]"
+              subscribeText="Subscribe"
+              unsubscribeText="Unsubscribe"
             />
           </div>
         </SheetHeader>

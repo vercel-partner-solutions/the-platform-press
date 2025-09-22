@@ -1,7 +1,8 @@
 {
   "Layout": {
     "subscribe": "Suscríbete por $1/semana",
-    "login": "Iniciar sesión"
+    "login": "Iniciar sesión",
+    "unsubscribe": "Darse de baja"
   },
   "Homepage": {
     "title": "Página de inicio | The Platform Press",

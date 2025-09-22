@@ -31,7 +31,8 @@ export async function subscribeUser(formData: FormData) {
 
 export async function toggleSubscription(currentPath?: string): Promise<boolean> {
   const cookieStore = await cookies();
-  const hasSubscription = cookieStore.has("platform-press-subscription");
+  const subscriptionCookie = cookieStore.get("platform-press-subscription");
+  const hasSubscription = subscriptionCookie?.value === "true";
 
   if (hasSubscription) {
     // Unsubscribing - delete both subscription and visited articles cookies
@@ -65,5 +66,6 @@ export async function toggleSubscription(currentPath?: string): Promise<boolean>
 
 export async function isSubscribed(): Promise<boolean> {
   const cookieStore = await cookies();
-  return cookieStore.has("platform-press-subscription");
+  const subscriptionCookie = cookieStore.get("platform-press-subscription");
+  return subscriptionCookie?.value === "true";
 }

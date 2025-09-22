@@ -6,16 +6,10 @@ import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
 import { Today } from "../layout/today";
 import { SearchBox } from "./search-box";
-import { SubscribeButton } from "./subscribe-button";
-import { isSubscribed } from "@/app/actions/subscription";
+import { Subscribe } from "./subscribe";
 
 export const DesktopHeader = async ({ locale }: { locale: string }) => {
   const t = await getDictionary(locale);
-  const translations = {
-    subscribe: t.Layout.subscribe,
-    login: t.Layout.login,
-  };
-  const subscribed = await isSubscribed();
   const categories = await getCategories();
   return (
     <>
@@ -31,10 +25,10 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
               <LocaleSwitcher />
 
               <div className="justify-self-end flex items-center gap-3">
-                <SubscribeButton
-                  key={subscribed ? "subscribed" : "unsubscribed"}
-                  initialState={subscribed}
+                <Subscribe
                   className="px-4 py-2"
+                  unsubscribeText={t.Layout.unsubscribe}
+                  subscribeText={t.Layout.subscribe}
                 />
               </div>
             </div>
@@ -62,18 +56,19 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
           </div>
         </div>
       </div>
-      <StickyCategories categories={categories} subscribed={subscribed} />
+      <StickyCategories categories={categories} locale={locale} />
     </>
   );
 };
 
-export const StickyCategories = ({
+export const StickyCategories = async ({
   categories,
-  subscribed,
+  locale,
 }: {
   categories: string[];
-  subscribed: boolean;
+  locale: string;
 }) => {
+  const t = await getDictionary(locale);
   return (
     <div className="bg-white sticky top-0 z-50 border-b border-neutral-200 shadow-sm hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,11 +114,11 @@ export const StickyCategories = ({
           </nav>
 
           <div className="animate-reveal-right">
-            <SubscribeButton
-              key={subscribed ? "subscribed" : "unsubscribed"}
-              initialState={subscribed}
+            <Subscribe
               size="sm"
               className="text-xs font-medium px-3 py-1.5"
+              unsubscribeText={t.Layout.unsubscribe}
+              subscribeText={t.Layout.subscribe}
             />
           </div>
         </div>

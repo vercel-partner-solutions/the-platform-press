@@ -1,7 +1,8 @@
 {
   "Layout": {
     "subscribe": "Subscribe For $1/Week",
-    "login": "Login"
+    "login": "Login",
+    "unsubscribe": "Unsubscribe"
   },
   "Homepage": {
     "title": "Homepage | The Platform Press",

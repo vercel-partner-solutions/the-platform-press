@@ -9,12 +9,16 @@ import { cn } from "@/lib/utils";
 
 interface SubscribeButtonProps {
   initialState: boolean;
+  subscribeText: string;
+  unsubscribeText: string;
   size?: "sm" | "default" | "lg";
   className?: string;
 }
 
 export function SubscribeButton({
   initialState,
+  subscribeText,
+  unsubscribeText,
   size = "sm",
   className,
 }: SubscribeButtonProps) {
@@ -38,9 +42,9 @@ export function SubscribeButton({
       )}
       disabled={pending}
     >
-      <div className="flex w-full justify-center gap-2">
+      <div className="flex w-full justify-center items-center gap-2">
         {pending && <Loader2 className="w-3 h-3 animate-spin" />}
-        {isSubscribed ? "Unsubscribe" : "Subscribe for $1/week"}
+        {isSubscribed ? unsubscribeText : subscribeText}
       </div>
     </Button>
   );
