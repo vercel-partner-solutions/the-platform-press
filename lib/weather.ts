@@ -114,16 +114,20 @@ async function getWeatherFromCoordinates(
   };
 }
 
-export async function getWeather(locale: string, location: { city?: string }): Promise<WeatherData> {
+export async function getWeather(
+  locale: string,
+  location: { city?: string },
+): Promise<WeatherData> {
   try {
     const { city } = location;
 
     // This isn't available in dev or build time
-    if (!city) return {
-      temperature: undefined,
-      condition: undefined,
-      unit: undefined,
-    }
+    if (!city)
+      return {
+        temperature: undefined,
+        condition: undefined,
+        unit: undefined,
+      };
 
     const coordinates = await getCoordinatesFromCity(city);
     if (!coordinates) throw new Error("Coordinates not found");

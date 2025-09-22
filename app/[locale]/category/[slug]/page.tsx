@@ -1,4 +1,3 @@
-
 import { getArticles } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
 

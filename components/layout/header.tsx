@@ -1,8 +1,6 @@
 import { DesktopHeader } from "@/components/ui/desktop-header";
 import { MobileHeader } from "@/components/ui/mobile-header";
 
-export const HEADER_HEIGHT = 400;
-
 export function Header({ locale }: { locale: string }) {
   return (
     <div className="border-b border-neutral-200">

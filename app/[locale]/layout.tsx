@@ -5,10 +5,9 @@ import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Footer from "@/components/layout/footer";
-import { Header, HEADER_HEIGHT } from "@/components/layout/header";
+import { Header } from "@/components/layout/header";
 import { i18n } from "@/i18n.config";
 import { StickyDesktopNavigation } from "@/components/ui/desktop-header";
-import { getCategories } from "@/lib/cms";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,7 +26,6 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-  generator: "v0.dev",
 };
 
 export const generateStaticParams = async () => {
@@ -51,7 +49,7 @@ export default async function Layout({
         <Header locale={locale} />
         <StickyDesktopNavigation />
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
-          {/* {children} */}
+          {children}
         </main>
         <Footer />
         <Analytics />

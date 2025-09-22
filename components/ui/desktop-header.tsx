@@ -8,6 +8,7 @@ import { Today } from "../layout/today";
 import { Button } from "./button";
 import { SearchBox } from "./search-box";
 import { Suspense } from "react";
+import { Skeleton } from "./skeleton";
 
 export const DesktopHeader = async ({ locale }: { locale: string }) => {
   return (
@@ -122,7 +123,7 @@ const MainHeaderBar = async ({ locale }: { locale: string }) => {
     {/* Desktop: Stock ticker */}
     <div className="hidden md:block text-right justify-self-end">
       <div className="w-32 text-right">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Skeleton className="w-32 h-6" />}>
           <StockTicker />
         </Suspense>
       </div>

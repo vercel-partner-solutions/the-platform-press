@@ -79,7 +79,7 @@ async function MobileMenu({ categories }: { categories: string[] }) {
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
           <Suspense fallback={<div>Loading...</div>}>
-          <LocaleSwitcher />
+            <LocaleSwitcher />
           </Suspense>
 
           {categories.map((category) => (
