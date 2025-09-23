@@ -53,7 +53,6 @@ function handleArticlePaywall(
   return NextResponse.rewrite(paywallUrl);
 }
 
-
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
