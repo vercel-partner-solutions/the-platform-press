@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { i18n, type Locale } from "@/i18n.config";
 import { cn } from "@/lib/utils";
 
-export function LocaleSwitcher() {
+export function LocaleSwitcher( { activeLocale }: { activeLocale: string } ) {
   const pathname = usePathname();
   const redirectedPathname = (locale: Locale) => {
     if (!pathname) return "/";
@@ -17,7 +17,7 @@ export function LocaleSwitcher() {
   return (
     <nav className="justify-self-center flex items-center gap-6">
       {i18n.locales.map((locale) => {
-        const isActive = locale === locale;
+        const isActive = locale === activeLocale;
         return (
           <Link
             href={redirectedPathname(locale)}

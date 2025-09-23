@@ -5,7 +5,7 @@ export function Header({ locale }: { locale: string }) {
   return (
     <div className="border-b border-neutral-200">
       <DesktopHeader locale={locale} />
-      <MobileHeader />
+      <MobileHeader locale={locale} />
     </div>
   );
 }

@@ -19,7 +19,8 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
   );
 };
 
-export const StickyDesktopNavigation = async () => {
+export const StickyDesktopNavigation = async ({ locale }: { locale: string }) => {
+  const t = await getDictionary(locale);
   const categories = await getCategories();
   return (
     <div className="sticky top-0 z-50 border-b border-neutral-200 shadow-sm hidden md:block bg-white">
@@ -74,7 +75,7 @@ const TopHeaderBar = async ({ locale }: { locale: string }) => {
         </div>
 
         <Suspense fallback={<div>Loading...</div>}>
-          <LocaleSwitcher />
+          <LocaleSwitcher activeLocale={locale} />
         </Suspense>
 
         <div className="justify-self-end flex items-center gap-3">

@@ -15,7 +15,7 @@ import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { Subscribe } from "./subscribe";
 
-export async function MobileHeader() {
+export async function MobileHeader({ locale }: { locale: string }) {
   const categories = await getCategories();
 
   return (
@@ -35,13 +35,13 @@ export async function MobileHeader() {
       </div>
 
       <div className="items-center justify-end flex flex-1">
-        <MobileMenu categories={categories} />
+        <MobileMenu categories={categories} locale={locale} />
       </div>
     </div>
   );
 }
 
-async function MobileMenu({ categories }: { categories: string[] }) {
+async function MobileMenu({ categories, locale }: { categories: string[], locale: string }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -62,7 +62,7 @@ async function MobileMenu({ categories }: { categories: string[] }) {
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
           <Suspense fallback={<div>Loading...</div>}>
-            <LocaleSwitcher />
+            <LocaleSwitcher activeLocale={locale} />
           </Suspense>
 
           {categories.map((category) => (
@@ -80,7 +80,7 @@ async function MobileMenu({ categories }: { categories: string[] }) {
           ))}
         </div>
         <SheetFooter>
-          <LocaleSwitcher />
+          <LocaleSwitcher activeLocale={locale} />
         </SheetFooter>
       </SheetContent>
     </Sheet>

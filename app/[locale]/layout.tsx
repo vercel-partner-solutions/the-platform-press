@@ -47,9 +47,9 @@ export default async function Layout({
     >
       <body className="bg-white text-black antialiased min-h-screen flex flex-col">
         <Header locale={locale} />
-        <StickyDesktopNavigation />
+        <StickyDesktopNavigation locale={locale} />
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
-          {/* {children} */}
+          {children}
         </main>
         <Footer />
         <Analytics />
