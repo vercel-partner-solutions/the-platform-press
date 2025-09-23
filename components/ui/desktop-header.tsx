@@ -52,12 +52,14 @@ export const StickyDesktopNavigation = async ({
           </nav>
 
           <div className="animate-reveal-right">
+            <Suspense>
             <Subscribe
               size="sm"
               className="text-xs font-medium px-3 py-1.5"
               unsubscribeText={t.Layout.unsubscribe}
               subscribeText={t.Layout.subscribe}
             />
+            </Suspense>
           </div>
         </div>
       </div>
