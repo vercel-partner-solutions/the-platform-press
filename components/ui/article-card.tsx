@@ -21,13 +21,13 @@ export default function ArticleCard({
 
   return (
     <article className="bg-white group flex flex-col">
-      <Link href={`/${article.slug}`} className="block">
+      <Link href={`/articles/${article.slug}`} className="block">
         <div className="relative w-full aspect-[16/9] overflow-hidden rounded-md">
           <Image
             src={
               article.imageUrl ||
               `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
-                "news",
+                "news"
               )}`
             }
             alt={article.title}
@@ -42,7 +42,7 @@ export default function ArticleCard({
         <div className="mb-1.5">
           <CategoryBadge category={article.category} />
         </div>
-        <Link href={`/${article.slug}`} className="block">
+        <Link href={`/articles/${article.slug}`} className="block">
           <h2 className="text-lg font-semibold text-black group-hover:underline transition-colors mb-1.5 leading-tight">
             {article.title}
           </h2>

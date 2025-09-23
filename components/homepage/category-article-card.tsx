@@ -6,12 +6,14 @@ import CategoryBadge from "../ui/category-badge";
 export default function CategoryArticleCard({ article }: { article: Article }) {
   return (
     <article className="group flex flex-col">
-      <Link href={`/${article.slug}`} className="block">
+      <Link href={`/articles/${article.slug}`} className="block">
         <div className="relative w-full aspect-[16/9] overflow-hidden rounded-md bg-neutral-100">
           <Image
             src={
               article.imageUrl ||
-              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent("news")}`
+              `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
+                "news"
+              )}`
             }
             alt={article.title}
             fill
@@ -24,7 +26,7 @@ export default function CategoryArticleCard({ article }: { article: Article }) {
         <div className="mb-1.5">
           <CategoryBadge category={article.category} />
         </div>
-        <Link href={`/${article.slug}`} className="block">
+        <Link href={`/articles/${article.slug}`} className="block">
           <h3 className="text-md font-semibold text-black group-hover:underline transition-colors leading-tight line-clamp-3">
             {article.title}
           </h3>

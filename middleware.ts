@@ -14,7 +14,7 @@ function getLocale(request: NextRequest): string | undefined {
 
   // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
-    locales,
+    locales
   );
 
   const locale = matchLocale(languages, locales, i18n.defaultLocale);
@@ -22,24 +22,40 @@ function getLocale(request: NextRequest): string | undefined {
   return locale;
 }
 
+function handleArticlePaywall(request: NextRequest, pathname: string): NextResponse | null {
+  // Check if the path contains /articles/ pattern (but not paywall routes)
+  const articlesMatch = pathname.match(/\/articles\/([^\/]+)(?!\/paywall)$/);
+
+  if (!articlesMatch || !articlesMatch[1]) {
+    return null;
+  }
+
+  const slug = articlesMatch[1];
+  const subscriptionCookie = request.cookies.get("platform-press-subscription");
+  const hasSubscription = subscriptionCookie?.value === "true";
+
+  if (hasSubscription) {
+    return null;
+  }
+
+  // User doesn't have subscription, rewrite to paywall
+  // Extract locale from pathname (guaranteed to be there after locale redirect)
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const locale = pathSegments[0];
+
+  const paywallPath = `/${locale}/articles/${slug}/paywall`;
+  const paywallUrl = new URL(paywallPath, request.url);
+  paywallUrl.search = request.nextUrl.search;
+
+  return NextResponse.rewrite(paywallUrl);
+}
+
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
-  // // If you have one
-  // if (
-  //   [
-  //     '/manifest.json',
-  //     '/favicon.ico',
-  //     // Your other files in `public`
-  //   ].includes(pathname)
-  // )
-  //   return
-
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
-    (locale) =>
-      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
   // Redirect if there is no locale
@@ -51,13 +67,22 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
-        request.url,
-      ),
+        request.url
+      )
     );
   }
+
+  // Check for article paywall after locale is guaranteed
+  const paywallResponse = handleArticlePaywall(request, pathname);
+  if (paywallResponse) {
+    return paywallResponse;
+  }
+
+  // Continue with normal request
+  return NextResponse.next();
 }
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|placeholder.svg).*)"],
 };

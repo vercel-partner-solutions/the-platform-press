@@ -25,7 +25,7 @@ export default async function LatestArticleListItem({
       <div className="flex flex-col sm:flex-row gap-6 py-2">
         {/* Image */}
         <Link
-          href={`/${article.slug}`}
+          href={`/articles/${article.slug}`}
           className="sm:w-40 md:w-48 shrink-0 block"
         >
           <div className="relative w-full aspect-[16/9] rounded-md overflow-hidden">
@@ -33,7 +33,7 @@ export default async function LatestArticleListItem({
               src={
                 article.imageUrl ||
                 `/placeholder.svg?width=192&height=108&query=${encodeURIComponent(
-                  "news",
+                  "news"
                 )}`
               }
               alt={article.title}
@@ -50,7 +50,7 @@ export default async function LatestArticleListItem({
             <time className="text-xs text-neutral-500">{dateTime}</time>
           </div>
 
-          <Link href={`/${article.slug}`} className="block">
+          <Link href={`/articles/${article.slug}`} className="block">
             <h3 className="text-lg font-semibold text-black group-hover:underline leading-tight mb-1.5">
               {article.title}
             </h3>

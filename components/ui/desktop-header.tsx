@@ -5,15 +5,11 @@ import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
 import { Today } from "../layout/today";
-import { Button } from "./button";
 import { SearchBox } from "./search-box";
+import { Subscribe } from "./subscribe";
 
 export const DesktopHeader = async ({ locale }: { locale: string }) => {
   const t = await getDictionary(locale);
-  const translations = {
-    subscribe: t.Layout.subscribe,
-    login: t.Layout.login,
-  };
   const categories = await getCategories();
   return (
     <>
@@ -29,20 +25,11 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
               <LocaleSwitcher />
 
               <div className="justify-self-end flex items-center gap-3">
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2"
-                >
-                  {translations.subscribe}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs font-medium border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-4 py-2 bg-transparent"
-                >
-                  {translations.login}
-                </Button>
+                <Subscribe
+                  className="px-4 py-2"
+                  unsubscribeText={t.Layout.unsubscribe}
+                  subscribeText={t.Layout.subscribe}
+                />
               </div>
             </div>
           </div>
@@ -68,12 +55,19 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
           </div>
         </div>
       </div>
-      <StickyCategories categories={categories} />
+      <StickyCategories categories={categories} locale={locale} />
     </>
   );
 };
 
-export const StickyCategories = ({ categories }: { categories: string[] }) => {
+export const StickyCategories = async ({
+  categories,
+  locale,
+}: {
+  categories: string[];
+  locale: string;
+}) => {
+  const t = await getDictionary(locale);
   return (
     <div className="bg-white sticky top-0 z-50 border-b border-neutral-200 shadow-sm hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,22 +113,12 @@ export const StickyCategories = ({ categories }: { categories: string[] }) => {
           </nav>
 
           <div className="animate-reveal-right">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="default"
-                size="sm"
-                className="text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
-              >
-                SUBSCRIBE
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs font-medium border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-3 py-1.5 bg-transparent"
-              >
-                LOG IN
-              </Button>
-            </div>
+            <Subscribe
+              size="sm"
+              className="text-xs font-medium px-3 py-1.5"
+              unsubscribeText={t.Layout.unsubscribe}
+              subscribeText={t.Layout.subscribe}
+            />
           </div>
         </div>
       </div>

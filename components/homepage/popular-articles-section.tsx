@@ -25,7 +25,7 @@ async function PopularArticleListItem({
           {index + 1}
         </div>
         <div className="flex-grow">
-          <Link href={`/${article.slug}`} className="block">
+          <Link href={`/articles/${article.slug}`} className="block">
             <h3 className="text-lg font-bold text-black hover:underline leading-tight">
               {article.title}
             </h3>
