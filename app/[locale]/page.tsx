@@ -20,6 +20,17 @@ export async function generateMetadata({
   return {
     title: t.Homepage.title,
     description: t.Homepage.description,
+    openGraph: {
+      title: t.Homepage.title,
+      description: t.Homepage.description,
+      type: 'website',
+      siteName: 'The Platform Press',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t.Homepage.title,
+      description: t.Homepage.description,
+    },
   };
 }
 

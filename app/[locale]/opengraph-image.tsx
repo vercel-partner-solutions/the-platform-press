@@ -1,34 +1,12 @@
 import { ImageResponse } from 'next/og'
-import { getArticleBySlug } from '@/lib/cms'
+import { getDictionary } from '@/dictionaries'
 
 export const contentType = 'image/png'
 
 // Image generation
-export default async function Image({ params }: { params: Promise<{ slug: string; locale: string }> }) {
-  const { slug } = await params
-  const article = await getArticleBySlug(slug)
-
-  if (!article) { 
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#000000',
-          }}
-        >
-          <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#ffffff' }}>
-            Article Not Found
-          </div>
-        </div>
-      ),
-      { ...size }
-    )
-  }
+export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const t = await getDictionary(locale)
 
   return new ImageResponse(
     (
@@ -47,10 +25,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         {/* Header */}
         <div
           style={{
-            fontSize: '28px',
+            fontSize: '32px',
             fontWeight: 'bold',
             color: '#ffffff',
-            marginBottom: '40px',
+            marginBottom: '50px',
           }}
         >
           The Platform Press
@@ -59,15 +37,29 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         {/* Main title */}
         <h1
           style={{
-            fontSize: '48px',
+            fontSize: '56px',
             fontWeight: 'bold',
             color: '#ffffff',
             lineHeight: '1.1',
             textAlign: 'center',
+            marginBottom: '30px',
           }}
         >
-          {article.title}
+          Latest News & Analysis
         </h1>
+
+        {/* Description */}
+        <p
+          style={{
+            fontSize: '28px',
+            color: '#cccccc',
+            lineHeight: '1.4',
+            textAlign: 'center',
+            maxWidth: '900px',
+          }}
+        >
+          {t.Homepage.description}
+        </p>
       </div>
     ),
     {
