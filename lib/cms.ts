@@ -615,7 +615,7 @@ The future of AI points towards even more integration into our daily lives. Adva
 
 async function fetchContent<T = any>(
   query: string,
-  variables: Record<string, any> = {}
+  variables: Record<string, any> = {},
 ): Promise<T[]> {
   if (query === "article") {
     return placeholderArticles as T[];
@@ -623,7 +623,7 @@ async function fetchContent<T = any>(
 
   if (query === "category") {
     const categories = Array.from(
-      new Set(placeholderArticles.map((a) => a.category))
+      new Set(placeholderArticles.map((a) => a.category)),
     ).map((cat) => ({
       slug: cat.toLowerCase(),
       title: cat,
@@ -668,13 +668,13 @@ export async function getArticles({
 
   if (category) {
     articles = articles.filter(
-      (article) => article.category.toLowerCase() === category.toLowerCase()
+      (article) => article.category.toLowerCase() === category.toLowerCase(),
     );
   }
 
   if (location) {
     articles = articles.filter(
-      (article) => (article as any).location === location
+      (article) => (article as any).location === location,
     );
   }
 
@@ -684,7 +684,7 @@ export async function getArticles({
       (article) =>
         article.title.toLowerCase().includes(lowerQuery) ||
         article.excerpt.toLowerCase().includes(lowerQuery) ||
-        article.author.toLowerCase().includes(lowerQuery)
+        article.author.toLowerCase().includes(lowerQuery),
     );
   }
 
@@ -708,7 +708,7 @@ export async function getArticles({
     articles.sort(
       (a, b) =>
         new Date(b.datePublished).getTime() -
-        new Date(a.datePublished).getTime()
+        new Date(a.datePublished).getTime(),
     );
   }
 
@@ -719,7 +719,7 @@ export async function getArticles({
 }
 
 export async function getArticleBySlug(
-  slug: string
+  slug: string,
 ): Promise<Article | undefined> {
   const cmsArticles = await fetchContent<CMSArticle>("article");
   const articles = cmsArticles.map(reshapeToArticle);

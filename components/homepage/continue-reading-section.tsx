@@ -27,7 +27,7 @@ async function ContinueReadingCard({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
-                "news"
+                "news",
               )}`
             }
             alt={article.title}
@@ -78,13 +78,13 @@ export default async function ContinueReadingSection({
         if (visitedSlugs.length > 0) {
           // Fetch articles by slug in parallel
           const articlePromises = visitedSlugs.map((slug) =>
-            getArticleBySlug(slug)
+            getArticleBySlug(slug),
           );
           const fetchedArticles = await Promise.all(articlePromises);
 
           // Filter out any undefined results
           articles = fetchedArticles.filter(
-            (article): article is Article => article !== undefined
+            (article): article is Article => article !== undefined,
           );
 
           if (articles.length > 0) {

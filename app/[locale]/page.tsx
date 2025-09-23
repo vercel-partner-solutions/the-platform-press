@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 
 import BreakingNewsBanner from "@/components/homepage/breaking-news-banner";
 import CategoryArticlesSection from "@/components/homepage/category-articles-section";
+import ContinueReading from "@/components/homepage/continue-reading";
 import HeroSection from "@/components/homepage/hero-section";
 import LatestArticlesSection from "@/components/homepage/latest-articles-section";
-import ContinueReading from "@/components/homepage/continue-reading";
 import OpinionArticlesSection from "@/components/homepage/opinion-articles-section";
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import { getDictionary } from "@/dictionaries";

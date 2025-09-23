@@ -1,14 +1,14 @@
-import { getLocation } from "@/lib/geo/server";
-import { getWeather, renderWeatherIcon } from "@/lib/weather";
+import { unstable_cacheLife as cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { unstable_cacheLife as cacheLife } from "next/cache";
+import { getLocation } from "@/lib/geo/server";
+import { getWeather, renderWeatherIcon } from "@/lib/weather";
 
 export function Today({ locale }: { locale: string }) {
   return (
     <div className="hidden md:flex flex-col justify-self-start">
       <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
-          {renderDate(locale)}
+        {renderDate(locale)}
         <Suspense fallback={<Skeleton className="w-10 h-4" />}>
           {renderWeather(locale)}
         </Suspense>
@@ -43,8 +43,8 @@ const dateOptions = {
 };
 
 const renderDate = async (locale: string) => {
-  "use cache"
-  cacheLife('days')
+  "use cache";
+  cacheLife("days");
   const dateTime = new Date();
 
   const safeIntlDate = dateTime.toLocaleDateString(locale, dateOptions);

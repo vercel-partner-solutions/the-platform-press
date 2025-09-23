@@ -6,8 +6,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { i18n } from "@/i18n.config";
 import { StickyDesktopNavigation } from "@/components/ui/desktop-header";
+import { i18n } from "@/i18n.config";
 
 const poppins = Poppins({
   subsets: ["latin"],

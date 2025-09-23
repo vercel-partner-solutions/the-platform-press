@@ -103,7 +103,7 @@ export default async function ArticlePage({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                "news article"
+                "news article",
               )}`
             }
             alt={article.title}

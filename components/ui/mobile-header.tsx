@@ -1,5 +1,6 @@
 import { Menu, Search } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/sheet";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
-import { Suspense } from "react";
 import { Subscribe } from "./subscribe";
 
 export async function MobileHeader() {
