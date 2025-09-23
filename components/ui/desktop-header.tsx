@@ -1,14 +1,14 @@
 import Link from "next/link";
-
 import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
 import { Today } from "../layout/today";
-import { Button } from "./button";
 import { SearchBox } from "./search-box";
 import { Suspense } from "react";
 import { Skeleton } from "./skeleton";
+import { Button } from "./button";
+import { Subscribe } from "./subscribe";
 
 export const DesktopHeader = async ({ locale }: { locale: string }) => {
   return (
@@ -47,22 +47,12 @@ export const StickyDesktopNavigation = async () => {
           </nav>
 
           <div className="animate-reveal-right">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="default"
-                size="sm"
-                className="text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5"
-              >
-                SUBSCRIBE
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs font-medium border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-3 py-1.5 bg-transparent"
-              >
-                LOG IN
-              </Button>
-            </div>
+            <Subscribe
+              size="sm"
+              className="text-xs font-medium px-3 py-1.5"
+              unsubscribeText={t.Layout.unsubscribe}
+              subscribeText={t.Layout.subscribe}
+            />
           </div>
         </div>
       </div>

@@ -12,7 +12,6 @@ export interface Article {
   isBreaking?: boolean;
   isFeatured?: boolean;
   views?: number; // For "popular" section simulation
-  location?: string; // For local news articles
 }
 
 export interface Category {

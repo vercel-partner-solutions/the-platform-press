@@ -4,7 +4,7 @@ import BreakingNewsBanner from "@/components/homepage/breaking-news-banner";
 import CategoryArticlesSection from "@/components/homepage/category-articles-section";
 import HeroSection from "@/components/homepage/hero-section";
 import LatestArticlesSection from "@/components/homepage/latest-articles-section";
-import LocalNews from "@/components/homepage/local-news";
+import ContinueReading from "@/components/homepage/continue-reading";
 import OpinionArticlesSection from "@/components/homepage/opinion-articles-section";
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import { getDictionary } from "@/dictionaries";
@@ -35,7 +35,9 @@ export default async function HomePage({
 
       <div className="space-y-16 pt-0">
         <HeroSection />
-        <LocalNews locale={locale} />
+
+        <ContinueReading locale={locale} fallbackCategory="Science" />
+
         <CategoryArticlesSection
           title="Technology"
           categorySlug="technology"
