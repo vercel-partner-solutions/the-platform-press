@@ -22,7 +22,10 @@ function getLocale(request: NextRequest): string | undefined {
   return locale;
 }
 
-function handleArticlePaywall(request: NextRequest, pathname: string): NextResponse | null {
+function handleArticlePaywall(
+  request: NextRequest,
+  pathname: string
+): NextResponse | null {
   // Check if the path contains /articles/ pattern (but not paywall routes)
   const articlesMatch = pathname.match(/\/articles\/([^\/]+)(?!\/paywall)$/);
 
@@ -84,5 +87,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|placeholder.svg).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|placeholder.svg).*)",
+  ],
 };
