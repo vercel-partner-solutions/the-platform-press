@@ -26,16 +26,16 @@ export async function generateMetadata({
     openGraph: {
       title: article.title,
       description: article.excerpt,
-      images: [
-        {
-          url: article.imageUrl.startsWith("http")
-            ? article.imageUrl
-            : `https://yourdomain.com${article.imageUrl}`,
-          width: 1200,
-          height: 630,
-          alt: article.title,
-        },
-      ],
+      type: 'article',
+      siteName: 'The Platform Press',
+      publishedTime: article.datePublished,
+      authors: [article.author],
+      section: article.category,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt,
     },
   };
 }
