@@ -39,20 +39,43 @@
   }
 }
 
-.animate-reveal-left {
+/* Default state: elements are hidden (duplicates of main header) */
+.animate-reveal-left,
+.animate-reveal-right {
   opacity: 0;
-  animation: reveal-left auto ease-out;
-  animation-timeline: --page-scroll;
-  animation-range: 100px 150px;
-  animation-fill-mode: both;
+  transform: translateX(-30px); /* Start position for left */
 }
 
 .animate-reveal-right {
-  opacity: 0;
-  animation: reveal-right auto ease-out;
-  animation-timeline: --page-scroll;
-  animation-range: 100px 150px;
-  animation-fill-mode: both;
+  transform: translateX(30px); /* Start position for right */
+}
+
+/* Scroll-driven animations - only work when there's actual scrollable content */
+@supports (animation-timeline: scroll()) {
+  .animate-reveal-left {
+    animation: reveal-left auto ease-out;
+    animation-timeline: scroll();
+    animation-range: 100px 150px;
+    animation-fill-mode: both;
+  }
+
+  .animate-reveal-right {
+    opacity: 0;
+    animation: reveal-right auto ease-out;
+    animation-timeline: scroll();
+    animation-range: 100px 150px;
+    animation-fill-mode: both;
+  }
+}
+
+/* Fallback for browsers that don't support scroll-driven animations but DO support view-timeline */
+@supports not (animation-timeline: scroll()) {
+  @supports (animation-timeline: view()) {
+    .animate-reveal-left,
+    .animate-reveal-right {
+      opacity: 0; /* Keep hidden - these are duplicates */
+    }
+  }
 }
 
 .cycling-item {
