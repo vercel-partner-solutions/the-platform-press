@@ -49,7 +49,7 @@ export default async function Layout({
         <Header locale={locale} />
         <StickyDesktopNavigation />
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
-          {children}
+          {/* {children} */}
         </main>
         <Footer />
         <Analytics />

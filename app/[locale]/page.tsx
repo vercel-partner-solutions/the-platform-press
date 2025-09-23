@@ -35,15 +35,12 @@ export default async function HomePage({
 
       <div className="space-y-16 pt-0">
         <HeroSection />
-
         <LocalNews locale={locale} />
-
         <CategoryArticlesSection
           title="Technology"
           categorySlug="technology"
           isHomepage
         />
-
         {/* Two-column layout for Latest News and Popular This Week */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-10">
           <div className="lg:col-span-2">
@@ -53,9 +50,7 @@ export default async function HomePage({
             <PopularArticlesSection isHomepage locale={locale} />
           </div>
         </div>
-
         <OpinionArticlesSection isHomepage />
-
         <CategoryArticlesSection
           title="Business"
           categorySlug="business"
