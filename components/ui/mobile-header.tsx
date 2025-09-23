@@ -41,7 +41,13 @@ export async function MobileHeader({ locale }: { locale: string }) {
   );
 }
 
-async function MobileMenu({ categories, locale }: { categories: string[], locale: string }) {
+async function MobileMenu({
+  categories,
+  locale,
+}: {
+  categories: string[];
+  locale: string;
+}) {
   return (
     <Sheet>
       <SheetTrigger asChild>

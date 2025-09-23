@@ -19,7 +19,11 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
   );
 };
 
-export const StickyDesktopNavigation = async ({ locale }: { locale: string }) => {
+export const StickyDesktopNavigation = async ({
+  locale,
+}: {
+  locale: string;
+}) => {
   const t = await getDictionary(locale);
   const categories = await getCategories();
   return (
