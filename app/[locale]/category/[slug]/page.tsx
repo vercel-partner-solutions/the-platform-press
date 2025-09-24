@@ -26,6 +26,20 @@ export async function generateMetadata({
       description: `Stay updated with the latest ${category} news, analysis, and insights from The Platform Press.`,
       type: "website",
       url: `/category/${slug}`,
+      siteName: 'The Platform Press',
+      images: [
+        {
+          url: `/category/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${category} - The Platform Press`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${category} | The Platform Press`,
+      description: `Stay updated with the latest ${category} news, analysis, and insights from The Platform Press.`,
     },
   };
 }
