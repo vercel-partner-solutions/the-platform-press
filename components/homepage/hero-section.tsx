@@ -7,7 +7,7 @@ import CategoryBadge from "../ui/category-badge";
 function FeaturedArticleCard({ article }: { article: Article }) {
   return (
     <article className="col-span-12 lg:col-span-8 relative group rounded-lg overflow-hidden h-[450px] bg-black">
-      <Link href={`/${article.slug}`} className="block w-full h-full">
+      <Link href={`/articles/${article.slug}`} className="block w-full h-full">
         <Image
           src={
             article.imageUrl ||
@@ -39,7 +39,7 @@ function FeaturedArticleCard({ article }: { article: Article }) {
 function SecondaryArticleCard({ article }: { article: Article }) {
   return (
     <article className="group">
-      <Link href={`/${article.slug}`} className="block">
+      <Link href={`/articles/${article.slug}`} className="block">
         <div className="mb-1.5">
           <CategoryBadge category={article.category} />
         </div>
