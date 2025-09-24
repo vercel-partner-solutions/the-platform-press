@@ -26,7 +26,7 @@
     "react": "^19",
     "react-dom": "^19",
     "tailwind-merge": "^2.5.5",
-    "zod": "^3.24.1"
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
