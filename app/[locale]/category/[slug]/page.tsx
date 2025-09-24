@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getArticles, getCategoryBySlug } from "@/lib/cms";
+import { getArticles, getCategories, getCategoryBySlug } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
 
 type Props = {
@@ -37,6 +37,11 @@ export async function generateMetadata({
       url: `${baseUrl}/category/${slug}`,
     },
   };
+}
+
+export async function generateStaticParams() {
+  const categories = await getCategories();
+  return categories.map((c) => ({ slug: c.slug }));
 }
 
 export default async function CategorySearchPage({

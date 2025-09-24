@@ -17,13 +17,15 @@ export async function Subscribe({
   const subscribed = await isSubscribed();
 
   return (
-    <SubscribeButton
-      key={subscribed ? "subscribed" : "unsubscribed"}
-      initialState={subscribed}
-      subscribeText={subscribeText}
-      unsubscribeText={unsubscribeText}
-      size={size}
-      className={className}
-    />
+    <div className="justify-self-end flex items-center gap-3">
+      <SubscribeButton
+        key={subscribed ? "subscribed" : "unsubscribed"}
+        initialState={subscribed}
+        subscribeText={subscribeText}
+        unsubscribeText={unsubscribeText}
+        size={size}
+        className={className}
+      />
+    </div>
   );
 }

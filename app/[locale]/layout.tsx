@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { i18n } from "@/i18n.config";
+import { StickyNavigation } from "@/components/ui/sticky-navigation";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -46,9 +47,8 @@ export default async function Layout({
       lang={locale}
     >
       <body className="bg-white text-black antialiased min-h-screen flex flex-col">
-        <Suspense>
-          <Header locale={locale} />
-        </Suspense>
+        <Header locale={locale} />
+        <StickyNavigation locale={locale} />
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
           {children}
         </main>

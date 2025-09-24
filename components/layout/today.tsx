@@ -8,9 +8,9 @@ export function Today({ locale }: { locale: string }) {
   return (
     <div className="hidden md:flex flex-col justify-self-start">
       <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
-        {renderDate(locale)}
+        {getDate(locale)}
         <Suspense fallback={<Skeleton className="w-10 h-4" />}>
-          {renderWeather(locale)}
+          <Weather locale={locale} />
         </Suspense>
       </div>
       <span className="text-sm font-medium text-neutral-700">
@@ -20,7 +20,7 @@ export function Today({ locale }: { locale: string }) {
   );
 }
 
-const renderWeather = async (locale: string) => {
+async function Weather({ locale }: { locale: string }) {
   const location = await getLocation();
   const weather = await getWeather(locale, location);
 
@@ -33,7 +33,7 @@ const renderWeather = async (locale: string) => {
       {weather.unit}
     </span>
   );
-};
+}
 
 const dateOptions = {
   weekday: "long" as const,
@@ -42,11 +42,14 @@ const dateOptions = {
   day: "numeric" as const,
 };
 
-const renderDate = async (locale: string) => {
+const getDate = async (locale: string) => {
   "use cache";
-  cacheLife("days");
+  cacheLife("hours");
+
+  // TODO: this should get the date by user timezone
   const dateTime = new Date();
 
   const safeIntlDate = dateTime.toLocaleDateString(locale, dateOptions);
+
   return safeIntlDate;
 };
