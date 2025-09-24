@@ -30,8 +30,11 @@ const CategorySearchInput = forwardRef<
         onChange={(e) => onChange(e.target.value)}
         disabled={isSearching}
       />
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
-        {value.length > 0 && (
+      <div className="absolute left-3 top-1/2 -translate-y-1/2">
+        <Search className="h-5 w-5 text-neutral-500 peer-focus:text-black" />
+      </div>
+      {value.length > 0 && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
           <button
             type="button"
             onClick={onClear}
@@ -40,11 +43,8 @@ const CategorySearchInput = forwardRef<
           >
             <X className="h-5 w-5" />
           </button>
-        )}
-        {value.length === 0 && (
-          <Search className="h-5 w-5 text-neutral-500 peer-focus:text-black" />
-        )}
-      </div>
+        </div>
+      )}
     </form>
   );
 });

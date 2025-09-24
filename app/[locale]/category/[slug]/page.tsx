@@ -18,12 +18,14 @@ export default async function CategorySearchPage({
 
   const category = decodeURIComponent(slug);
   const articles = await getArticles({
-    category: category,
+    category: category === "all" ? undefined : category,
   });
+
+  const initialArticles = articles.slice(0, 9);
 
   return (
     <CategorySearchClient
-      initialArticles={articles}
+      initialArticles={initialArticles}
       totalCount={articles.length}
       hasMore={articles.length > 9}
       category={category}

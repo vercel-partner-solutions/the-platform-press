@@ -1,16 +1,11 @@
-"use client";
-
-import { Clock, MessageSquareText } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 interface CategorySidebarProps {
   categories: string[];
+  currentCategory: string;
 }
 
-export default function CategorySidebar({ categories }: CategorySidebarProps) {
-  const pathname = usePathname();
-  const currentCategory = pathname.split("/category/")[1] || "";
+export default function CategorySidebar({ categories, currentCategory }: CategorySidebarProps) {
 
   return (
     <aside className="lg:w-64 flex-shrink-0">
@@ -58,47 +53,6 @@ export default function CategorySidebar({ categories }: CategorySidebarProps) {
                 </span>
               </Link>
             ))}
-          </nav>
-        </div>
-
-        {/* Browse Section */}
-        <div className="border-t border-neutral-200 pt-6">
-          <h3 className="text-md font-semibold text-black mb-4">Browse</h3>
-          <nav className="space-y-2">
-            <Link
-              href="/category/latest"
-              className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors group ${
-                currentCategory === "latest"
-                  ? "bg-blue-500 text-white"
-                  : "text-neutral-700 hover:text-black hover:bg-white"
-              }`}
-            >
-              <Clock size={16} className="mr-2" />
-              <span
-                className={
-                  currentCategory === "latest" ? "" : "group-hover:underline"
-                }
-              >
-                Latest News
-              </span>
-            </Link>
-            <Link
-              href="/category/opinion"
-              className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors group ${
-                currentCategory === "opinion"
-                  ? "bg-blue-500 text-white"
-                  : "text-neutral-700 hover:text-black hover:bg-white"
-              }`}
-            >
-              <MessageSquareText size={16} className="mr-2" />
-              <span
-                className={
-                  currentCategory === "opinion" ? "" : "group-hover:underline"
-                }
-              >
-                Opinions & Analysis
-              </span>
-            </Link>
           </nav>
         </div>
       </div>
