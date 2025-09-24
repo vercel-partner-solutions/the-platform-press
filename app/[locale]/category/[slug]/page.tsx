@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getArticles, getCategoryBySlug } from "@/lib/cms";
@@ -17,20 +16,25 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  
+
   const category = await getCategoryBySlug(slug);
+
   if (!category) {
     notFound();
   }
-  
+
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
   return {
     title: `${category.title} | The Platform Press`,
     description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
     openGraph: {
+      type: "website",
       title: `${category.title} | The Platform Press`,
       description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
-      type: "website",
-      url: `/category/${slug}`,
+      url: `${baseUrl}/category/${slug}`,
     },
   };
 }
@@ -43,12 +47,13 @@ export default async function CategorySearchPage({
   const { q } = await searchParams;
 
   const category = await getCategoryBySlug(slug);
+
   if (!category) {
     notFound();
   }
 
   const articles = await getArticles({
-    category: category.title,
+    category: category.slug,
   });
 
   return (
