@@ -4,9 +4,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { Suspense } from "react";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { StickyDesktopNavigation } from "@/components/ui/desktop-header";
 import { i18n } from "@/i18n.config";
 
 const poppins = Poppins({
@@ -46,10 +46,11 @@ export default async function Layout({
       lang={locale}
     >
       <body className="bg-white text-black antialiased min-h-screen flex flex-col">
-        <Header locale={locale} />
-        <StickyDesktopNavigation locale={locale} />
+        <Suspense>
+          <Header locale={locale} />
+        </Suspense>
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
-          {/* {children} */}
+          {children}
         </main>
         <Footer />
         <Analytics />

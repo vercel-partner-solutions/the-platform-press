@@ -734,3 +734,11 @@ export async function getCategories(): Promise<string[]> {
     .map((cat) => cat.title)
     .sort();
 }
+
+export async function getCategoryBySlug(
+  slug: string
+): Promise<Category | undefined> {
+  const cmsCategories = await fetchContent<CMSCategory>("category");
+  const categories = cmsCategories.map(reshapeToCategory);
+  return categories.find((category) => category.slug === slug);
+}

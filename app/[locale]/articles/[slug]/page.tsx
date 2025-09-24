@@ -13,24 +13,28 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
+  const { slug } = await params;
 
-  const article = await getArticleBySlug((await params).slug);
+  const article = await getArticleBySlug(slug);
   if (!article) {
-    return {
-      title: "Article Not Found",
-    };
+    notFound();
   }
+
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
   return {
-    title: article.title,
+    title: `${article.title} | The Platform Press`,
     description: article.excerpt,
     openGraph: {
-      title: article.title,
+      type: "article",
+      title: `${article.title} | The Platform Press`,
       description: article.excerpt,
+      url: `${baseUrl}/articles/${article.slug}`,
       images: [
         {
-          url: article.imageUrl.startsWith("http")
-            ? article.imageUrl
-            : `https://yourdomain.com${article.imageUrl}`,
+          url: article.imageUrl || "",
           width: 1200,
           height: 630,
           alt: article.title,
@@ -39,6 +43,14 @@ export async function generateMetadata({
     },
   };
 }
+
+export const generateStaticParams = async () => {
+  return (await getArticles({ isFeatured: true })).map((a) => {
+    return {
+      slug: a.slug,
+    };
+  });
+};
 
 export default async function ArticlePage({
   params,
@@ -102,7 +114,7 @@ export default async function ArticlePage({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                "news article",
+                "news article"
               )}`
             }
             alt={article.title}
