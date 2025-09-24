@@ -1,6 +1,7 @@
 
 import type { Metadata } from "next";
-import { getArticles } from "@/lib/cms";
+import { notFound } from "next/navigation";
+import { getArticles, getCategoryBySlug } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
 
 type Props = {
@@ -16,14 +17,18 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const category = decodeURIComponent(slug);
+  
+  const category = await getCategoryBySlug(slug);
+  if (!category) {
+    notFound();
+  }
   
   return {
-    title: `${category} | The Platform Press`,
-    description: `Stay updated with the latest ${category} news, analysis, and insights from The Platform Press.`,
+    title: `${category.title} | The Platform Press`,
+    description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
     openGraph: {
-      title: `${category} | The Platform Press`,
-      description: `Stay updated with the latest ${category} news, analysis, and insights from The Platform Press.`,
+      title: `${category.title} | The Platform Press`,
+      description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
       type: "website",
       url: `/category/${slug}`,
       siteName: 'The Platform Press',
@@ -51,9 +56,13 @@ export default async function CategorySearchPage({
   const { slug, locale } = await params;
   const { q } = await searchParams;
 
-  const category = decodeURIComponent(slug);
+  const category = await getCategoryBySlug(slug);
+  if (!category) {
+    notFound();
+  }
+
   const articles = await getArticles({
-    category: category,
+    category: category.title,
   });
 
   return (
@@ -61,7 +70,7 @@ export default async function CategorySearchPage({
       initialArticles={articles}
       totalCount={articles.length}
       hasMore={articles.length > 9}
-      category={category}
+      category={category.title}
       searchParams={q ? { q } : {}}
       locale={locale}
     />
