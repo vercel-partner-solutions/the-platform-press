@@ -12,19 +12,18 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params;
-
-  const article = await getArticleBySlug((await params).slug);
+  const { slug } = await params;
+  
+  const article = await getArticleBySlug(slug);
   if (!article) {
-    return {
-      title: "Article Not Found",
-    };
+    notFound();
   }
+  
   return {
-    title: article.title,
+    title: `${article.title} | The Platform Press`,
     description: article.excerpt,
     openGraph: {
-      title: article.title,
+      title: `${article.title} | The Platform Press`,
       description: article.excerpt,
       type: 'article',
       siteName: 'The Platform Press',
