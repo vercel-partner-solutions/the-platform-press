@@ -646,6 +646,27 @@ The future of AI points towards even more integration into our daily lives. Adva
   },
 ];
 
+export const homepageConfig = {
+  sections: {
+    authoredSection: {
+      categoryId: "4", // Opinion
+      sectionTitle: "Opinions & Analysis",
+    },
+    firstCategorySection: {
+      categoryId: "1", // Technology
+      sectionTitle: "Technology",
+    },
+    secondCategorySection: {
+      categoryId: "2", // Business
+      sectionTitle: "Business",
+    },
+    continueReadingFallback: {
+      categoryId: "3", // Science
+      sectionTitle: "Science",
+    },
+  },
+};
+
 async function fetchContent<T = any>(
   query: string,
   variables: Record<string, any> = {}
@@ -678,6 +699,7 @@ function reshapeToCategory(item: CMSCategory): Category {
 export async function getArticles({
   limit,
   category,
+  categoryId,
   location,
   sortBy,
   excludeIds,
@@ -688,6 +710,7 @@ export async function getArticles({
 }: {
   limit?: number;
   category?: string;
+  categoryId?: string;
   location?: string;
   sortBy?: "datePublished" | "views";
   excludeIds?: string[];
@@ -699,9 +722,19 @@ export async function getArticles({
   const cmsArticles = await fetchContent<CMSArticle>("article");
   let articles = cmsArticles.map(reshapeToArticle);
 
-  if (category) {
+  // Handle category filtering by ID or title
+  let categoryFilter: string | undefined = category;
+  if (categoryId && !category) {
+    const categoryObj = await getCategoryById(categoryId);
+    if (categoryObj) {
+      categoryFilter = categoryObj.title;
+    }
+  }
+
+  if (categoryFilter) {
     articles = articles.filter(
-      (article) => article.category.toLowerCase() === category.toLowerCase()
+      (article) =>
+        article.category.toLowerCase() === categoryFilter!.toLowerCase()
     );
   }
 
@@ -770,4 +803,12 @@ export async function getCategoryBySlug(
   const cmsCategories = await fetchContent<CMSCategory>("category");
   const categories = cmsCategories.map(reshapeToCategory);
   return categories.find((category) => category.slug === slug);
+}
+
+export async function getCategoryById(
+  id: string
+): Promise<Category | undefined> {
+  const cmsCategories = await fetchContent<CMSCategory>("category");
+  const categories = cmsCategories.map(reshapeToCategory);
+  return categories.find((category) => category.id === id);
 }

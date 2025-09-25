@@ -8,6 +8,7 @@ import LatestArticlesSection from "@/components/homepage/latest-articles-section
 import AuthoredArticlesSection from "@/components/homepage/authored-articles-section";
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import { getDictionary } from "@/dictionaries";
+import { homepageConfig } from "@/lib/cms";
 
 export async function generateMetadata({
   params,
@@ -47,11 +48,16 @@ export default async function HomePage({
       <div className="space-y-16 pt-0">
         <HeroSection />
 
-        <ContinueReading locale={locale} fallbackCategory="Science" />
+        <ContinueReading
+          locale={locale}
+          fallbackCategoryId={
+            homepageConfig.sections.continueReadingFallback.categoryId
+          }
+        />
 
         <CategoryArticlesSection
-          title="Technology"
-          categorySlug="technology"
+          categoryId={homepageConfig.sections.firstCategorySection.categoryId}
+          sectionTitle={homepageConfig.sections.firstCategorySection.sectionTitle}
           isHomepage
         />
         {/* Two-column layout for Latest News and Popular This Week */}
@@ -63,10 +69,14 @@ export default async function HomePage({
             <PopularArticlesSection isHomepage locale={locale} />
           </div>
         </div>
-        <AuthoredArticlesSection isHomepage />
+        <AuthoredArticlesSection
+          categoryId={homepageConfig.sections.authoredSection.categoryId}
+          sectionTitle={homepageConfig.sections.authoredSection.sectionTitle}
+          isHomepage
+        />
         <CategoryArticlesSection
-          title="Business"
-          categorySlug="business"
+          categoryId={homepageConfig.sections.secondCategorySection.categoryId}
+          sectionTitle={homepageConfig.sections.secondCategorySection.sectionTitle}
           isHomepage
         />
       </div>

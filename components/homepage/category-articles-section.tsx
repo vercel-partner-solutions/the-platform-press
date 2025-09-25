@@ -1,21 +1,24 @@
 import Link from "next/link";
-import { getArticles } from "@/lib/cms";
+import { getArticles, getCategoryById } from "@/lib/cms";
 import CategoryArticleCard from "./category-article-card";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export default async function CategoryArticlesSection({
-  title,
-  categorySlug,
+  categoryId,
+  sectionTitle,
   isHomepage = false,
 }: {
-  title: string;
-  categorySlug?: string;
+  categoryId: string;
+  sectionTitle: string;
   isHomepage?: boolean;
 }) {
   "use cache: remote";
 
+  const category = await getCategoryById(categoryId);
+  if (!category) return null;
+
   const articles = await getArticles({
-    category: title,
+    categoryId: categoryId,
     limit: 4,
     sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
@@ -28,24 +31,22 @@ export default async function CategoryArticlesSection({
 
   return (
     <section
-      aria-labelledby={`${categorySlug || title.toLowerCase()}-heading`}
+      aria-labelledby={`${category.slug}-heading`}
       className="mb-10"
     >
       <div className="flex items-baseline justify-between border-b-2 border-black pb-2 mb-6">
         <h2
-          id={`${categorySlug || title.toLowerCase()}-heading`}
+          id={`${category.slug}-heading`}
           className="text-2xl font-bold uppercase tracking-tight text-black"
         >
-          {title}
+          {sectionTitle}
         </h2>
-        {categorySlug && (
-          <Link
-            href={`/category/${categorySlug}`}
-            className="text-sm font-medium text-black hover:underline"
-          >
-            View all &rarr;
-          </Link>
-        )}
+        <Link
+          href={`/category/${category.slug}`}
+          className="text-sm font-medium text-black hover:underline"
+        >
+          View all &rarr;
+        </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
         {articles.map((article) => (

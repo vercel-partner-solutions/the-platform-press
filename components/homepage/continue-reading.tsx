@@ -4,15 +4,15 @@ import ContinueReadingSkeleton from "./continue-reading-skeleton";
 
 export default function ContinueReading({
   locale,
-  fallbackCategory = "Science",
+  fallbackCategoryId,
 }: {
   locale: string;
-  fallbackCategory?: string;
+  fallbackCategoryId: string;
 }) {
   return (
     <Suspense fallback={<ContinueReadingSkeleton />}>
       <ContinueReadingSection
-        fallbackCategory={fallbackCategory}
+        fallbackCategoryId={fallbackCategoryId}
         locale={locale}
       />
     </Suspense>

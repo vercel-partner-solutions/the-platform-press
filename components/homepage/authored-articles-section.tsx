@@ -1,19 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getArticles } from "@/lib/cms";
+import { getArticles, getCategoryById } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export default async function AuthoredArticlesSection({
+  categoryId,
+  sectionTitle,
   isHomepage = false,
 }: {
+  categoryId: string;
+  sectionTitle: string;
   isHomepage?: boolean;
 }) {
   "use cache: remote";
 
+  const category = await getCategoryById(categoryId);
+  if (!category) return null;
+
   const articles = await getArticles({
     limit: 3,
-    category: "Opinion",
+    categoryId: categoryId,
     sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
   });
@@ -24,16 +31,16 @@ export default async function AuthoredArticlesSection({
   cacheTag(...articles.map((a) => a.id), "article-list", "articles");
 
   return (
-    <section aria-labelledby="opinion-heading" className="mb-10">
+    <section aria-labelledby={`${category.slug}-heading`} className="mb-10">
       <div className="flex items-baseline justify-between border-b-2 border-black pb-2 mb-6">
         <h2
-          id="opinion-heading"
+          id={`${category.slug}-heading`}
           className="text-2xl font-bold uppercase tracking-tight text-black"
         >
-          Opinions & Analysis
+          {sectionTitle}
         </h2>
         <Link
-          href="/category/opinion"
+          href={`/category/${category.slug}`}
           className="text-sm font-medium text-black hover:underline"
         >
           View all &rarr;
