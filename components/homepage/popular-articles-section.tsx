@@ -48,6 +48,8 @@ export default async function PopularArticlesSection({
   isHomepage?: boolean;
   locale: string;
 }) {
+  "use cache";
+
   const articles = await getArticles({
     limit: 5,
     sortBy: "views",

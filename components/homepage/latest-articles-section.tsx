@@ -9,6 +9,8 @@ export default async function LatestArticlesSection({
   isHomepage?: boolean;
   locale: string;
 }) {
+  "use cache";
+
   const articles = await getArticles({
     limit: 4,
     sortBy: "datePublished",

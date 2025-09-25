@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 
 export default async function BreakingNewsBanner() {
+  "use cache";
   const breakingArticles = await getArticles({
     isBreaking: true,
     limit: 1,

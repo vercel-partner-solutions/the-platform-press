@@ -11,6 +11,8 @@ export default async function CategoryArticlesSection({
   categorySlug?: string;
   isHomepage?: boolean;
 }) {
+  "use cache";
+
   const articles = await getArticles({
     category: title,
     limit: 4,

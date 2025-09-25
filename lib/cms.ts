@@ -635,11 +635,17 @@ async function fetchContent<T = any>(
 }
 
 function reshapeToArticle(item: CMSArticle): Article {
-  return item;
+  return {
+    ...item,
+    title: `${item.title} | ${new Date().getMilliseconds().toString()}`,
+  };
 }
 
 function reshapeToCategory(item: CMSCategory): Category {
-  return item;
+  return {
+    ...item,
+    title: `${item.title} | ${new Date().getMilliseconds().toString()}`,
+  };
 }
 
 export async function getArticles({

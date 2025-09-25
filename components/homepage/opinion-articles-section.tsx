@@ -45,6 +45,8 @@ export default async function OpinionArticlesSection({
 }: {
   isHomepage?: boolean;
 }) {
+  "use cache";
+
   const articles = await getArticles({
     limit: 3,
     category: "Opinion",

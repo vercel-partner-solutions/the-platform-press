@@ -13,6 +13,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
+  "use cache";
+
   const { slug } = await params;
 
   const article = await getArticleBySlug(slug);
@@ -57,6 +59,8 @@ export default async function ArticlePage({
   params: Promise<{ slug: string; locale: string }>;
   previewOnly?: boolean;
 }) {
+  "use cache";
+
   const { slug, locale } = await params;
 
   const article = await getArticleBySlug(slug);
