@@ -13,7 +13,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  "use cache";
+  "use cache: remote";
 
   const { slug } = await params;
 
@@ -59,7 +59,7 @@ export default async function ArticlePage({
   params: Promise<{ slug: string; locale: string }>;
   previewOnly?: boolean;
 }) {
-  "use cache";
+  "use cache: remote";
 
   const { slug, locale } = await params;
 

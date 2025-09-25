@@ -71,7 +71,7 @@ async function MobileMenu({ locale }: { locale: string }) {
 }
 
 async function MobileCategories() {
-  "use cache";
+  "use cache: remote";
   cacheTag("categories");
 
   const categories = await getCategories();

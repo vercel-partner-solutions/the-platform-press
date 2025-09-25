@@ -45,7 +45,7 @@ export default async function OpinionArticlesSection({
 }: {
   isHomepage?: boolean;
 }) {
-  "use cache";
+  "use cache: remote";
 
   const articles = await getArticles({
     limit: 3,

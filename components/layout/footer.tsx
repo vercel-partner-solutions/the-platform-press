@@ -4,7 +4,7 @@ import { unstable_cacheTag as cacheTag } from "next/cache";
 import { cacheLife } from "next/dist/server/use-cache/cache-life";
 
 export default async function Footer() {
-  "use cache";
+  "use cache: remote";
   cacheLife("days");
 
   const currentYear = new Date().getFullYear();
@@ -39,7 +39,7 @@ export default async function Footer() {
 }
 
 async function FooterCategories() {
-  "use cache";
+  "use cache: remote";
   cacheTag("categories");
 
   const categories = await getCategories();

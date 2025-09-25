@@ -55,7 +55,7 @@ function SecondaryArticleCard({ article }: { article: Article }) {
 }
 
 export default async function HeroSection() {
-  "use cache";
+  "use cache: remote";
 
   const featuredArticles = await getArticles({
     isFeatured: true,

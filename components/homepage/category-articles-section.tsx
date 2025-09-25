@@ -11,7 +11,7 @@ export default async function CategoryArticlesSection({
   categorySlug?: string;
   isHomepage?: boolean;
 }) {
-  "use cache";
+  "use cache: remote";
 
   const articles = await getArticles({
     category: title,

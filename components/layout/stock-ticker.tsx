@@ -20,7 +20,7 @@ async function getStocks(): Promise<Stock[]> {
 }
 
 export async function StockTicker() {
-  "use cache";
+  "use cache: remote";
   cacheLife("minutes");
 
   const stocks = await getStocks();

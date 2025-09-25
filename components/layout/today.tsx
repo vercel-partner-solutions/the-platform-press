@@ -43,7 +43,7 @@ const dateOptions = {
 };
 
 const getDate = async (locale: string) => {
-  "use cache";
+  "use cache: remote";
   cacheLife("hours");
 
   // TODO: this should get the date by user timezone

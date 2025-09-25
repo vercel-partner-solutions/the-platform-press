@@ -15,7 +15,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  "use cache";
+  "use cache: remote";
 
   const { slug } = await params;
 

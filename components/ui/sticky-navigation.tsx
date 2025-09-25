@@ -39,7 +39,7 @@ export async function StickyNavigation({ locale }: { locale: string }) {
 }
 
 async function Categories() {
-  "use cache";
+  "use cache: remote";
   cacheTag("categories");
 
   const categories = await getCategories();

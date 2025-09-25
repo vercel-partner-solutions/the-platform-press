@@ -121,7 +121,7 @@ export async function getWeather(
   locale: string,
   location: { city?: string }
 ): Promise<WeatherData> {
-  "use cache";
+  "use cache: remote";
   cacheLife("minutes");
 
   try {

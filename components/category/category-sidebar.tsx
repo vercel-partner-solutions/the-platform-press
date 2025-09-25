@@ -3,7 +3,7 @@ import CategoryNavigation from "./category-navigation";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export default async function CategorySidebar() {
-  "use cache";
+  "use cache: remote";
   cacheTag("categories");
 
   const categories = await getCategories();

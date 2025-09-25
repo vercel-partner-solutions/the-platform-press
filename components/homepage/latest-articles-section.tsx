@@ -9,7 +9,7 @@ export default async function LatestArticlesSection({
   isHomepage?: boolean;
   locale: string;
 }) {
-  "use cache";
+  "use cache: remote";
 
   const articles = await getArticles({
     limit: 4,

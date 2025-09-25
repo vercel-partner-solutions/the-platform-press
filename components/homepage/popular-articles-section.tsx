@@ -48,7 +48,7 @@ export default async function PopularArticlesSection({
   isHomepage?: boolean;
   locale: string;
 }) {
-  "use cache";
+  "use cache: remote";
 
   const articles = await getArticles({
     limit: 5,
