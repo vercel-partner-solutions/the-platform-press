@@ -17,19 +17,19 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getDictionary(locale);
 
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
   return {
     title: t.Homepage.title,
     description: t.Homepage.description,
     openGraph: {
-      title: t.Homepage.title,
-      description: t.Homepage.description,
-      type: 'website',
-      siteName: 'The Platform Press',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: t.Homepage.title,
-      description: t.Homepage.description,
+      type: "website",
+      title: "The Platform Press",
+      description:
+        "Your source for the latest news, analysis, and insights from around the world.",
+      url: baseUrl,
     },
   };
 }

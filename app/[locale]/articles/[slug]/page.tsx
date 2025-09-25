@@ -19,18 +19,31 @@ export async function generateMetadata({
   if (!article) {
     notFound();
   }
-  
+
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
   return {
     title: `${article.title} | The Platform Press`,
     description: article.excerpt,
     openGraph: {
+      type: "article",
       title: `${article.title} | The Platform Press`,
       description: article.excerpt,
-      type: 'article',
       siteName: 'The Platform Press',
       publishedTime: article.datePublished,
       authors: [article.author],
       section: article.category,
+      url: `${baseUrl}/articles/${article.slug}`,
+      images: [
+        {
+          url: article.imageUrl || "",
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',

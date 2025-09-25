@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getArticles, getCategoryBySlug } from "@/lib/cms";
@@ -22,6 +21,10 @@ export async function generateMetadata({
   if (!category) {
     notFound();
   }
+
+  const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
   
   return {
     title: `${category.title} | The Platform Press`,
@@ -30,7 +33,7 @@ export async function generateMetadata({
       title: `${category.title} | The Platform Press`,
       description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
       type: "website",
-      url: `/category/${slug}`,
+      url: `${baseUrl}/category/${slug}`,
       siteName: 'The Platform Press',
       images: [
         {
@@ -44,7 +47,7 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: `${category} | The Platform Press`,
-      description: `Stay updated with the latest ${category} news, analysis, and insights from The Platform Press.`,
+      description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
     },
   };
 }
@@ -62,7 +65,7 @@ export default async function CategorySearchPage({
   }
 
   const articles = await getArticles({
-    category: category.title,
+    category: category.slug,
   });
 
   return (
