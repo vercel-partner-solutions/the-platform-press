@@ -7,6 +7,7 @@ import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export async function generateMetadata({
   params,
@@ -18,9 +19,13 @@ export async function generateMetadata({
   const { slug } = await params;
 
   const article = await getArticleBySlug(slug);
+
   if (!article) {
     notFound();
   }
+
+  // revalidate if this article changes or via global tag
+  cacheTag(article.id, "articles");
 
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -68,6 +73,9 @@ export default async function ArticlePage({
   if (!article) {
     notFound();
   }
+
+  // revalidate if this article changes or via global tag
+  cacheTag(article.id, "articles");
 
   const date = new Date(article.datePublished);
   const dateTime = date.toLocaleDateString(locale, {

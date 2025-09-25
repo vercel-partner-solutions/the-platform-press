@@ -4,9 +4,11 @@ import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export default async function CategorySidebar() {
   "use cache: remote";
-  cacheTag("categories");
 
   const categories = await getCategories();
+
+  // revalidate if any of the categories change or with the global tag
+  cacheTag(...categories.map((c) => c.id), "categories");
 
   return <CategoryNavigation categories={categories} />;
 }

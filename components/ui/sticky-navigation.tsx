@@ -40,9 +40,11 @@ export async function StickyNavigation({ locale }: { locale: string }) {
 
 async function Categories() {
   "use cache: remote";
-  cacheTag("categories");
 
   const categories = await getCategories();
+
+  // revalidate if any of the categories change or with the global tag
+  cacheTag(...categories.map((c) => c.id), "categories");
 
   return (
     <nav className="flex items-center gap-6 overflow-x-auto">

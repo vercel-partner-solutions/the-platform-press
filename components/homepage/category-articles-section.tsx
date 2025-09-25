@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import CategoryArticleCard from "./category-article-card";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export default async function CategoryArticlesSection({
   title,
@@ -21,6 +22,9 @@ export default async function CategoryArticlesSection({
   });
 
   if (!articles || articles.length === 0) return null;
+
+  // revalidate if any of these articles change, a list of articles may change, or via global tag
+  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
 
   return (
     <section

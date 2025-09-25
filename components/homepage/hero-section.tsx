@@ -3,6 +3,63 @@ import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
+import { unstable_cacheTag as cacheTag } from "next/cache";
+
+export default async function HeroSection() {
+  "use cache: remote";
+
+  const featuredArticles = await getArticles({
+    isFeatured: true,
+    limit: 1,
+    sortBy: "datePublished",
+  });
+  const featuredArticle = featuredArticles[0];
+
+  const excludedIds: string[] = [];
+
+  if (featuredArticle) {
+    excludedIds.push(featuredArticle.id);
+  }
+
+  const secondaryArticles = await getArticles({
+    limit: 3,
+    excludeIds: excludedIds,
+    sortBy: "datePublished",
+  });
+
+  if (!featuredArticle) return null;
+
+  // revalidate if the featured or secondary articles change, if a list of articles may change, or via global tag
+  cacheTag(
+    featuredArticle.id,
+    ...secondaryArticles.map((a) => a.id),
+    "article-list",
+    "articles"
+  );
+
+  return (
+    <section aria-labelledby="hero-heading" className="mb-10">
+      <h2 id="hero-heading" className="sr-only">
+        Featured News
+      </h2>
+      <div className="grid grid-cols-12 gap-6">
+        <FeaturedArticleCard article={featuredArticle} />
+
+        {secondaryArticles.length > 0 && (
+          <div className="col-span-12 lg:col-span-4 bg-neutral-50 rounded-lg p-6 flex flex-col justify-center">
+            <div className="space-y-6 divide-y divide-neutral-200">
+              {secondaryArticles.map((article, index) => (
+                <div key={article.id} className={index === 0 ? "" : "pt-6"}>
+                  <SecondaryArticleCard article={article} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 function FeaturedArticleCard({ article }: { article: Article }) {
   return (
@@ -51,52 +108,5 @@ function SecondaryArticleCard({ article }: { article: Article }) {
         </p>
       </Link>
     </article>
-  );
-}
-
-export default async function HeroSection() {
-  "use cache: remote";
-
-  const featuredArticles = await getArticles({
-    isFeatured: true,
-    limit: 1,
-    sortBy: "datePublished",
-  });
-  const featuredArticle = featuredArticles[0];
-
-  const excludedIds: string[] = [];
-  if (featuredArticle) {
-    excludedIds.push(featuredArticle.id);
-  }
-
-  const secondaryArticles = await getArticles({
-    limit: 3,
-    excludeIds: excludedIds,
-    sortBy: "datePublished",
-  });
-
-  if (!featuredArticle) return null;
-
-  return (
-    <section aria-labelledby="hero-heading" className="mb-10">
-      <h2 id="hero-heading" className="sr-only">
-        Featured News
-      </h2>
-      <div className="grid grid-cols-12 gap-6">
-        <FeaturedArticleCard article={featuredArticle} />
-
-        {secondaryArticles.length > 0 && (
-          <div className="col-span-12 lg:col-span-4 bg-neutral-50 rounded-lg p-6 flex flex-col justify-center">
-            <div className="space-y-6 divide-y divide-neutral-200">
-              {secondaryArticles.map((article, index) => (
-                <div key={article.id} className={index === 0 ? "" : "pt-6"}>
-                  <SecondaryArticleCard article={article} />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
   );
 }

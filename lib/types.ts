@@ -3,20 +3,23 @@ export interface Article {
   slug: string;
   title: string;
   excerpt: string;
-  content: string; // Markdown or HTML string
+  content: string;
   imageUrl: string;
   category: string;
   author: string;
-  datePublished: string; // ISO 8601 format
+  datePublished: string;
   readingTime: number;
   isBreaking?: boolean;
   isFeatured?: boolean;
-  views?: number; // For "popular" section simulation
+  views?: number;
+  lastUpdated?: string;
 }
 
 export interface Category {
+  id: string;
   slug: string;
   title: string;
+  lastUpdated?: string;
 }
 
 export interface Author {
@@ -35,10 +38,10 @@ export interface CMSData {
   articles: Article[];
 }
 
-// CMS types - same as Article for this reference implementation
 export interface CMSArticle extends Article {}
 
 export interface CMSCategory {
+  id: string;
   slug: string;
   title: string;
 }

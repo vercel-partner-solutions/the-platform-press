@@ -5,7 +5,7 @@ import CategoryArticlesSection from "@/components/homepage/category-articles-sec
 import ContinueReading from "@/components/homepage/continue-reading";
 import HeroSection from "@/components/homepage/hero-section";
 import LatestArticlesSection from "@/components/homepage/latest-articles-section";
-import OpinionArticlesSection from "@/components/homepage/opinion-articles-section";
+import AuthoredArticlesSection from "@/components/homepage/authored-articles-section";
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import { getDictionary } from "@/dictionaries";
 
@@ -63,7 +63,7 @@ export default async function HomePage({
             <PopularArticlesSection isHomepage locale={locale} />
           </div>
         </div>
-        <OpinionArticlesSection isHomepage />
+        <AuthoredArticlesSection isHomepage />
         <CategoryArticlesSection
           title="Business"
           categorySlug="business"

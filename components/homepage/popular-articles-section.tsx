@@ -1,6 +1,54 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
+import { unstable_cacheTag as cacheTag } from "next/cache";
+
+export default async function PopularArticlesSection({
+  isHomepage = false,
+  locale,
+}: {
+  isHomepage?: boolean;
+  locale: string;
+}) {
+  "use cache: remote";
+
+  const articles = await getArticles({
+    limit: 5,
+    sortBy: "views",
+    ...(isHomepage && { excludeFeatured: true }),
+  });
+
+  if (!articles || articles.length === 0) return null;
+
+  // revalidate if any of these articles changes, a list of articles may change, or via global tag
+  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
+
+  return (
+    <div className="relative">
+      <section
+        aria-labelledby="popular-heading"
+        className="relative z-10 bg-white border-2 border-black rounded-2xl p-4 sm:p-6"
+      >
+        <h3
+          id="popular-heading"
+          className="text-sm font-bold uppercase tracking-widest text-black mb-4"
+        >
+          Most Popular
+        </h3>
+        <ol>
+          {articles.map((article, index) => (
+            <PopularArticleListItem
+              locale={locale}
+              key={article.id}
+              article={article}
+              index={index}
+            />
+          ))}
+        </ol>
+      </section>
+    </div>
+  );
+}
 
 async function PopularArticleListItem({
   article,
@@ -38,49 +86,5 @@ async function PopularArticleListItem({
         </div>
       </div>
     </li>
-  );
-}
-
-export default async function PopularArticlesSection({
-  isHomepage = false,
-  locale,
-}: {
-  isHomepage?: boolean;
-  locale: string;
-}) {
-  "use cache: remote";
-
-  const articles = await getArticles({
-    limit: 5,
-    sortBy: "views",
-    ...(isHomepage && { excludeFeatured: true }),
-  });
-
-  if (!articles || articles.length === 0) return null;
-
-  return (
-    <div className="relative">
-      <section
-        aria-labelledby="popular-heading"
-        className="relative z-10 bg-white border-2 border-black rounded-2xl p-4 sm:p-6"
-      >
-        <h3
-          id="popular-heading"
-          className="text-sm font-bold uppercase tracking-widest text-black mb-4"
-        >
-          Most Popular
-        </h3>
-        <ol>
-          {articles.map((article, index) => (
-            <PopularArticleListItem
-              locale={locale}
-              key={article.id}
-              article={article}
-              index={index}
-            />
-          ))}
-        </ol>
-      </section>
-    </div>
   );
 }

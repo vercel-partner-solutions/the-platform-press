@@ -1,5 +1,38 @@
 import type { Article, Category, CMSArticle, CMSCategory } from "./types";
 
+const placeholderCategories: Category[] = [
+  {
+    id: "1",
+    slug: "technology",
+    title: "Technology",
+  },
+  {
+    id: "2",
+    slug: "business",
+    title: "Business",
+  },
+  {
+    id: "3",
+    slug: "science",
+    title: "Science",
+  },
+  {
+    id: "4",
+    slug: "opinion",
+    title: "Opinion",
+  },
+  {
+    id: "5",
+    slug: "world",
+    title: "World",
+  },
+  {
+    id: "6",
+    slug: "local",
+    title: "Local",
+  },
+];
+
 const placeholderArticles: Article[] = [
   {
     id: "1",
@@ -622,13 +655,7 @@ async function fetchContent<T = any>(
   }
 
   if (query === "category") {
-    const categories = Array.from(
-      new Set(placeholderArticles.map((a) => a.category))
-    ).map((cat) => ({
-      slug: cat.toLowerCase(),
-      title: cat,
-    }));
-    return categories as T[];
+    return placeholderCategories as T[];
   }
 
   return [];
@@ -637,14 +664,14 @@ async function fetchContent<T = any>(
 function reshapeToArticle(item: CMSArticle): Article {
   return {
     ...item,
-    title: `${item.title} | ${new Date().getMilliseconds().toString()}`,
+    lastUpdated: new Date().toLocaleString(),
   };
 }
 
 function reshapeToCategory(item: CMSCategory): Category {
   return {
     ...item,
-    title: `${item.title} | ${new Date().getMilliseconds().toString()}`,
+    lastUpdated: new Date().toLocaleString(),
   };
 }
 
