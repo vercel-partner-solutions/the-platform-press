@@ -38,7 +38,7 @@ export async function generateMetadata({
       url: `${baseUrl}/articles/${article.slug}`,
       images: [
         {
-          url: article.imageUrl || "",
+          url: article.imageUrl || `/articles/${article.slug}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: article.title,
