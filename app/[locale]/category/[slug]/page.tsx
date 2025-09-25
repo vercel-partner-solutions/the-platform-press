@@ -40,13 +40,13 @@ export async function generateMetadata({
           url: `/category/${slug}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: `${category} - The Platform Press`,
+          alt: `${category.title} - The Platform Press`,
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${category} | The Platform Press`,
+      title: `${category.title} | The Platform Press`,
       description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
     },
   };
@@ -79,3 +79,4 @@ export default async function CategorySearchPage({
     />
   );
 }
+
