@@ -21,7 +21,7 @@ export default async function BreakingNewsBanner() {
   return (
     <div className="px-4 py-4">
       <div className="container mx-auto flex items-center justify-center text-sm font-medium">
-        <span className="mr-2 text-red-500 font-bold">LIVE</span>
+        <span className="mr-2 text-red-500 font-bold">BREAKING</span>
         <Link
           href={`/articles/${article.slug}`}
           className="hover:underline text-center line-clamp-1"
