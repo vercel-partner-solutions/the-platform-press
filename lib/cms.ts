@@ -289,6 +289,34 @@ const GET_CATEGORIES_QUERY = `
   }
 `;
 
+const GET_CATEGORY_BY_SLUG_QUERY = `
+  query GetCategoryBySlug($slug: String!, $preview: Boolean) {
+    categoryCollection(where: { slug: $slug }, limit: 1, preview: $preview) {
+      items {
+        sys {
+          id
+        }
+        slug
+        title
+      }
+    }
+  }
+`;
+
+const GET_CATEGORY_BY_ID_QUERY = `
+  query GetCategoryById($id: String!, $preview: Boolean) {
+    categoryCollection(where: { sys: { id: $id } }, limit: 1, preview: $preview) {
+      items {
+        sys {
+          id
+        }
+        slug
+        title
+      }
+    }
+  }
+`;
+
 // Contentful GraphQL fetcher
 async function fetchContent<T = any>(
   query: string,
@@ -430,7 +458,7 @@ export const homepageConfig = {
       sectionTitle: "Changelog",
     },
     continueReadingFallback: {
-      categoryId: "36i75OQ1y6V1Ym4cOKf5dp5",
+      categoryId: "6i75OQ1y6V1Ym4cOKf5dp5",
       sectionTitle: "Community",
     },
   },
@@ -460,10 +488,8 @@ export async function getArticles({
   searchQuery?: string;
 } = {}): Promise<Article[]> {
   try {
-    // Build GraphQL where clause for server-side filtering
     const where: any = {};
 
-    // Add GraphQL-supported filters
     if (isFeatured !== undefined) {
       where.isFeatured = isFeatured;
     }
@@ -474,6 +500,10 @@ export async function getArticles({
 
     if (category) {
       where.category = { title: category };
+    }
+
+    if (categoryId) {
+      where.category = { sys: { id: categoryId } };
     }
 
     // Determine if we need client-side filtering for unsupported filters
@@ -495,8 +525,6 @@ export async function getArticles({
 
     let articles = response.articleCollection.items.map(reshapeToArticle);
 
-    // Category filtering now handled at GraphQL level
-
     if (location) {
       articles = articles.filter(
         (article) => (article as any).location === location
@@ -512,10 +540,6 @@ export async function getArticles({
           article.author.toLowerCase().includes(lowerQuery)
       );
     }
-
-    // isBreaking filtering now handled at GraphQL level
-
-    // isFeatured filtering now handled at GraphQL level
 
     if (excludeFeatured) {
       articles = articles.filter((article) => !article.isFeatured);
@@ -571,7 +595,7 @@ export async function getArticleBySlug(
   }
 }
 
-export async function getCategories(): Promise<string[]> {
+export async function getCategories(): Promise<Category[]> {
   try {
     const response = await fetchContent<CategoryCollection>(
       GET_CATEGORIES_QUERY,
@@ -587,19 +611,57 @@ export async function getCategories(): Promise<string[]> {
 
     const categories = response.categoryCollection.items.map(reshapeToCategory);
 
-    return categories.map((cat) => cat.title).sort();
+    return categories.sort((a, b) => a.title.localeCompare(b.title));
   } catch (error) {
     console.error("Error fetching categories from Contentful:", error);
     return [];
   }
 }
 
-// export async function getCategoryBySlug(
-//   slug: string
-// ): Promise<Category | undefined> {
-// }
+export async function getCategoryBySlug(
+  slug: string
+): Promise<Category | undefined> {
+  try {
+    const response = await fetchContent<CategoryCollection>(
+      GET_CATEGORY_BY_SLUG_QUERY,
+      {
+        slug,
+        preview: false,
+      }
+    );
 
-// export async function getCategoryById(
-//   id: string
-// ): Promise<Category | undefined> {
-// }
+    if (!response?.categoryCollection?.items?.length) {
+      console.warn(`Category with slug "${slug}" not found`);
+      return undefined;
+    }
+
+    return reshapeToCategory(response.categoryCollection.items[0]);
+  } catch (error) {
+    console.error(`Error fetching category with slug "${slug}":`, error);
+    return undefined;
+  }
+}
+
+export async function getCategoryById(
+  id: string
+): Promise<Category | undefined> {
+  try {
+    const response = await fetchContent<CategoryCollection>(
+      GET_CATEGORY_BY_ID_QUERY,
+      {
+        id,
+        preview: false,
+      }
+    );
+
+    if (!response?.categoryCollection?.items?.length) {
+      console.warn(`Category with id "${id}" not found`);
+      return undefined;
+    }
+
+    return reshapeToCategory(response.categoryCollection.items[0]);
+  } catch (error) {
+    console.error(`Error fetching category with id "${id}":`, error);
+    return undefined;
+  }
+}
