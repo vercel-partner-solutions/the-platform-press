@@ -1,9 +1,9 @@
 import { CalendarDays, Clock, UserCircle } from "lucide-react";
-import { marked } from "marked";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArticleTracker } from "@/components/article-tracker";
+import { ArticleContent } from "@/lib/cms/article-content";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
@@ -84,8 +84,6 @@ export default async function ArticlePage({
     day: "numeric",
   });
 
-  // Parse the markdown content to HTML
-  const parsedContent = await marked.parse(article.content);
 
   const relatedArticles = await getArticles({
     category: article.category,
@@ -134,13 +132,7 @@ export default async function ArticlePage({
           />
         </div>
 
-        {!previewOnly && (
-          <div
-            className="prose prose-neutral lg:prose-lg max-w-none"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: <we want to use the parsed HTML>
-            dangerouslySetInnerHTML={{ __html: parsedContent }} // Use the parsed HTML
-          />
-        )}
+        {!previewOnly && <ArticleContent content={article.content} />}
       </article>
 
       {relatedArticles.length > 0 && (

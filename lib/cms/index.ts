@@ -1,6 +1,4 @@
-import type { Article, Category } from "./types";
-import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
-import { BLOCKS, INLINES } from "@contentful/rich-text-types";
+import type { Article, Category } from "../types";
 import type { Document } from "@contentful/rich-text-types";
 
 // Contentful-specific types
@@ -71,64 +69,6 @@ interface CategoryCollection {
   };
 }
 
-const richTextOptions = {
-  renderNode: {
-    [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
-      if (!node.data?.target?.url) {
-        return "";
-      }
-      const { url, title, description, width, height } = node.data.target;
-      return `<img src="${url}" alt="${description || title || ""}" width="${
-        width || "auto"
-      }" height="${height || "auto"}" class="w-full h-auto" />`;
-    },
-    [BLOCKS.PARAGRAPH]: (node: any, next: any) =>
-      `<p class="mb-4">${next(node.content)}</p>`,
-    [BLOCKS.HEADING_1]: (node: any, next: any) =>
-      `<h1 class="text-4xl font-bold mb-4">${next(node.content)}</h1>`,
-    [BLOCKS.HEADING_2]: (node: any, next: any) =>
-      `<h2 class="text-3xl font-bold mb-3">${next(node.content)}</h2>`,
-    [BLOCKS.HEADING_3]: (node: any, next: any) =>
-      `<h3 class="text-2xl font-bold mb-3">${next(node.content)}</h3>`,
-    [BLOCKS.HEADING_4]: (node: any, next: any) =>
-      `<h4 class="text-xl font-bold mb-2">${next(node.content)}</h4>`,
-    [BLOCKS.HEADING_5]: (node: any, next: any) =>
-      `<h5 class="text-lg font-bold mb-2">${next(node.content)}</h5>`,
-    [BLOCKS.HEADING_6]: (node: any, next: any) =>
-      `<h6 class="text-base font-bold mb-2">${next(node.content)}</h6>`,
-    [BLOCKS.UL_LIST]: (node: any, next: any) =>
-      `<ul class="list-disc pl-6 mb-4">${next(node.content)}</ul>`,
-    [BLOCKS.OL_LIST]: (node: any, next: any) =>
-      `<ol class="list-decimal pl-6 mb-4">${next(node.content)}</ol>`,
-    [BLOCKS.LIST_ITEM]: (node: any, next: any) =>
-      `<li class="mb-1">${next(node.content)}</li>`,
-    [BLOCKS.QUOTE]: (node: any, next: any) =>
-      `<blockquote class="border-l-4 border-gray-300 pl-4 italic mb-4">${next(
-        node.content
-      )}</blockquote>`,
-    [BLOCKS.HR]: () => `<hr class="my-6 border-gray-300" />`,
-    [INLINES.HYPERLINK]: (node: any, next: any) => {
-      const { uri } = node.data;
-      return `<a href="${uri}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">${next(
-        node.content
-      )}</a>`;
-    },
-  },
-  renderMark: {
-    bold: (text: string) => `<strong>${text}</strong>`,
-    italic: (text: string) => `<em>${text}</em>`,
-    underline: (text: string) => `<u>${text}</u>`,
-    code: (text: string) =>
-      `<code class="bg-gray-100 px-1 py-0.5 rounded">${text}</code>`,
-  },
-};
-
-function convertRichTextToHtml(richTextDocument: Document): string {
-  if (!richTextDocument) {
-    return "";
-  }
-  return documentToHtmlString(richTextDocument, richTextOptions);
-}
 
 const GET_ARTICLES_QUERY = `
   query GetArticles($limit: Int, $skip: Int, $where: ArticleFilter, $preview: Boolean, $order: [ArticleOrder]) {
@@ -415,16 +355,15 @@ function mergeRichTextLinks(content: any): Document {
 }
 
 function reshapeToArticle(item: ContentfulArticle): Article {
-  // Merge rich text links and convert to HTML
+  // Merge rich text links but keep as Document for React component rendering
   const richTextDocument = mergeRichTextLinks(item.content);
-  const htmlContent = convertRichTextToHtml(richTextDocument);
 
   return {
     id: item.sys.id,
     slug: item.slug,
     title: item.title,
     excerpt: item.excerpt,
-    content: htmlContent,
+    content: richTextDocument,
     imageUrl:
       item.featuredImage?.url || "/placeholder.svg?width=800&height=450",
     category: item.category?.title || "Uncategorized",
