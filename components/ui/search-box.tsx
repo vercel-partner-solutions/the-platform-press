@@ -109,7 +109,7 @@ export function SearchBox() {
 
   // Handle input focus to show results if available
   const handleInputFocus = () => {
-    if (query.length >= 3 && results.length > 0) {
+    if (query.length >= 2 && results.length > 0) {
       setIsOpen(true);
     }
   };
@@ -159,8 +159,6 @@ export function SearchBox() {
             </button>
           )}
         </div>
-
-        {/* Dropdown Results */}
         {isOpen && results.length > 0 && (
           <div
             ref={dropdownRef}

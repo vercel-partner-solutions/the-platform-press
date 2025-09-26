@@ -4,7 +4,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import { Suspense } from "react";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { i18n } from "@/i18n.config";

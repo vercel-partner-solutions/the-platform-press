@@ -1,15 +1,16 @@
-import { unstable_cacheLife as cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getLocation } from "@/lib/geo/server";
 import { getWeather, renderWeatherIcon } from "@/lib/weather";
 
-export function Today({ locale }: { locale: string }) {
+export async function Today({ locale }: { locale: string }) {
   return (
     <div className="hidden md:flex flex-col justify-self-start">
       <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
-        {getDate(locale)}
-        <Suspense fallback={<Skeleton className="w-10 h-4" />}>
+        <Suspense fallback={<Skeleton className="w-[118px] h-5" />}>
+          <DateDisplay locale={locale} />
+        </Suspense>
+        <Suspense fallback={<Skeleton className="w-10 h-5" />}>
           <Weather locale={locale} />
         </Suspense>
       </div>
@@ -35,21 +36,25 @@ async function Weather({ locale }: { locale: string }) {
   );
 }
 
-const dateOptions = {
-  weekday: "long" as const,
-  year: "numeric" as const,
-  month: "long" as const,
-  day: "numeric" as const,
-};
+async function DateDisplay({ locale }: { locale: string }) {
+  const location = await getLocation();
+  const formattedDate = await getFormattedDate(locale, location.timezone);
+  return <span>{formattedDate}</span>;
+}
 
-const getDate = async (locale: string) => {
-  "use cache: remote";
-  cacheLife("hours");
+async function getFormattedDate(locale: string, timezone?: string) {
+  "use cache";
 
-  // TODO: this should get the date by user timezone
-  const dateTime = new Date();
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  };
 
-  const safeIntlDate = dateTime.toLocaleDateString(locale, dateOptions);
+  if (timezone) {
+    options.timeZone = timezone;
+  }
 
-  return safeIntlDate;
-};
+  return new Date().toLocaleDateString(locale, options);
+}
