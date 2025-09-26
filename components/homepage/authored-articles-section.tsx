@@ -48,30 +48,20 @@ export default async function AuthoredArticlesSection({
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <OpinionArticleCard key={article.id} article={article} />
+          <AuthorArticleCard key={article.id} article={article} />
         ))}
       </div>
     </section>
   );
 }
 
-function OpinionArticleCard({ article }: { article: Article }) {
+function AuthorArticleCard({ article }: { article: Article }) {
   return (
     <article className="group bg-neutral-50 p-4 rounded-lg hover:bg-neutral-100 transition-colors">
-      <div className="flex items-start gap-3 mb-2">
-        <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
-          <Image
-            src={`/placeholder.svg?width=48&height=48&query=author ${
-              article.author.split(" ")[0]
-            }`}
-            alt={article.author}
-            fill
-            className="object-cover"
-          />
-        </div>
+      <div className="flex items-start gap-3 mb-4">
         <div>
           <h4 className="text-sm font-semibold text-black">{article.author}</h4>
-          <p className="text-xs text-neutral-600">Opinion Contributor</p>
+          <p className="text-xs text-neutral-600">Contributor</p>
         </div>
       </div>
       <Link href={`/articles/${article.slug}`}>
@@ -86,7 +76,7 @@ function OpinionArticleCard({ article }: { article: Article }) {
         href={`/articles/${article.slug}`}
         className="text-sm text-black hover:underline font-medium"
       >
-        Read full opinion &rarr;
+        Read full details &rarr;
       </Link>
     </article>
   );
