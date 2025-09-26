@@ -48,6 +48,7 @@ interface ContentfulArticle {
   metaKeywords?: string;
   author: ContentfulAuthor;
   category: ContentfulCategory;
+  views?: number;
   relatedArticles?: ContentfulArticle[];
 }
 
@@ -130,8 +131,8 @@ function convertRichTextToHtml(richTextDocument: Document): string {
 }
 
 const GET_ARTICLES_QUERY = `
-  query GetArticles($limit: Int, $skip: Int, $where: ArticleFilter, $preview: Boolean) {
-    articleCollection(limit: $limit, skip: $skip, where: $where, preview: $preview, order: publishDate_DESC) {
+  query GetArticles($limit: Int, $skip: Int, $where: ArticleFilter, $preview: Boolean, $order: [ArticleOrder]) {
+    articleCollection(limit: $limit, skip: $skip, where: $where, preview: $preview, order: $order) {
       total
       items {
         sys {
@@ -177,6 +178,7 @@ const GET_ARTICLES_QUERY = `
         isFeatured
         metaDescription
         metaKeywords
+        views
         author {
           sys {
             id
@@ -244,6 +246,7 @@ const GET_ARTICLE_BY_SLUG_QUERY = `
         isFeatured
         metaDescription
         metaKeywords
+        views
         author {
           sys {
             id
@@ -431,7 +434,7 @@ function reshapeToArticle(item: ContentfulArticle): Article {
     readingTime: item.readingTime || 5,
     isBreaking: item.isBreakingNews || false,
     isFeatured: item.isFeatured || false,
-    views: Math.floor(Math.random() * 2000) + 100, // Simulated for now
+    views: item.views || 0,
   };
 }
 
@@ -468,7 +471,6 @@ export async function getArticles({
   limit,
   category,
   categoryId,
-  location,
   sortBy,
   excludeIds,
   isFeatured,
@@ -479,7 +481,6 @@ export async function getArticles({
   limit?: number;
   category?: string;
   categoryId?: string;
-  location?: string;
   sortBy?: "datePublished" | "views";
   excludeIds?: string[];
   isFeatured?: boolean;
@@ -506,15 +507,29 @@ export async function getArticles({
       where.category = { sys: { id: categoryId } };
     }
 
-    // Determine if we need client-side filtering for unsupported filters
-    const hasClientSideFilters =
-      searchQuery || location || excludeIds?.length || excludeFeatured;
-    const fetchLimit = hasClientSideFilters ? (limit || 10) * 2 : limit || 10;
+    if (excludeIds && excludeIds.length > 0) {
+      where.sys = { id_not_in: excludeIds };
+    }
+
+    if (excludeFeatured) {
+      where.isFeatured_not = true;
+    }
+
+    if (searchQuery) {
+      where.OR = [
+        { title_contains: searchQuery },
+        { excerpt_contains: searchQuery },
+      ];
+    }
+
+    // Determine sort order
+    const order = sortBy === "views" ? ["views_DESC"] : ["publishDate_DESC"];
 
     const response = await fetchContent<ArticleCollection>(GET_ARTICLES_QUERY, {
-      limit: fetchLimit,
+      limit: limit || 10,
       skip: 0,
       where: Object.keys(where).length > 0 ? where : undefined,
+      order,
       preview: false,
     });
 
@@ -524,45 +539,6 @@ export async function getArticles({
     }
 
     let articles = response.articleCollection.items.map(reshapeToArticle);
-
-    if (location) {
-      articles = articles.filter(
-        (article) => (article as any).location === location
-      );
-    }
-
-    if (searchQuery) {
-      const lowerQuery = searchQuery.toLowerCase();
-      articles = articles.filter(
-        (article) =>
-          article.title.toLowerCase().includes(lowerQuery) ||
-          article.excerpt.toLowerCase().includes(lowerQuery) ||
-          article.author.toLowerCase().includes(lowerQuery)
-      );
-    }
-
-    if (excludeFeatured) {
-      articles = articles.filter((article) => !article.isFeatured);
-    }
-
-    if (excludeIds && excludeIds.length > 0) {
-      articles = articles.filter((article) => !excludeIds.includes(article.id));
-    }
-
-    if (sortBy === "views") {
-      articles.sort((a, b) => (b.views || 0) - (a.views || 0));
-    } else {
-      // Default sort by datePublished (newest first)
-      articles.sort(
-        (a, b) =>
-          new Date(b.datePublished).getTime() -
-          new Date(a.datePublished).getTime()
-      );
-    }
-
-    if (limit && articles.length > limit) {
-      return articles.slice(0, limit);
-    }
 
     return articles;
   } catch (error) {

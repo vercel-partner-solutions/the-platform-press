@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "fetch-schema": "tsx scripts/fetch-contentful-schema.ts"
   },
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^17.1.3",
