@@ -10,7 +10,7 @@ export async function StickyNavigation({ locale }: { locale: string }) {
   return (
     <div className="bg-white sticky top-0 z-50 border-b border-neutral-200 shadow-sm hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+        <div className="grid grid-cols-3 items-center h-14">
           <div className="animate-reveal-left">
             <Link
               href="/"
@@ -20,9 +20,11 @@ export async function StickyNavigation({ locale }: { locale: string }) {
             </Link>
           </div>
 
-          <Categories />
+          <div className="justify-self-center">
+            <Categories />
+          </div>
 
-          <div className="animate-reveal-right">
+          <div className="animate-reveal-right justify-self-end">
             <Suspense>
               <Subscribe
                 size="sm"
