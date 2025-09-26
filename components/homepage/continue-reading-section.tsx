@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { isSubscribed } from "@/app/actions/subscription";
-import { getArticleBySlug, getArticles } from "@/lib/cms";
+import { getArticleBySlug, getArticles, getCategoryById } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 
 async function ContinueReadingCard({
@@ -27,7 +27,7 @@ async function ContinueReadingCard({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
-                "news"
+                "news",
               )}`
             }
             alt={article.title}
@@ -56,15 +56,19 @@ async function ContinueReadingCard({
 }
 
 export default async function ContinueReadingSection({
-  fallbackCategory,
+  fallbackCategoryId,
   locale,
 }: {
-  fallbackCategory: string;
+  fallbackCategoryId: string;
   locale: string;
 }) {
   const subscribed = await isSubscribed();
   let articles: Article[] = [];
-  let sectionTitle = fallbackCategory;
+
+  const fallbackCategory = await getCategoryById(fallbackCategoryId);
+  if (!fallbackCategory) return null;
+
+  let sectionTitle = fallbackCategory.title;
 
   if (subscribed) {
     // Get visited articles for subscribed users
@@ -78,13 +82,13 @@ export default async function ContinueReadingSection({
         if (visitedSlugs.length > 0) {
           // Fetch articles by slug in parallel
           const articlePromises = visitedSlugs.map((slug) =>
-            getArticleBySlug(slug)
+            getArticleBySlug(slug),
           );
           const fetchedArticles = await Promise.all(articlePromises);
 
           // Filter out any undefined results
           articles = fetchedArticles.filter(
-            (article): article is Article => article !== undefined
+            (article): article is Article => article !== undefined,
           );
 
           if (articles.length > 0) {
@@ -99,7 +103,7 @@ export default async function ContinueReadingSection({
 
   // If no visited articles or not subscribed, use fallback category
   if (articles.length === 0) {
-    articles = await getArticles({ category: fallbackCategory, limit: 3 });
+    articles = await getArticles({ categoryId: fallbackCategoryId, limit: 3 });
   }
 
   if (!articles || articles.length === 0) return null;

@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n.config";
-import { getLocation } from "@/lib/geo/server";
+import { unstable_cacheLife as cacheLife } from "next/cache";
 
 export interface WeatherData {
   temperature?: number;
@@ -62,9 +62,11 @@ export function renderWeatherIcon(condition: WeatherCondition): string {
 }
 
 async function getCoordinatesFromCity(
-  city: string,
+  city: string
 ): Promise<{ latitude: number; longitude: number } | null> {
-  const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`;
+  const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+    city
+  )}&count=1&language=en&format=json`;
 
   const response = await fetch(geocodingUrl);
   if (!response.ok) {
@@ -95,7 +97,7 @@ function getTemperatureSymbol(locale: Locale): "C" | "F" {
 async function getWeatherFromCoordinates(
   latitude: number,
   longitude: number,
-  locale: Locale,
+  locale: Locale
 ): Promise<WeatherData> {
   const temperatureUnit = getTemperatureUnit(locale);
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=${temperatureUnit}`;
@@ -115,10 +117,23 @@ async function getWeatherFromCoordinates(
   };
 }
 
-export async function getWeather(locale: string): Promise<WeatherData> {
+export async function getWeather(
+  locale: string,
+  location: { city?: string }
+): Promise<WeatherData> {
+  "use cache: remote";
+  cacheLife("minutes");
+
   try {
-    const { city } = await getLocation();
-    if (!city) throw new Error("City not found");
+    const { city } = location;
+
+    // This isn't available in dev or build time
+    if (!city)
+      return {
+        temperature: undefined,
+        condition: undefined,
+        unit: undefined,
+      };
 
     const coordinates = await getCoordinatesFromCity(city);
     if (!coordinates) throw new Error("Coordinates not found");
@@ -126,13 +141,13 @@ export async function getWeather(locale: string): Promise<WeatherData> {
     return await getWeatherFromCoordinates(
       coordinates.latitude,
       coordinates.longitude,
-      locale as Locale,
+      locale as Locale
     );
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error fetching weather:", error.message);
     } else {
-      console.error("Error fetching weather:", error);
+      console.error("Unknown error fetching weather:", error);
     }
 
     return {

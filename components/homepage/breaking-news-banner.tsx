@@ -1,15 +1,22 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export default async function BreakingNewsBanner() {
+  "use cache: remote";
+
   const breakingArticles = await getArticles({
     isBreaking: true,
     limit: 1,
     sortBy: "datePublished",
   });
+
   const article = breakingArticles[0];
 
   if (!article) return null;
+
+  // revalidate if this article changes, a list of articles may change (since this grabs the top 1), or via global tag
+  cacheTag(article.id, "article-list", "articles");
 
   return (
     <div className="px-4 py-4">

@@ -7,18 +7,25 @@ import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
+  "use cache: remote";
+
   const { slug } = await params;
 
   const article = await getArticleBySlug(slug);
+
   if (!article) {
     notFound();
   }
+
+  // revalidate if this article changes or via global tag
+  cacheTag(article.id, "articles");
 
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -44,6 +51,12 @@ export async function generateMetadata({
   };
 }
 
+export const generateStaticParams = async () => {
+  return (await getArticles({ isFeatured: true })).map((a) => ({
+    slug: a.slug,
+  }));
+};
+
 export default async function ArticlePage({
   params,
   previewOnly = false,
@@ -51,6 +64,8 @@ export default async function ArticlePage({
   params: Promise<{ slug: string; locale: string }>;
   previewOnly?: boolean;
 }) {
+  "use cache: remote";
+
   const { slug, locale } = await params;
 
   const article = await getArticleBySlug(slug);
@@ -58,6 +73,9 @@ export default async function ArticlePage({
   if (!article) {
     notFound();
   }
+
+  // revalidate if this article changes or via global tag
+  cacheTag(article.id, "articles");
 
   const date = new Date(article.datePublished);
   const dateTime = date.toLocaleDateString(locale, {

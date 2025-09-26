@@ -30,7 +30,7 @@ export async function subscribeUser(formData: FormData) {
 }
 
 export async function toggleSubscription(
-  currentPath?: string
+  currentPath?: string,
 ): Promise<boolean> {
   const cookieStore = await cookies();
   const subscriptionCookie = cookieStore.get("platform-press-subscription");

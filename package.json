@@ -7,7 +7,8 @@
     "dev": "next dev --turbopack",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.6.1",
@@ -21,7 +22,7 @@
     "lucide-react": "^0.454.0",
     "marked": "latest",
     "negotiator": "^1.0.0",
-    "next": "15.6.0-canary.17",
+    "next": "15.6.0-canary.20",
     "next-themes": "latest",
     "react": "^19",
     "react-dom": "^19",
