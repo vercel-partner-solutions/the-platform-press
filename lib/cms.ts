@@ -409,14 +409,37 @@ function reshapeToArticle(item: ContentfulArticle): Article {
 
 function reshapeToCategory(item: ContentfulCategory): Category {
   return {
+    id: item.sys.id,
     slug: item.slug,
     title: item.title,
   };
 }
 
+export const homepageConfig = {
+  sections: {
+    authoredSection: {
+      categoryId: "3LcBoYnuugO6HO4uQBMVlp",
+      sectionTitle: "Customer Stories",
+    },
+    firstCategorySection: {
+      categoryId: "6z4OY83zIVZCVuB7WEM4Ru",
+      sectionTitle: "Company News",
+    },
+    secondCategorySection: {
+      categoryId: "2iVXH95RmH4IzVHncEeN7M",
+      sectionTitle: "Changelog",
+    },
+    continueReadingFallback: {
+      categoryId: "36i75OQ1y6V1Ym4cOKf5dp5",
+      sectionTitle: "Community",
+    },
+  },
+};
+
 export async function getArticles({
   limit,
   category,
+  categoryId,
   location,
   sortBy,
   excludeIds,
@@ -427,6 +450,7 @@ export async function getArticles({
 }: {
   limit?: number;
   category?: string;
+  categoryId?: string;
   location?: string;
   sortBy?: "datePublished" | "views";
   excludeIds?: string[];
@@ -569,3 +593,13 @@ export async function getCategories(): Promise<string[]> {
     return [];
   }
 }
+
+// export async function getCategoryBySlug(
+//   slug: string
+// ): Promise<Category | undefined> {
+// }
+
+// export async function getCategoryById(
+//   id: string
+// ): Promise<Category | undefined> {
+// }

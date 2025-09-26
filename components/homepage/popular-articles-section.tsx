@@ -1,51 +1,17 @@
 import Link from "next/link";
-import { getFormatter } from "next-intl/server";
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
-
-async function PopularArticleListItem({
-  article,
-  index,
-}: {
-  article: Article;
-  index: number;
-}) {
-  const formatter = await getFormatter();
-  const date = new Date(article.datePublished);
-  const dateTime = formatter.dateTime(date, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
-  return (
-    <li className="py-5 border-b border-neutral-200 last:border-b-0">
-      <div className="flex items-start gap-4 sm:gap-5">
-        <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-accent text-accent-foreground rounded-full font-bold text-sm">
-          {index + 1}
-        </div>
-        <div className="flex-grow">
-          <Link href={`/${article.slug}`} className="block">
-            <h3 className="text-lg font-bold text-black hover:underline leading-tight">
-              {article.title}
-            </h3>
-          </Link>
-          <p className="text-xs font-semibold text-neutral-500 mt-1.5 tracking-wider">
-            <span>{article.author.toUpperCase()}</span>
-            <span className="mx-1.5">&middot;</span>
-            <span>{dateTime}</span>
-          </p>
-        </div>
-      </div>
-    </li>
-  );
-}
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export default async function PopularArticlesSection({
   isHomepage = false,
+  locale,
 }: {
   isHomepage?: boolean;
+  locale: string;
 }) {
+  "use cache: remote";
+
   const articles = await getArticles({
     limit: 5,
     sortBy: "views",
@@ -53,6 +19,9 @@ export default async function PopularArticlesSection({
   });
 
   if (!articles || articles.length === 0) return null;
+
+  // revalidate if any of these articles changes, a list of articles may change, or via global tag
+  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
 
   return (
     <div className="relative">
@@ -69,6 +38,7 @@ export default async function PopularArticlesSection({
         <ol>
           {articles.map((article, index) => (
             <PopularArticleListItem
+              locale={locale}
               key={article.id}
               article={article}
               index={index}
@@ -77,5 +47,44 @@ export default async function PopularArticlesSection({
         </ol>
       </section>
     </div>
+  );
+}
+
+async function PopularArticleListItem({
+  article,
+  index,
+  locale,
+}: {
+  article: Article;
+  index: number;
+  locale: string;
+}) {
+  const date = new Date(article.datePublished);
+  const dateTime = date.toLocaleDateString(locale, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
+  return (
+    <li className="py-5 border-b border-neutral-200 last:border-b-0">
+      <div className="flex items-start gap-4 sm:gap-5">
+        <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-accent text-accent-foreground rounded-full font-bold text-sm">
+          {index + 1}
+        </div>
+        <div className="flex-grow">
+          <Link href={`/articles/${article.slug}`} className="block">
+            <h3 className="text-lg font-bold text-black hover:underline leading-tight">
+              {article.title}
+            </h3>
+          </Link>
+          <p className="text-xs font-semibold text-neutral-500 mt-1.5 tracking-wider">
+            <span>{article.author.toUpperCase()}</span>
+            <span className="mx-1.5">&middot;</span>
+            <span>{dateTime}</span>
+          </p>
+        </div>
+      </div>
+    </li>
   );
 }

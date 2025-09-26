@@ -3,21 +3,23 @@ export interface Article {
   slug: string;
   title: string;
   excerpt: string;
-  content: string; // Markdown or HTML string
+  content: string;
   imageUrl: string;
   category: string;
   author: string;
-  datePublished: string; // ISO 8601 format
+  datePublished: string;
   readingTime: number;
   isBreaking?: boolean;
   isFeatured?: boolean;
-  views?: number; // For "popular" section simulation
-  location?: string; // For local news articles
+  views?: number;
+  lastUpdated?: string;
 }
 
 export interface Category {
+  id: string;
   slug: string;
   title: string;
+  lastUpdated?: string;
 }
 
 export interface Author {
@@ -26,6 +28,8 @@ export interface Author {
   title: string;
 }
 
-export interface CMSData {
-  articles: Article[];
+export interface Stock {
+  symbol: string;
+  change: number;
+  isPositive: boolean;
 }

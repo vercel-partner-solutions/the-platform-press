@@ -1,24 +1,18 @@
-import { getFormatter, getNow } from "next-intl/server";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getLocation } from "@/lib/geo/server";
+import { getWeather, renderWeatherIcon } from "@/lib/weather";
 
-export async function Today() {
-  const weather = await getMockWeather();
-  const format = await getFormatter();
-  const dateTime = await getNow();
-
-  const intlDate = format.dateTime(dateTime, {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
+export async function Today({ locale }: { locale: string }) {
   return (
     <div className="hidden md:flex flex-col justify-self-start">
       <div className="flex items-center gap-2 text-sm text-neutral-600 mb-1">
-        <span>{intlDate}</span>
-        <span>
-          {renderWeatherIcon(weather.condition)} {weather.temperature}
-        </span>
+        <Suspense fallback={<Skeleton className="w-[118px] h-5" />}>
+          <DateDisplay locale={locale} />
+        </Suspense>
+        <Suspense fallback={<Skeleton className="w-10 h-5" />}>
+          <Weather locale={locale} />
+        </Suspense>
       </div>
       <span className="text-sm font-medium text-neutral-700">
         Today's Paper
@@ -27,35 +21,40 @@ export async function Today() {
   );
 }
 
-interface WeatherData {
-  temperature: number;
-  condition: "Sunny" | "Cloudy" | "Rainy" | "Snowy";
+async function Weather({ locale }: { locale: string }) {
+  const location = await getLocation();
+  const weather = await getWeather(locale, location);
+
+  if (!weather || !weather.condition || !weather.temperature || !weather.unit)
+    return null;
+
+  return (
+    <span>
+      {renderWeatherIcon(weather.condition)} {weather.temperature}°
+      {weather.unit}
+    </span>
+  );
 }
 
-async function getMockWeather(): Promise<WeatherData> {
-  new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
-  const conditions: WeatherData["condition"][] = ["Sunny", "Cloudy", "Rainy"];
-  const randomCondition =
-    conditions[Math.floor(Math.random() * conditions.length)];
-  const randomTemp = Math.floor(Math.random() * (85 - 65 + 1) + 65); // Temp between 65 and 85
+async function DateDisplay({ locale }: { locale: string }) {
+  const location = await getLocation();
+  const formattedDate = await getFormattedDate(locale, location.timezone);
+  return <span>{formattedDate}</span>;
+}
 
-  return {
-    temperature: randomTemp,
-    condition: randomCondition,
+async function getFormattedDate(locale: string, timezone?: string) {
+  "use cache";
+
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   };
-}
 
-function renderWeatherIcon(condition: WeatherData["condition"]) {
-  switch (condition) {
-    case "Sunny":
-      return "☀️";
-    case "Cloudy":
-      return "☁️";
-    case "Rainy":
-      return "🌧️";
-    case "Snowy":
-      return "❄️";
-    default:
-      return "🌤️";
+  if (timezone) {
+    options.timeZone = timezone;
   }
+
+  return new Date().toLocaleDateString(locale, options);
 }

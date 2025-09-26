@@ -1,19 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useFormatter } from "next-intl";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "./category-badge";
 
 export default function ArticleCard({
   article,
   priorityImage = false,
+  locale,
 }: {
   article: Article;
   priorityImage?: boolean;
+  locale: string;
 }) {
-  const formatter = useFormatter();
   const date = new Date(article.datePublished);
-  const dateTime = formatter.dateTime(date, {
+  const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -21,7 +21,7 @@ export default function ArticleCard({
 
   return (
     <article className="bg-white group flex flex-col">
-      <Link href={`/${article.slug}`} className="block">
+      <Link href={`/articles/${article.slug}`} className="block">
         <div className="relative w-full aspect-[16/9] overflow-hidden rounded-md">
           <Image
             src={
@@ -42,7 +42,7 @@ export default function ArticleCard({
         <div className="mb-1.5">
           <CategoryBadge category={article.category} />
         </div>
-        <Link href={`/${article.slug}`} className="block">
+        <Link href={`/articles/${article.slug}`} className="block">
           <h2 className="text-lg font-semibold text-black group-hover:underline transition-colors mb-1.5 leading-tight">
             {article.title}
           </h2>

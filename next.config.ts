@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    cacheComponents: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -10,8 +12,7 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
+  }
 };
 
-const withNextIntl = createNextIntlPlugin();
-export default withNextIntl(nextConfig);
+export default nextConfig;

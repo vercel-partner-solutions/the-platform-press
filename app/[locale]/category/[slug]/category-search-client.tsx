@@ -22,6 +22,7 @@ interface CategorySearchClientProps {
   searchParams: {
     q?: string;
   };
+  locale: string;
 }
 
 export default function CategorySearchClient({
@@ -30,6 +31,7 @@ export default function CategorySearchClient({
   hasMore: initialHasMore,
   category,
   searchParams,
+  locale,
 }: CategorySearchClientProps) {
   const pathname = usePathname();
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
@@ -240,7 +242,7 @@ export default function CategorySearchClient({
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             {articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+              <ArticleCard key={article.id} article={article} locale={locale} />
             ))}
           </div>
 

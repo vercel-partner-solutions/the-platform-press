@@ -1,7 +1,8 @@
 {
   "Layout": {
     "subscribe": "每周仅需 $1 订阅",
-    "login": "登录"
+    "login": "登录",
+    "unsubscribe": "退订"
   },
   "Homepage": {
     "title": "首页 | The Platform Press",

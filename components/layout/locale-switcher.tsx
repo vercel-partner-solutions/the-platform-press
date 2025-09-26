@@ -1,33 +1,34 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useLocale } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
-import { localeToLabel, routing } from "@/i18n/routing";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { i18n, type Locale } from "@/i18n.config";
 import { cn } from "@/lib/utils";
 
-export function LocaleSwitcher() {
+export function LocaleSwitcher({ activeLocale }: { activeLocale: string }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentLocale = useLocale();
-  const fullUrl = `${pathname}?${searchParams.toString()}`;
+  const redirectedPathname = (locale: Locale) => {
+    if (!pathname) return "/";
+    const segments = pathname.split("/");
+    segments[1] = locale;
+    return segments.join("/");
+  };
 
   return (
     <nav className="justify-self-center flex items-center gap-6">
-      {routing.locales.map((locale) => {
-        const isActive = locale === currentLocale;
+      {i18n.locales.map((locale) => {
+        const isActive = locale === activeLocale;
         return (
           <Link
-            href={fullUrl}
+            href={redirectedPathname(locale)}
             replace
-            locale={locale}
             key={locale}
             className={cn(
-              "text-xs font-medium text-neutral-600 uppercase tracking-wide cursor-default",
+              "text-xs font-medium text-neutral-600 hober:font-bold hover:text-neutral-900 uppercase tracking-wide cursor-pointer",
               isActive && "text-bold",
             )}
           >
-            {localeToLabel.get(locale)}
+            {locale}
           </Link>
         );
       })}
