@@ -8,6 +8,7 @@ import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { i18n } from "@/i18n.config";
 import { StickyNavigation } from "@/components/ui/sticky-navigation";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default async function Layout({
         </main>
         <Footer />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
