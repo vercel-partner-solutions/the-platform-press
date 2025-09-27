@@ -28,8 +28,7 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       title: "The Platform Press",
-      description:
-        "Your source for the latest news, analysis, and insights from around the world.",
+      description: t.Homepage.description,
       url: baseUrl,
     },
   };

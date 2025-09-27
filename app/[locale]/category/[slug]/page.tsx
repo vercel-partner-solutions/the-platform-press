@@ -22,7 +22,6 @@ export async function generateMetadata({
   const { slug } = await params;
 
   const category = await getCategoryBySlug(slug);
-
   if (!category) {
     notFound();
   }
@@ -34,14 +33,31 @@ export async function generateMetadata({
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
 
+  const description = `Stay updated with the latest ${category.title} news from The Platform Press.`;
+  const title = `${category.title} | The Platform Press`;
+
   return {
-    title: `${category.title} | The Platform Press`,
-    description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
+    title,
+    description,
     openGraph: {
+      title,
+      description,
       type: "website",
-      title: `${category.title} | The Platform Press`,
-      description: `Stay updated with the latest ${category.title} news, analysis, and insights from The Platform Press.`,
       url: `${baseUrl}/category/${slug}`,
+      siteName: "The Platform Press",
+      images: [
+        {
+          url: `/category/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }
@@ -59,7 +75,6 @@ export default async function CategorySearchPage({
   const { q } = await searchParams;
 
   const category = await getCategoryBySlug(slug);
-
   if (!category) {
     notFound();
   }
