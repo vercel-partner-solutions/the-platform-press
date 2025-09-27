@@ -16,8 +16,14 @@ async function loadPoppinsFont() {
     return null;
   }
 
-  const fontResponse = await fetch(fontUrl);
-  return await fontResponse.arrayBuffer();
+  try {
+    const fontResponse = await fetch(fontUrl);
+    return await fontResponse.arrayBuffer();
+  } catch (error) {
+    // Font loading failed (network error, timeout, etc.)
+    // Return null to gracefully fall back to system font
+    return null;
+  }
 }
 
 export default async function OpengraphImage(
