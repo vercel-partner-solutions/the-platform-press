@@ -14,7 +14,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  
+
   const article = await getArticleBySlug(slug);
   if (!article) {
     notFound();
@@ -31,14 +31,14 @@ export async function generateMetadata({
       type: "article",
       title: `${article.title} | The Platform Press`,
       description: article.excerpt,
-      siteName: 'The Platform Press',
+      siteName: "The Platform Press",
       publishedTime: article.datePublished,
       authors: [article.author],
       section: article.category,
       url: `${baseUrl}/articles/${article.slug}`,
       images: [
         {
-          url: article.imageUrl || `/articles/${article.slug}/opengraph-image`,
+          url: `/articles/${article.slug}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: article.title,
@@ -46,7 +46,7 @@ export async function generateMetadata({
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: article.title,
       description: article.excerpt,
     },
