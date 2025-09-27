@@ -38,15 +38,24 @@ export async function generateMetadata({
       type: "article",
       title: `${article.title} | The Platform Press`,
       description: article.excerpt,
+      siteName: "The Platform Press",
+      publishedTime: article.datePublished,
+      authors: [article.author],
+      section: article.category,
       url: `${baseUrl}/articles/${article.slug}`,
       images: [
         {
-          url: article.imageUrl || "",
+          url: `/articles/${article.slug}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: article.title,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt,
     },
   };
 }
