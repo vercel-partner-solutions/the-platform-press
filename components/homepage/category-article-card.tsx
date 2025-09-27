@@ -12,7 +12,7 @@ export default function CategoryArticleCard({ article }: { article: Article }) {
             src={
               article.imageUrl ||
               `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
-                "news"
+                "news",
               )}`
             }
             alt={article.title}

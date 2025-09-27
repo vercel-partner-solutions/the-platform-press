@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getArticles, getCategoryBySlug } from "@/lib/cms";
+import { getArticles, getCategories, getCategoryBySlug } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
+import { unstable_cacheTag as cacheTag } from "next/cache";
+import { Category } from "@/lib/types";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
@@ -15,12 +17,17 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
+  "use cache: remote";
+
   const { slug } = await params;
 
   const category = await getCategoryBySlug(slug);
   if (!category) {
     notFound();
   }
+
+  // revalidate if this category changes or via global tag
+  cacheTag(category.id, "categories");
 
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -55,6 +62,11 @@ export async function generateMetadata({
   };
 }
 
+export async function generateStaticParams() {
+  const categories = await getCategories();
+  return categories.map((c) => ({ slug: c.slug }));
+}
+
 export default async function CategorySearchPage({
   params,
   searchParams,
@@ -67,9 +79,7 @@ export default async function CategorySearchPage({
     notFound();
   }
 
-  const articles = await getArticles({
-    category: category.slug,
-  });
+  const articles = await getInitialArticles(category);
 
   return (
     <CategorySearchClient
@@ -81,4 +91,18 @@ export default async function CategorySearchPage({
       locale={locale}
     />
   );
+}
+
+async function getInitialArticles(category: Category) {
+  "use cache";
+
+  const articles = await getArticles({
+    category: category.slug,
+    sortBy: "datePublished",
+    limit: 9,
+  });
+
+  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
+
+  return articles;
 }

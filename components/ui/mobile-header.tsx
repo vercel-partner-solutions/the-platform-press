@@ -13,10 +13,10 @@ import {
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { Subscribe } from "./subscribe";
+import { unstable_cacheTag as cacheTag } from "next/cache";
+import { Suspense } from "react";
 
-export async function MobileHeader() {
-  const categories = await getCategories();
-
+export async function MobileHeader({ locale }: { locale: string }) {
   return (
     <div className="md:hidden flex items-center justify-between w-full h-16 px-4">
       <div className="flex flex-1 items-center px-2">
@@ -34,13 +34,13 @@ export async function MobileHeader() {
       </div>
 
       <div className="items-center justify-end flex flex-1">
-        <MobileMenu categories={categories} />
+        <MobileMenu locale={locale} />
       </div>
     </div>
   );
 }
 
-async function MobileMenu({ categories }: { categories: string[] }) {
+async function MobileMenu({ locale }: { locale: string }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -50,36 +50,49 @@ async function MobileMenu({ categories }: { categories: string[] }) {
       </SheetTrigger>
       <SheetContent side="right" className="w-full">
         <SheetHeader>
-          <SheetTitle>The Platform Press</SheetTitle>
-          <div className="flex flex-col gap-2 px-4 items-center">
-            <Subscribe
-              className="max-w-[200px]"
-              subscribeText="Subscribe"
-              unsubscribeText="Unsubscribe"
-            />
+          <SheetTitle className="text-center">The Platform Press</SheetTitle>
+          <div className="flex flex-col gap-2 items-center">
+            <Suspense>
+              <Subscribe
+                className="max-w-[200px]"
+                subscribeText="Subscribe"
+                unsubscribeText="Unsubscribe"
+              />
+            </Suspense>
           </div>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 p-4">
-          <LocaleSwitcher />
-
-          {categories.map((category) => (
-            <div
-              className="block px-3 py-2 text-sm rounded-md transition-colors group w-full"
-              key={category}
-            >
-              <Link
-                href={`/category/${category.toLowerCase()}`}
-                className="w-full h-full block"
-              >
-                <SheetClose>{category}</SheetClose>
-              </Link>
-            </div>
-          ))}
+          <LocaleSwitcher activeLocale={locale} />
+          <MobileCategories />
         </div>
-        <SheetFooter>
-          <LocaleSwitcher />
-        </SheetFooter>
       </SheetContent>
     </Sheet>
+  );
+}
+
+async function MobileCategories() {
+  "use cache: remote";
+
+  const categories = await getCategories();
+
+  // revalidate if any of the categories change or with the global tag
+  cacheTag(...categories.map((c) => c.id), "categories");
+
+  return (
+    <div>
+      {categories.map((category) => (
+        <div
+          className="block px-3 py-2 text-sm rounded-md transition-colors group w-full"
+          key={category.slug}
+        >
+          <Link
+            href={`/category/${category.slug.toLowerCase()}`}
+            className="w-full h-full block"
+          >
+            <SheetClose>{category.title}</SheetClose>
+          </Link>
+        </div>
+      ))}
+    </div>
   );
 }

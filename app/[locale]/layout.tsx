@@ -6,6 +6,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { i18n } from "@/i18n.config";
+import { StickyNavigation } from "@/components/ui/sticky-navigation";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,7 +27,10 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-  generator: "v0.dev",
+};
+
+export const generateStaticParams = async () => {
+  return i18n.locales.map((locale) => ({ locale }));
 };
 
 export default async function Layout({
@@ -35,19 +41,20 @@ export default async function Layout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-
   return (
     <html
       className={`${GeistSans.className} ${poppins.variable}`}
       lang={locale}
     >
-      <body className="bg-white text-black antialiased flex flex-col min-h-screen">
+      <body className="bg-white text-black antialiased min-h-screen flex flex-col">
         <Header locale={locale} />
-        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <StickyNavigation locale={locale} />
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
           {children}
         </main>
         <Footer />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
