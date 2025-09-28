@@ -1,12 +1,12 @@
-export default function CategorySearchLoading() {
+export default function ArticlesGridSkeleton() {
   return (
-    <div className="space-y-6">
-      {/* Search Bar Loading */}
-      <div className="mb-8">
-        <div className="h-12 bg-neutral-200 rounded-lg animate-pulse"></div>
+    <section>
+      {/* Search results info placeholder - matches SearchResultsInfo spacing */}
+      <div className="mb-6">
+        <div className="h-5 bg-neutral-200 rounded w-48 animate-pulse"></div>
       </div>
 
-      {/* Articles Grid Loading */}
+      {/* Articles grid skeleton */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         {Array.from({ length: 9 }).map((_, i) => (
           <div key={i} className="animate-pulse">
@@ -24,6 +24,6 @@ export default function CategorySearchLoading() {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

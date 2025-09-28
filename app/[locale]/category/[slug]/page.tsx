@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getArticles, getCategories, getCategoryBySlug } from "@/lib/cms";
-import CategorySearch from "./category-search";
+import { getCategories, getCategoryBySlug } from "@/lib/cms";
+import CategoryHeader from "@/components/category/category-header";
+import CategorySearchSkeleton from "@/components/category/category-search-skeleton";
+import CategoryArticles from "./category-articles";
 import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
 } from "next/cache";
-import { Article, Category } from "@/lib/types";
+import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
-  searchParams: Promise<{
-    q?: string;
-  }>;
 };
 
 export async function generateMetadata({
@@ -83,53 +82,34 @@ export async function generateStaticParams() {
   return [{ slug: "all" }, ...categories.map((c) => ({ slug: c.slug }))];
 }
 
-export default async function CategorySearchPage({
-  params,
-  searchParams,
-}: Props) {
-  const { slug, locale } = await params;
-  const { q } = await searchParams;
+export default async function CategoryPage({ params }: Props) {
+  "use cache: remote";
+  cacheLife("max");
 
+  const { slug, locale } = await params;
+
+  let category;
   let categoryName: string;
-  let articles: Article[] = [];
 
   if (slug === "all") {
-    articles = await getInitialArticles();
-    categoryName = "All";
+    categoryName = "all";
   } else {
-    const category = await getCategoryBySlug(slug);
+    category = await getCategoryBySlug(slug);
 
     if (!category) {
       notFound();
     }
 
-    articles = await getInitialArticles(category);
+    cacheTag(category.id);
     categoryName = category.title;
   }
 
   return (
-    <CategorySearch
-      initialArticles={articles}
-      totalCount={articles.length}
-      hasMore={articles.length > 9}
-      category={categoryName}
-      searchParams={q ? { q } : {}}
-      locale={locale}
-    />
+    <div className="flex-1 min-w-0">
+      <CategoryHeader category={categoryName} />
+      <Suspense fallback={<CategorySearchSkeleton />}>
+        <CategoryArticles category={category} locale={locale} />
+      </Suspense>
+    </div>
   );
-}
-
-async function getInitialArticles(category?: Category) {
-  "use cache: remote";
-  cacheLife("max");
-
-  const articles = await getArticles({
-    category: category?.slug,
-    sortBy: "datePublished",
-    limit: 9,
-  });
-
-  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
-
-  return articles;
 }
