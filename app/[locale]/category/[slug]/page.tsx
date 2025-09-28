@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getArticles, getCategories, getCategoryBySlug } from "@/lib/cms";
-import CategorySearchClient from "./category-search-client";
+import CategorySearch from "./category-search";
 import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
 } from "next/cache";
-import { Category } from "@/lib/types";
+import { Article, Category } from "@/lib/types";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
@@ -31,7 +31,8 @@ export async function generateMetadata({
 
   if (slug === "all") {
     title = "All Articles | The Platform Press";
-    description = "Browse all articles from The Platform Press across all categories.";
+    description =
+      "Browse all articles from The Platform Press across all categories.";
   } else {
     const category = await getCategoryBySlug(slug);
     if (!category) {
@@ -79,10 +80,7 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const categories = await getCategories();
-  return [
-    { slug: "all" },
-    ...categories.map((c) => ({ slug: c.slug }))
-  ];
+  return [{ slug: "all" }, ...categories.map((c) => ({ slug: c.slug }))];
 }
 
 export default async function CategorySearchPage({
@@ -92,43 +90,36 @@ export default async function CategorySearchPage({
   const { slug, locale } = await params;
   const { q } = await searchParams;
 
-  // Handle "all" slug specially
+  let categoryName: string;
+  let articles: Article[] = [];
+
   if (slug === "all") {
-    const articles = await getInitialArticles(null);
+    articles = await getInitialArticles();
+    categoryName = "All";
+  } else {
+    const category = await getCategoryBySlug(slug);
 
-    return (
-      <CategorySearchClient
-        initialArticles={articles}
-        totalCount={articles.length}
-        hasMore={articles.length > 9}
-        category="all"
-        searchParams={q ? { q } : {}}
-        locale={locale}
-      />
-    );
+    if (!category) {
+      notFound();
+    }
+
+    articles = await getInitialArticles(category);
+    categoryName = category.title;
   }
-
-  const category = await getCategoryBySlug(slug);
-
-  if (!category) {
-    notFound();
-  }
-
-  const articles = await getInitialArticles(category);
 
   return (
-    <CategorySearchClient
+    <CategorySearch
       initialArticles={articles}
       totalCount={articles.length}
       hasMore={articles.length > 9}
-      category={category.title}
+      category={categoryName}
       searchParams={q ? { q } : {}}
       locale={locale}
     />
   );
 }
 
-async function getInitialArticles(category: Category | null) {
+async function getInitialArticles(category?: Category) {
   "use cache: remote";
   cacheLife("max");
 

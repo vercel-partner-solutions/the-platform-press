@@ -14,100 +14,7 @@ import CategorySearchInput from "@/components/ui/category-search-input";
 import type { Article } from "@/lib/types";
 import { searchArticlesAction } from "../actions";
 
-// Subcomponents
-function CategoryHeader({ category }: { category: string }) {
-  const getCategoryDisplayName = (category: string) => {
-    return category === "all"
-      ? "All Articles"
-      : category.charAt(0).toUpperCase() + category.slice(1);
-  };
-
-  return (
-    <div className="mb-6">
-      <h1 className="text-3xl font-bold text-black mb-2">
-        {getCategoryDisplayName(category)}
-      </h1>
-      <div className="w-16 h-1 bg-blue-600 rounded"></div>
-    </div>
-  );
-}
-
-function EmptyState({ activeSearchQuery }: { activeSearchQuery: string }) {
-  return (
-    <section className="text-center py-12">
-      <p className="text-neutral-600 text-lg mb-4">
-        {activeSearchQuery
-          ? `No articles found for "${activeSearchQuery}"`
-          : "No articles found in this section."}
-      </p>
-      <p className="text-neutral-500">
-        {activeSearchQuery
-          ? "Try a different search term or clear the search."
-          : "Check back later for new content."}
-      </p>
-    </section>
-  );
-}
-
-function SearchResultsInfo({ totalCount, activeSearchQuery }: { totalCount: number; activeSearchQuery: string }) {
-  if (!activeSearchQuery) return null;
-
-  return (
-    <div className="mb-6 text-sm text-neutral-600">
-      Showing {totalCount} {totalCount === 1 ? "result" : "results"} for{" "}
-      <span className="font-semibold text-black">
-        "{activeSearchQuery}"
-      </span>
-    </div>
-  );
-}
-
-function ArticlesGrid({ articles, locale }: { articles: Article[]; locale: string }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-      {articles.map((article) => (
-        <ArticleCard key={article.id} article={article} locale={locale} />
-      ))}
-    </div>
-  );
-}
-
-function LoadMoreButton({ onClick, isPending }: { onClick: () => void; isPending: boolean }) {
-  return (
-    <div className="flex justify-center mt-8">
-      <Button
-        type="button"
-        onClick={onClick}
-        disabled={isPending}
-        variant="outline"
-        className="px-8 py-2 border-neutral-300 text-black hover:bg-neutral-50 hover:border-black transition-colors bg-transparent"
-      >
-        Load More
-      </Button>
-    </div>
-  );
-}
-
-function LoadingState() {
-  return (
-    <div className="text-center py-12">
-      <p className="text-neutral-600">Searching...</p>
-    </div>
-  );
-}
-
-function ArticleCount({ totalCount }: { totalCount: number }) {
-  return (
-    <div className="text-center mt-8">
-      <p className="text-neutral-500 text-sm">
-        Showing all {totalCount}{" "}
-        {totalCount === 1 ? "article" : "articles"}
-      </p>
-    </div>
-  );
-}
-
-interface CategorySearchClientProps {
+interface CategorySearchProps {
   initialArticles: Article[];
   totalCount: number;
   hasMore: boolean;
@@ -118,14 +25,14 @@ interface CategorySearchClientProps {
   locale: string;
 }
 
-export default function CategorySearchClient({
+export default function CategorySearch({
   initialArticles,
   totalCount: initialTotalCount,
   hasMore: initialHasMore,
   category,
   searchParams,
   locale,
-}: CategorySearchClientProps) {
+}: CategorySearchProps) {
   const pathname = usePathname();
   const router = useRouter();
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
@@ -292,7 +199,10 @@ export default function CategorySearchClient({
         <EmptyState activeSearchQuery={activeSearchQuery} />
       ) : (
         <section>
-          <SearchResultsInfo totalCount={totalCount} activeSearchQuery={activeSearchQuery} />
+          <SearchResultsInfo
+            totalCount={totalCount}
+            activeSearchQuery={activeSearchQuery}
+          />
           <ArticlesGrid articles={articles} locale={locale} />
 
           {hasMore && !activeSearchQuery && (
@@ -305,5 +215,113 @@ export default function CategorySearchClient({
         </section>
       )}
     </>
+  );
+}
+
+// Subcomponents
+function CategoryHeader({ category }: { category: string }) {
+  const getCategoryDisplayName = (category: string) => {
+    return category === "all"
+      ? "All Articles"
+      : category.charAt(0).toUpperCase() + category.slice(1);
+  };
+
+  return (
+    <div className="mb-6">
+      <h1 className="text-3xl font-bold text-black mb-2">
+        {getCategoryDisplayName(category)}
+      </h1>
+      <div className="w-16 h-1 bg-blue-600 rounded"></div>
+    </div>
+  );
+}
+
+function EmptyState({ activeSearchQuery }: { activeSearchQuery: string }) {
+  return (
+    <section className="text-center py-12">
+      <p className="text-neutral-600 text-lg mb-4">
+        {activeSearchQuery
+          ? `No articles found for "${activeSearchQuery}"`
+          : "No articles found in this section."}
+      </p>
+      <p className="text-neutral-500">
+        {activeSearchQuery
+          ? "Try a different search term or clear the search."
+          : "Check back later for new content."}
+      </p>
+    </section>
+  );
+}
+
+function SearchResultsInfo({
+  totalCount,
+  activeSearchQuery,
+}: {
+  totalCount: number;
+  activeSearchQuery: string;
+}) {
+  if (!activeSearchQuery) return null;
+
+  return (
+    <div className="mb-6 text-sm text-neutral-600">
+      Showing {totalCount} {totalCount === 1 ? "result" : "results"} for{" "}
+      <span className="font-semibold text-black">"{activeSearchQuery}"</span>
+    </div>
+  );
+}
+
+function ArticlesGrid({
+  articles,
+  locale,
+}: {
+  articles: Article[];
+  locale: string;
+}) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+      {articles.map((article) => (
+        <ArticleCard key={article.id} article={article} locale={locale} />
+      ))}
+    </div>
+  );
+}
+
+function LoadMoreButton({
+  onClick,
+  isPending,
+}: {
+  onClick: () => void;
+  isPending: boolean;
+}) {
+  return (
+    <div className="flex justify-center mt-8">
+      <Button
+        type="button"
+        onClick={onClick}
+        disabled={isPending}
+        variant="outline"
+        className="px-8 py-2 border-neutral-300 text-black hover:bg-neutral-50 hover:border-black transition-colors bg-transparent"
+      >
+        Load More
+      </Button>
+    </div>
+  );
+}
+
+function LoadingState() {
+  return (
+    <div className="text-center py-12">
+      <p className="text-neutral-600">Searching...</p>
+    </div>
+  );
+}
+
+function ArticleCount({ totalCount }: { totalCount: number }) {
+  return (
+    <div className="text-center mt-8">
+      <p className="text-neutral-500 text-sm">
+        Showing all {totalCount} {totalCount === 1 ? "article" : "articles"}
+      </p>
+    </div>
   );
 }
