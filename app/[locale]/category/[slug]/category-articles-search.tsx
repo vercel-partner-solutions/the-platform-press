@@ -3,6 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, useEffect, useState, useTransition } from "react";
 import ArticleCard from "@/components/ui/article-card";
+import { Button } from "@/components/ui/button";
 import CategorySearchInput from "@/components/category/category-search-input";
 import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
 import type { Article } from "@/lib/types";
@@ -11,6 +12,7 @@ import { searchArticlesAction } from "../actions";
 interface CategoryArticlesSearchProps {
   initialArticles: Article[];
   totalCount: number;
+  hasMore: boolean;
   category: string;
   locale: string;
 }
@@ -18,6 +20,7 @@ interface CategoryArticlesSearchProps {
 export default function CategoryArticlesSearch({
   initialArticles,
   totalCount: initialTotalCount,
+  hasMore: initialHasMore,
   category,
   locale,
 }: CategoryArticlesSearchProps) {
@@ -28,6 +31,7 @@ export default function CategoryArticlesSearch({
 
   const [articles, setArticles] = useState<Article[]>(initialArticles);
   const [totalCount, setTotalCount] = useState(initialTotalCount);
+  const [hasMore, setHasMore] = useState(initialHasMore);
   const [searchQuery, setSearchQuery] = useState(q || "");
   const [activeSearchQuery, setActiveSearchQuery] = useState(q || "");
   const [isPending, startTransition] = useTransition();
@@ -54,9 +58,12 @@ export default function CategoryArticlesSearch({
         category: getFetchCategory(),
         sortBy: "datePublished",
         searchQuery: query,
+        limit: 10, // Fetch 10 to check if there are more
       });
-      setArticles(fetchedArticles);
-      setTotalCount(fetchedArticles.length);
+      const displayArticles = fetchedArticles.slice(0, 9); // Only show first 9
+      setArticles(displayArticles);
+      setTotalCount(displayArticles.length);
+      setHasMore(fetchedArticles.length === 10);
     });
   };
 
@@ -69,15 +76,34 @@ export default function CategoryArticlesSearch({
     setActiveSearchQuery("");
     setArticles(initialArticles);
     setTotalCount(initialTotalCount);
+    setHasMore(initialHasMore);
+  };
+
+  const loadMore = () => {
+    startTransition(async () => {
+      const nextArticles = await searchArticlesAction({
+        category: getFetchCategory(),
+        sortBy: "datePublished",
+        searchQuery: activeSearchQuery || undefined,
+        skip: articles.length,
+        limit: 9,
+      });
+
+      const updatedArticles = [...articles, ...nextArticles];
+      setArticles(updatedArticles);
+      setTotalCount(updatedArticles.length);
+      setHasMore(nextArticles.length === 9);
+    });
   };
 
   // Effect to update state when navigating between categories (server-provided props change)
   useEffect(() => {
     setArticles(initialArticles);
     setTotalCount(initialTotalCount);
+    setHasMore(initialHasMore);
     setSearchQuery(q || "");
     setActiveSearchQuery(q || "");
-  }, [initialArticles, initialTotalCount, q]);
+  }, [initialArticles, initialTotalCount, initialHasMore, q]);
 
   const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -115,6 +141,19 @@ export default function CategoryArticlesSearch({
               <ArticleCard key={article.id} article={article} locale={locale} />
             ))}
           </div>
+
+          {hasMore && (
+            <div className="flex justify-center mt-8">
+              <Button
+                type="button"
+                onClick={loadMore}
+                disabled={isPending}
+                variant="outline"
+              >
+                Load More
+              </Button>
+            </div>
+          )}
         </section>
       )}
     </>
@@ -169,6 +208,3 @@ function SearchResultsInfo({
     </div>
   );
 }
-
-
-

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCategories, getCategoryBySlug } from "@/lib/cms";
 import CategoryHeader from "@/components/category/category-header";
-import CategorySearchSkeleton from "@/components/category/category-search-skeleton";
+import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
 import CategoryArticles from "./category-articles";
 import {
   unstable_cacheTag as cacheTag,
@@ -107,7 +107,7 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <div className="flex-1 min-w-0">
       <CategoryHeader category={categoryName} />
-      <Suspense fallback={<CategorySearchSkeleton />}>
+      <Suspense fallback={<ArticlesGridSkeleton showSearchInput />}>
         <CategoryArticles category={category} locale={locale} />
       </Suspense>
     </div>

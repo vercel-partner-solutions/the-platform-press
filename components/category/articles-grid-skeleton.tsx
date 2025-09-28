@@ -1,9 +1,20 @@
-export default function ArticlesGridSkeleton() {
+interface ArticlesGridSkeletonProps {
+  showSearchInput?: boolean;
+}
+
+export default function ArticlesGridSkeleton({ showSearchInput }: ArticlesGridSkeletonProps) {
   return (
     <section>
-      {/* Search results info placeholder - matches SearchResultsInfo spacing */}
-      <div className="mb-6">
-        <div className="h-5 bg-neutral-200 rounded w-48 animate-pulse"></div>
+      {showSearchInput && (
+        /* Search Bar Loading */
+        <div className="mb-8">
+          <div className="h-12 bg-neutral-200 rounded-lg animate-pulse"></div>
+        </div>
+      )}
+
+      {/* Result count */}
+      <div className="mb-8">
+        <div className="h-5 bg-neutral-200 rounded-lg w-[200px] animate-pulse"></div>
       </div>
 
       {/* Articles grid skeleton */}

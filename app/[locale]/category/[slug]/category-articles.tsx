@@ -17,6 +17,8 @@ export default async function CategoryArticles({
 }: CategoryArticlesProps) {
   let articles: Article[] = [];
 
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
   if (!category) {
     // "all" case - no specific category
     articles = await getInitialArticles();
@@ -27,11 +29,14 @@ export default async function CategoryArticles({
 
   const categoryName = category ? category.title : "all";
 
+  const hasMore = articles.length === 10;
+  const initialArticles = articles.slice(0, 9); // Only show first 9
+
   return (
     <CategoryArticlesSearch
-      initialArticles={articles}
-      totalCount={articles.length}
-      hasMore={articles.length > 9}
+      initialArticles={initialArticles}
+      totalCount={initialArticles.length}
+      hasMore={hasMore}
       category={categoryName}
       locale={locale}
     />
@@ -45,7 +50,7 @@ async function getInitialArticles(category?: Category) {
   const articles = await getArticles({
     category: category?.slug,
     sortBy: "datePublished",
-    limit: 9,
+    limit: 10, // Fetch 10 to check if there are more
   });
 
   cacheTag(...articles.map((a) => a.id), "article-list", "articles");

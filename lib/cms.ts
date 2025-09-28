@@ -698,6 +698,7 @@ function reshapeToCategory(item: CMSCategory): Category {
 
 export async function getArticles({
   limit,
+  skip,
   category,
   categoryId,
   location,
@@ -709,6 +710,7 @@ export async function getArticles({
   searchQuery,
 }: {
   limit?: number;
+  skip?: number;
   category?: string;
   categoryId?: string;
   location?: string;
@@ -778,10 +780,10 @@ export async function getArticles({
     );
   }
 
-  if (limit) {
-    return articles.slice(0, limit);
-  }
-  return articles;
+  const startIndex = skip || 0;
+  const endIndex = limit ? startIndex + limit : undefined;
+
+  return articles.slice(startIndex, endIndex);
 }
 
 export async function getArticleBySlug(
