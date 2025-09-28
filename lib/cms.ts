@@ -1,5 +1,38 @@
 import type { Article, Category, CMSArticle, CMSCategory } from "./types";
 
+const placeholderCategories: Category[] = [
+  {
+    id: "1",
+    slug: "technology",
+    title: "Technology",
+  },
+  {
+    id: "2",
+    slug: "business",
+    title: "Business",
+  },
+  {
+    id: "3",
+    slug: "science",
+    title: "Science",
+  },
+  {
+    id: "4",
+    slug: "opinion",
+    title: "Opinion",
+  },
+  {
+    id: "5",
+    slug: "world",
+    title: "World",
+  },
+  {
+    id: "6",
+    slug: "local",
+    title: "Local",
+  },
+];
+
 const placeholderArticles: Article[] = [
   {
     id: "1",
@@ -613,6 +646,27 @@ The future of AI points towards even more integration into our daily lives. Adva
   },
 ];
 
+export const homepageConfig = {
+  sections: {
+    authoredSection: {
+      categoryId: "4", // Opinion
+      sectionTitle: "Opinions & Analysis",
+    },
+    firstCategorySection: {
+      categoryId: "1", // Technology
+      sectionTitle: "Technology",
+    },
+    secondCategorySection: {
+      categoryId: "2", // Business
+      sectionTitle: "Business",
+    },
+    continueReadingFallback: {
+      categoryId: "3", // Science
+      sectionTitle: "Science",
+    },
+  },
+};
+
 async function fetchContent<T = any>(
   query: string,
   variables: Record<string, any> = {}
@@ -622,29 +676,30 @@ async function fetchContent<T = any>(
   }
 
   if (query === "category") {
-    const categories = Array.from(
-      new Set(placeholderArticles.map((a) => a.category))
-    ).map((cat) => ({
-      slug: cat.toLowerCase(),
-      title: cat,
-    }));
-    return categories as T[];
+    return placeholderCategories as T[];
   }
 
   return [];
 }
 
 function reshapeToArticle(item: CMSArticle): Article {
-  return item;
+  return {
+    ...item,
+    lastUpdated: new Date().toLocaleString(),
+  };
 }
 
 function reshapeToCategory(item: CMSCategory): Category {
-  return item;
+  return {
+    ...item,
+    lastUpdated: new Date().toLocaleString(),
+  };
 }
 
 export async function getArticles({
   limit,
   category,
+  categoryId,
   location,
   sortBy,
   excludeIds,
@@ -655,6 +710,7 @@ export async function getArticles({
 }: {
   limit?: number;
   category?: string;
+  categoryId?: string;
   location?: string;
   sortBy?: "datePublished" | "views";
   excludeIds?: string[];
@@ -666,9 +722,19 @@ export async function getArticles({
   const cmsArticles = await fetchContent<CMSArticle>("article");
   let articles = cmsArticles.map(reshapeToArticle);
 
-  if (category) {
+  // Handle category filtering by ID or title
+  let categoryFilter: string | undefined = category;
+  if (categoryId && !category) {
+    const categoryObj = await getCategoryById(categoryId);
+    if (categoryObj) {
+      categoryFilter = categoryObj.title;
+    }
+  }
+
+  if (categoryFilter) {
     articles = articles.filter(
-      (article) => article.category.toLowerCase() === category.toLowerCase()
+      (article) =>
+        article.category.toLowerCase() === categoryFilter!.toLowerCase()
     );
   }
 
@@ -726,11 +792,23 @@ export async function getArticleBySlug(
   return articles.find((article) => article.slug === slug);
 }
 
-export async function getCategories(): Promise<string[]> {
+export async function getCategories(): Promise<Category[]> {
+  const cmsCategories = await fetchContent<CMSCategory>("category");
+  return cmsCategories.map(reshapeToCategory);
+}
+
+export async function getCategoryBySlug(
+  slug: string
+): Promise<Category | undefined> {
   const cmsCategories = await fetchContent<CMSCategory>("category");
   const categories = cmsCategories.map(reshapeToCategory);
-  return categories
-    .filter((cat) => cat.title !== "Local") // Exclude Local from main categories
-    .map((cat) => cat.title)
-    .sort();
+  return categories.find((category) => category.slug === slug);
+}
+
+export async function getCategoryById(
+  id: string
+): Promise<Category | undefined> {
+  const cmsCategories = await fetchContent<CMSCategory>("category");
+  const categories = cmsCategories.map(reshapeToCategory);
+  return categories.find((category) => category.id === id);
 }

@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState, startTransition } from "react";
-import { usePathname } from "next/navigation";
-import { toggleSubscription } from "@/app/actions/subscription";
-import { Button } from "./button";
 import { Loader2 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { startTransition, useActionState } from "react";
+import { toggleSubscription } from "@/app/actions/subscription";
 import { cn } from "@/lib/utils";
+import { Button } from "./button";
 
 interface SubscribeButtonProps {
   initialState: boolean;
@@ -26,7 +26,7 @@ export function SubscribeButton({
 
   const [isSubscribed, action, pending] = useActionState(
     () => toggleSubscription(pathname),
-    initialState
+    initialState,
   );
 
   return (
@@ -38,7 +38,7 @@ export function SubscribeButton({
         className,
         isSubscribed
           ? "hover:bg-gray-200 hover:text-black"
-          : "bg-blue-600 hover:bg-blue-700 text-white"
+          : "bg-blue-600 hover:bg-blue-700 text-white",
       )}
       disabled={pending}
     >

@@ -7,39 +7,68 @@ import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  "use cache: remote";
+  cacheLife("max");
 
-  const article = await getArticleBySlug((await params).slug);
+  const { slug } = await params;
+
+  const article = await getArticleBySlug(slug);
+
   if (!article) {
-    return {
-      title: "Article Not Found",
-    };
+    notFound();
   }
+
+  // revalidate if this article changes or via global tag
+  cacheTag(article.id, "articles");
+
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
   return {
-    title: article.title,
+    title: `${article.title} | The Platform Press`,
     description: article.excerpt,
     openGraph: {
-      title: article.title,
+      type: "article",
+      title: `${article.title} | The Platform Press`,
       description: article.excerpt,
+      siteName: "The Platform Press",
+      publishedTime: article.datePublished,
+      authors: [article.author],
+      section: article.category,
+      url: `${baseUrl}/articles/${article.slug}`,
       images: [
         {
-          url: article.imageUrl.startsWith("http")
-            ? article.imageUrl
-            : `https://yourdomain.com${article.imageUrl}`,
+          url: `/articles/${article.slug}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: article.title,
         },
       ],
     },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt,
+    },
   };
 }
+
+export const generateStaticParams = async () => {
+  return (await getArticles({ isFeatured: true })).map((a) => ({
+    slug: a.slug,
+  }));
+};
 
 export default async function ArticlePage({
   params,
@@ -48,6 +77,9 @@ export default async function ArticlePage({
   params: Promise<{ slug: string; locale: string }>;
   previewOnly?: boolean;
 }) {
+  "use cache: remote";
+  cacheLife("max");
+
   const { slug, locale } = await params;
 
   const article = await getArticleBySlug(slug);
@@ -56,6 +88,9 @@ export default async function ArticlePage({
     notFound();
   }
 
+  // revalidate if this article changes or via global tag
+  cacheTag(article.id, "articles");
+
   const date = new Date(article.datePublished);
   const dateTime = date.toLocaleDateString(locale, {
     year: "numeric",
@@ -63,7 +98,6 @@ export default async function ArticlePage({
     day: "numeric",
   });
 
-  // Parse the markdown content to HTML
   const parsedContent = await marked.parse(article.content);
 
   const relatedArticles = await getArticles({
@@ -73,16 +107,16 @@ export default async function ArticlePage({
   });
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <article className="bg-white py-6 sm:py-8">
-        <header className="mb-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article className="bg-white py-8 sm:py-12">
+        <header className="mb-10">
           <div className="mb-3">
             <CategoryBadge category={article.category} />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-black mb-3 leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6 leading-tight">
             {article.title}
           </h1>
-          <div className="flex flex-wrap items-center text-sm text-neutral-600 gap-x-4 gap-y-1.5">
+          <div className="flex flex-wrap items-center text-base text-neutral-600 gap-x-6 gap-y-2">
             <div className="flex items-center">
               <UserCircle size={16} className="mr-1.5 text-neutral-500" />
               <span>By {article.author}</span>
@@ -98,7 +132,7 @@ export default async function ArticlePage({
           </div>
         </header>
 
-        <div className="relative w-full aspect-[16/9] mb-6 rounded-lg overflow-hidden">
+        <div className="relative w-full aspect-[16/9] mb-12 rounded-lg overflow-hidden shadow-lg">
           <Image
             src={
               article.imageUrl ||
@@ -123,8 +157,8 @@ export default async function ArticlePage({
       </article>
 
       {relatedArticles.length > 0 && (
-        <section className="mt-10 pt-6">
-          <h2 className="text-2xl font-semibold text-black mb-4">
+        <section className="mt-16 pt-8 border-t border-neutral-200">
+          <h2 className="text-3xl font-semibold text-black mb-6">
             Related Articles
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">

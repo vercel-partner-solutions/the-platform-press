@@ -1,12 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 import { getArticles, getCategoryById } from "@/lib/cms";
-import CategoryArticleCard from "./category-article-card";
+import type { Article } from "@/lib/types";
 import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
 } from "next/cache";
 
-export default async function CategoryArticlesSection({
+export default async function AuthoredArticlesSection({
   categoryId,
   sectionTitle,
   isHomepage = false,
@@ -22,15 +23,15 @@ export default async function CategoryArticlesSection({
   if (!category) return null;
 
   const articles = await getArticles({
+    limit: 3,
     categoryId: categoryId,
-    limit: 4,
     sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
   });
 
   if (!articles || articles.length === 0) return null;
 
-  // revalidate if any of these articles change, a list of articles may change, or via global tag
+  // revalidate if any of these articles changes, a list of articles may change, or via global tag
   cacheTag(...articles.map((a) => a.id), "article-list", "articles");
 
   return (
@@ -49,11 +50,38 @@ export default async function CategoryArticlesSection({
           View all &rarr;
         </Link>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <CategoryArticleCard key={article.id} article={article} />
+          <AuthorArticleCard key={article.id} article={article} />
         ))}
       </div>
     </section>
+  );
+}
+
+function AuthorArticleCard({ article }: { article: Article }) {
+  return (
+    <article className="group bg-neutral-50 p-4 rounded-lg hover:bg-neutral-100 transition-colors">
+      <div className="flex items-start gap-3 mb-4">
+        <div>
+          <h4 className="text-sm font-semibold text-black">{article.author}</h4>
+          <p className="text-xs text-neutral-600">Contributor</p>
+        </div>
+      </div>
+      <Link href={`/articles/${article.slug}`}>
+        <h3 className="text-lg font-semibold text-black group-hover:underline mb-1 leading-tight line-clamp-3">
+          {article.title}
+        </h3>
+      </Link>
+      <p className="text-sm text-neutral-700 line-clamp-2 mb-3">
+        {article.excerpt}
+      </p>
+      <Link
+        href={`/articles/${article.slug}`}
+        className="text-sm text-black hover:underline font-medium"
+      >
+        Read full details &rarr;
+      </Link>
+    </article>
   );
 }

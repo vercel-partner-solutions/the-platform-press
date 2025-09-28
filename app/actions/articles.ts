@@ -34,7 +34,7 @@ export async function trackArticleView(slug: string): Promise<void> {
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 30,
         path: "/",
-      }
+      },
     );
   } catch (error) {
     console.error("Error tracking article view:", error);

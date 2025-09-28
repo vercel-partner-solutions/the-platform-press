@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import LatestArticleListItem from "./latest-article-list-item";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export default async function LatestArticlesSection({
   isHomepage = false,
@@ -9,13 +13,19 @@ export default async function LatestArticlesSection({
   isHomepage?: boolean;
   locale: string;
 }) {
+  "use cache: remote";
+  cacheLife("max");
+
   const articles = await getArticles({
     limit: 4,
     sortBy: "datePublished",
     ...(isHomepage && { excludeFeatured: true }),
   });
 
-  if (!articles || articles.length === 0) return null;
+  if (articles?.length === 0) return null;
+
+  // revalidate if any of these articles changes, a list of articles may change, or via global tag
+  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
 
   return (
     <section aria-labelledby="latest-news-heading">

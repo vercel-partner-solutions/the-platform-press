@@ -1,18 +1,18 @@
 import type { Stock } from "@/lib/types";
+import { unstable_cacheLife as cacheLife } from "next/cache";
 
 async function getStocks(): Promise<Stock[]> {
   try {
-    // In a server component, we need to use the full URL
     const baseUrl = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
       : "http://localhost:3000";
 
-    const res = await fetch(`${baseUrl}/api/stocks`, {
-      cache: "no-store",
-    });
+    const res = await fetch(`${baseUrl}/api/stocks`);
 
     if (!res.ok) return [];
+
     const data = await res.json();
+
     return Array.isArray(data?.stocks) ? data.stocks : [];
   } catch {
     return [];
@@ -20,6 +20,9 @@ async function getStocks(): Promise<Stock[]> {
 }
 
 export async function StockTicker() {
+  "use cache: remote";
+  cacheLife("hours");
+
   const stocks = await getStocks();
 
   // Total duration of animation
@@ -27,32 +30,36 @@ export async function StockTicker() {
   const totalDuration = 20;
 
   return (
-    <div className="relative text-sm font-medium text-neutral-700 text-center">
-      <div className="relative h-16 flex items-center justify-center overflow-hidden">
-        {stocks.map((stock, index) => (
-          <div
-            key={stock.symbol}
-            className="cycling-item absolute inset-0 flex items-center justify-center font-light text-foreground opacity-0 will-change-opacity"
-            style={{
-              animationDelay: `${index * (totalDuration / stocks.length)}s`,
-              animationFillMode: "both",
-            }}
-          >
-            <div className="flex items-center gap-3">
-              <span className="font-medium text-foreground">
-                {stock.symbol}
-              </span>
-              <span
-                className={`text-sm font-medium ${
-                  stock.isPositive ? "text-green-600" : "text-red-600"
-                }`}
+    <div className="hidden md:block text-right justify-self-end">
+      <div className="w-32 text-right">
+        <div className="relative text-sm font-medium text-neutral-700 text-center">
+          <div className="relative h-16 flex items-center justify-center overflow-hidden">
+            {stocks.map((stock, index) => (
+              <div
+                key={stock.symbol}
+                className="cycling-item absolute inset-0 flex items-center justify-center font-light text-foreground opacity-0 will-change-opacity"
+                style={{
+                  animationDelay: `${index * (totalDuration / stocks.length)}s`,
+                  animationFillMode: "both",
+                }}
               >
-                {stock.isPositive ? "+" : ""}
-                {stock.change.toFixed(4)}
-              </span>
-            </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-medium text-foreground">
+                    {stock.symbol}
+                  </span>
+                  <span
+                    className={`text-sm font-medium ${
+                      stock.isPositive ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {stock.isPositive ? "+" : ""}
+                    {stock.change.toFixed(4)}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

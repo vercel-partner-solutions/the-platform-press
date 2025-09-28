@@ -1,18 +1,18 @@
 import { Suspense } from "react";
-import ContinueReadingSkeleton from "./continue-reading-skeleton";
 import ContinueReadingSection from "./continue-reading-section";
+import ContinueReadingSkeleton from "./continue-reading-skeleton";
 
 export default function ContinueReading({
   locale,
-  fallbackCategory = "Science",
+  fallbackCategoryId,
 }: {
   locale: string;
-  fallbackCategory?: string;
+  fallbackCategoryId: string;
 }) {
   return (
     <Suspense fallback={<ContinueReadingSkeleton />}>
       <ContinueReadingSection
-        fallbackCategory={fallbackCategory}
+        fallbackCategoryId={fallbackCategoryId}
         locale={locale}
       />
     </Suspense>

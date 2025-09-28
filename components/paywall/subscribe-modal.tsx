@@ -1,7 +1,11 @@
 "use client";
 
+import { Loader2, Mail, Shield, Star, Zap } from "lucide-react";
+import Form from "next/form";
+import { usePathname } from "next/navigation";
 import type React from "react";
-
+import { useFormStatus } from "react-dom";
+import { subscribeUser } from "@/app/actions/subscription";
 import {
   Dialog,
   DialogContent,
@@ -15,12 +19,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/use-mobile";
-import { Loader2, Mail, Shield, Star, Zap } from "lucide-react";
-import Form from "next/form";
-import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
-import { subscribeUser } from "@/app/actions/subscription";
-import { usePathname } from "next/navigation";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
