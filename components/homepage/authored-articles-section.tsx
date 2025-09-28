@@ -2,7 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { getArticles, getCategoryById } from "@/lib/cms";
 import type { Article } from "@/lib/types";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export default async function AuthoredArticlesSection({
   categoryId,
@@ -14,6 +17,7 @@ export default async function AuthoredArticlesSection({
   isHomepage?: boolean;
 }) {
   "use cache: remote";
+  cacheLife("max");
 
   const category = await getCategoryById(categoryId);
   if (!category) return null;

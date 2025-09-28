@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getLocation } from "@/lib/geo/server";
 import { getWeather, renderWeatherIcon } from "@/lib/weather";
+import { unstable_cacheLife as cacheLife } from "next/cache";
 
 export async function Today({ locale }: { locale: string }) {
   return (
@@ -43,7 +44,8 @@ async function DateDisplay({ locale }: { locale: string }) {
 }
 
 async function getFormattedDate(locale: string, timezone?: string) {
-  "use cache";
+  "use cache: remote";
+  cacheLife("hours");
 
   const options: Intl.DateTimeFormatOptions = {
     weekday: "short",

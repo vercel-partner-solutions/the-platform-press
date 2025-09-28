@@ -3,10 +3,14 @@ import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export default async function HeroSection() {
   "use cache: remote";
+  cacheLife("max");
 
   const featuredArticles = await getArticles({
     isFeatured: true,

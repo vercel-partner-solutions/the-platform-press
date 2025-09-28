@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getArticles, getCategories, getCategoryBySlug } from "@/lib/cms";
 import CategorySearchClient from "./category-search-client";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 import { Category } from "@/lib/types";
 
 type Props = {
@@ -18,6 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   "use cache: remote";
+  cacheLife("max");
 
   const { slug } = await params;
 
@@ -94,7 +98,8 @@ export default async function CategorySearchPage({
 }
 
 async function getInitialArticles(category: Category) {
-  "use cache";
+  "use cache: remote";
+  cacheLife("max");
 
   const articles = await getArticles({
     category: category.slug,
