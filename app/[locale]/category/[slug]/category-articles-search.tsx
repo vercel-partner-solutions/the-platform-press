@@ -14,7 +14,7 @@ interface CategoryArticlesSearchProps {
   totalCount: number;
   hasMore: boolean;
   locale: string;
-  category?: Category;
+  category: Category;
 }
 
 export default function CategoryArticlesSearch({
@@ -49,7 +49,7 @@ export default function CategoryArticlesSearch({
 
     startTransition(async () => {
       const fetchedArticles = await searchArticlesAction({
-        category: category?.slug,
+        categoryId: category.id,
         sortBy: "datePublished",
         searchQuery: query,
         limit: 10,
@@ -76,7 +76,7 @@ export default function CategoryArticlesSearch({
   const loadMore = () => {
     startTransition(async () => {
       const nextArticles = await searchArticlesAction({
-        category: category?.slug,
+        categoryId: category.id,
         sortBy: "datePublished",
         searchQuery: activeSearchQuery || undefined,
         skip: articles.length,
@@ -176,7 +176,7 @@ function SearchResultsInfo({
 }: {
   totalCount: number;
   activeSearchQuery: string;
-  category?: Category;
+  category: Category;
 }) {
   if (activeSearchQuery) {
     return (
@@ -187,12 +187,10 @@ function SearchResultsInfo({
     );
   }
 
-  const categoryDisplayName = category ? category.title : "All Categories";
-
   return (
     <div className="mb-6 text-sm text-neutral-600">
       Showing {totalCount} {totalCount === 1 ? "article" : "articles"} in{" "}
-      <span className="font-semibold text-black">{categoryDisplayName}</span>
+      <span className="font-semibold text-black">{category.title}</span>
     </div>
   );
 }

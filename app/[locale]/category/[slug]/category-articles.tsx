@@ -3,28 +3,22 @@ import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
 } from "next/cache";
-import type { Article, Category } from "@/lib/types";
+import type { Category } from "@/lib/types";
 import CategoryArticlesSearch from "./category-articles-search";
 
 interface CategoryArticlesProps {
   locale: string;
-  category?: Category;
+  category: Category;
 }
 
 export default async function CategoryArticles({
   category,
   locale,
 }: CategoryArticlesProps) {
-  let articles: Article[] = [];
-
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  if (!category) {
-    articles = await getInitialArticles();
-  } else {
-    cacheTag(category.id);
-    articles = await getInitialArticles(category);
-  }
+  cacheTag(category.id);
+  const articles = await getInitialArticles(category);
 
   const hasMore = articles.length === 10;
   const initialArticles = articles.slice(0, 9);
@@ -40,12 +34,12 @@ export default async function CategoryArticles({
   );
 }
 
-async function getInitialArticles(category?: Category) {
+async function getInitialArticles(category: Category) {
   "use cache: remote";
   cacheLife("max");
 
   const articles = await getArticles({
-    category: category?.slug,
+    categoryId: category.id,
     sortBy: "datePublished",
     limit: 10,
   });

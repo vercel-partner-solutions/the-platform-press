@@ -101,7 +101,7 @@ export default async function ArticlePage({
   const parsedContent = await marked.parse(article.content);
 
   const relatedArticles = await getArticles({
-    category: article.category,
+    categoryId: article.categoryId,
     excludeIds: [article.id],
     limit: 2,
   });

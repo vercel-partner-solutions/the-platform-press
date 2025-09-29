@@ -88,25 +88,17 @@ export default async function CategoryPage({ params }: Props) {
 
   const { slug, locale } = await params;
 
-  let category;
-  let categoryName: string;
+  const category = await getCategoryBySlug(slug);
 
-  if (slug === "all") {
-    categoryName = "all";
-  } else {
-    category = await getCategoryBySlug(slug);
-
-    if (!category) {
-      notFound();
-    }
-
-    cacheTag(category.id);
-    categoryName = category.title;
+  if (!category) {
+    notFound();
   }
+
+  cacheTag(category.id);
 
   return (
     <div className="flex-1 min-w-0">
-      <CategoryHeader category={categoryName} />
+      <CategoryHeader category={category} />
       <Suspense fallback={<ArticlesGridSkeleton showSearchInput />}>
         <CategoryArticles category={category} locale={locale} />
       </Suspense>

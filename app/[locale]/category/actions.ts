@@ -8,7 +8,7 @@ import {
 } from "next/cache";
 
 interface SearchArticlesParams {
-  category?: string;
+  categoryId?: string;
   sortBy?: "datePublished" | "views";
   searchQuery?: string;
   skip?: number;
@@ -22,7 +22,7 @@ export async function searchArticlesAction(
   cacheLife("max");
   cacheTag("article-list");
   return getArticles({
-    category: params.category,
+    categoryId: params.categoryId,
     sortBy: params.sortBy,
     searchQuery: params.searchQuery,
     skip: params.skip,
