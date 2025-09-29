@@ -17,8 +17,6 @@ export default async function CategoryArticles({
 }: CategoryArticlesProps) {
   let articles: Article[] = [];
 
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
   if (!category) {
     // "all" case - no specific category
     articles = await getInitialArticles();
