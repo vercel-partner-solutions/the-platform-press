@@ -15,8 +15,6 @@ export default async function CategoryArticles({
   category,
   locale,
 }: CategoryArticlesProps) {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
   cacheTag(category.id);
   const articles = await getInitialArticles(category);
 
