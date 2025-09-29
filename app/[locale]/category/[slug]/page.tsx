@@ -24,28 +24,16 @@ export async function generateMetadata({
 
   const { slug } = await params;
 
-  let title: string;
-  let description: string;
-  let cacheTagId: string | undefined;
-
-  if (slug === "all") {
-    title = "All Articles | The Platform Press";
-    description =
-      "Browse all articles from The Platform Press across all categories.";
-  } else {
-    const category = await getCategoryBySlug(slug);
-    if (!category) {
-      notFound();
-    }
-    title = `${category.title} | The Platform Press`;
-    description = `Stay updated with the latest ${category.title} news from The Platform Press.`;
-    cacheTagId = category.id;
+  const category = await getCategoryBySlug(slug);
+  if (!category) {
+    notFound();
   }
+
+  const title = `${category.title} | The Platform Press`;
+  const description = `Stay updated with the latest ${category.title} news from The Platform Press.`;
 
   // revalidate if this category changes or via global tag
-  if (cacheTagId) {
-    cacheTag(cacheTagId, "categories");
-  }
+  cacheTag(category.id, "categories");
 
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -79,7 +67,7 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const categories = await getCategories();
-  return [{ slug: "all" }, ...categories.map((c) => ({ slug: c.slug }))];
+  return categories.map((c) => ({ slug: c.slug }));
 }
 
 export default async function CategoryPage({ params }: Props) {
