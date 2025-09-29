@@ -11,17 +11,14 @@ export default async function Footer() {
   return (
     <footer className="bg-neutral-50 py-12 border-t border-neutral-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex justify-center space-x-16">
-          <div className="max-w-[300px]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+          <div className="lg:col-span-2">
             <h3 className="text-lg font-bold text-black mb-4 font-heading">
               The Platform Press
             </h3>
             <p className="text-sm text-neutral-600 mb-4">
               Your source for the latest news, analysis, and insights from
               around the world.
-            </p>
-            <p className="text-xs text-neutral-500">
-              Crafted with care for a well-informed world.
             </p>
           </div>
           <FooterCategories />
@@ -50,12 +47,12 @@ async function FooterCategories() {
   return (
     <div>
       <h4 className="text-md font-semibold text-black mb-4">Categories</h4>
-      <nav className="space-y-2">
+      <nav className="flex flex-wrap gap-x-4 gap-y-2">
         {categories.map((category) => (
           <Link
             key={category.slug}
             href={`/category/${category.slug.toLowerCase()}`}
-            className="block text-sm text-neutral-600 hover:text-accent transition-colors"
+            className="text-sm text-neutral-600 hover:text-accent transition-colors"
           >
             {category.title}
           </Link>
