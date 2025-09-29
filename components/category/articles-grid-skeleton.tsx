@@ -2,22 +2,19 @@ interface ArticlesGridSkeletonProps {
   showSearchInput?: boolean;
 }
 
-export default function ArticlesGridSkeleton({ showSearchInput }: ArticlesGridSkeletonProps) {
+export default function ArticlesGridSkeleton({
+  showSearchInput,
+}: ArticlesGridSkeletonProps) {
   return (
     <section>
       {showSearchInput && (
-        /* Search Bar Loading */
         <div className="mb-8">
           <div className="h-12 bg-neutral-200 rounded-lg animate-pulse"></div>
         </div>
       )}
-
-      {/* Result count */}
       <div className="mb-8">
         <div className="h-5 bg-neutral-200 rounded-lg w-[200px] animate-pulse"></div>
       </div>
-
-      {/* Articles grid skeleton */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         {Array.from({ length: 9 }).map((_, i) => (
           <div key={i} className="animate-pulse">

@@ -5,12 +5,13 @@ interface CategorySidebarProps {
   currentCategory: string;
 }
 
-export default function CategorySidebar({ categories, currentCategory }: CategorySidebarProps) {
-
+export default function CategorySidebar({
+  categories,
+  currentCategory,
+}: CategorySidebarProps) {
   return (
     <aside className="lg:w-64 flex-shrink-0">
       <div className="bg-neutral-50 rounded-lg p-6 sticky top-24">
-        {/* Categories Section */}
         <div className="mb-6">
           <div className="mb-4">
             <h3 className="font-bold text-black text-base">Categories</h3>

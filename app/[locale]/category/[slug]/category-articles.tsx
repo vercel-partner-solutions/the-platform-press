@@ -20,7 +20,6 @@ export default async function CategoryArticles({
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
   if (!category) {
-    // "all" case - no specific category
     articles = await getInitialArticles();
   } else {
     cacheTag(category.id);
@@ -28,7 +27,7 @@ export default async function CategoryArticles({
   }
 
   const hasMore = articles.length === 10;
-  const initialArticles = articles.slice(0, 9); // Only show first 9
+  const initialArticles = articles.slice(0, 9);
 
   return (
     <CategoryArticlesSearch
@@ -48,7 +47,7 @@ async function getInitialArticles(category?: Category) {
   const articles = await getArticles({
     category: category?.slug,
     sortBy: "datePublished",
-    limit: 10, // Fetch 10 to check if there are more
+    limit: 10,
   });
 
   cacheTag(...articles.map((a) => a.id), "article-list", "articles");

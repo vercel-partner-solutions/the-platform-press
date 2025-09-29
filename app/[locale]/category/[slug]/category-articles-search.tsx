@@ -52,9 +52,9 @@ export default function CategoryArticlesSearch({
         category: category?.slug,
         sortBy: "datePublished",
         searchQuery: query,
-        limit: 10, // Fetch 10 to check if there are more
+        limit: 10,
       });
-      const displayArticles = fetchedArticles.slice(0, 9); // Only show first 9
+      const displayArticles = fetchedArticles.slice(0, 9);
       setArticles(displayArticles);
       setTotalCount(displayArticles.length);
       setHasMore(fetchedArticles.length === 10);
@@ -90,15 +90,6 @@ export default function CategoryArticlesSearch({
     });
   };
 
-  // Effect to update state when navigating between categories (server-provided props change)
-  useEffect(() => {
-    setArticles(initialArticles);
-    setTotalCount(initialTotalCount);
-    setHasMore(initialHasMore);
-    setSearchQuery(q || "");
-    setActiveSearchQuery(q || "");
-  }, [initialArticles, initialTotalCount, initialHasMore, q]);
-
   const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchQuery.length > 0) {
@@ -108,8 +99,16 @@ export default function CategoryArticlesSearch({
     }
   };
 
+  useEffect(() => {
+    setArticles(initialArticles);
+    setTotalCount(initialTotalCount);
+    setHasMore(initialHasMore);
+    setSearchQuery(q || "");
+    setActiveSearchQuery(q || "");
+  }, [initialArticles, initialTotalCount, initialHasMore, q]);
+
   return (
-    <>
+    <div>
       <CategorySearchInput
         value={searchQuery}
         onChange={setSearchQuery}
@@ -149,7 +148,7 @@ export default function CategoryArticlesSearch({
           )}
         </section>
       )}
-    </>
+    </div>
   );
 }
 
