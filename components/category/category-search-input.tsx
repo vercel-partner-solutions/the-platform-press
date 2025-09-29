@@ -16,7 +16,7 @@ export default function CategorySearchInput({
   onChange,
   onSubmit,
   onClear,
-  isPending
+  isPending,
 }: CategorySearchInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const wasPending = useRef(false);
@@ -33,6 +33,7 @@ export default function CategorySearchInput({
     }
     wasPending.current = isPending;
   }, [isPending]);
+
   return (
     <form onSubmit={onSubmit} className="relative mb-8">
       <label htmlFor="search" className="sr-only">
