@@ -7,7 +7,10 @@ import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export async function generateMetadata({
   params,
@@ -15,6 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   "use cache: remote";
+  cacheLife("max");
 
   const { slug } = await params;
 
@@ -74,6 +78,7 @@ export default async function ArticlePage({
   previewOnly?: boolean;
 }) {
   "use cache: remote";
+  cacheLife("max");
 
   const { slug, locale } = await params;
 
@@ -93,11 +98,10 @@ export default async function ArticlePage({
     day: "numeric",
   });
 
-  // Parse the markdown content to HTML
   const parsedContent = await marked.parse(article.content);
 
   const relatedArticles = await getArticles({
-    category: article.category,
+    categoryId: article.categoryId,
     excludeIds: [article.id],
     limit: 2,
   });

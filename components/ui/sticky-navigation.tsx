@@ -3,7 +3,10 @@ import { Subscribe } from "./subscribe";
 import Link from "next/link";
 import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export async function StickyNavigation({ locale }: { locale: string }) {
   const t = await getDictionary(locale);
@@ -42,6 +45,7 @@ export async function StickyNavigation({ locale }: { locale: string }) {
 
 async function Categories() {
   "use cache: remote";
+  cacheLife("max");
 
   const categories = await getCategories();
 

@@ -40,6 +40,7 @@ export default async function Footer() {
 
 async function FooterCategories() {
   "use cache: remote";
+  cacheLife("max");
 
   const categories = await getCategories();
 

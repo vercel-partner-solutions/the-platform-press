@@ -2,16 +2,30 @@
 
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 
 interface SearchArticlesParams {
-  category?: string;
+  categoryId?: string;
   sortBy?: "datePublished" | "views";
   searchQuery?: string;
+  skip?: number;
+  limit?: number;
 }
 
 export async function searchArticlesAction(
-  params: SearchArticlesParams,
+  params: SearchArticlesParams
 ): Promise<Article[]> {
-  // The getArticles function from lib/cms is now safely called on the server
-  return getArticles(params);
+  "use cache";
+  cacheLife("max");
+  cacheTag("article-list");
+  return getArticles({
+    categoryId: params.categoryId,
+    sortBy: params.sortBy,
+    searchQuery: params.searchQuery,
+    skip: params.skip,
+    limit: params.limit,
+  });
 }

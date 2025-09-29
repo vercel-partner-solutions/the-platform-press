@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export default async function BreakingNewsBanner() {
   "use cache: remote";
+  cacheLife("max");
 
   const breakingArticles = await getArticles({
     isBreaking: true,
