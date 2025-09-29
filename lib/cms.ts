@@ -2,6 +2,11 @@ import type { Article, Category, CMSArticle, CMSCategory } from "./types";
 
 const placeholderCategories: Category[] = [
   {
+    id: "0",
+    slug: "all",
+    title: "All News",
+  },
+  {
     id: "1",
     slug: "technology",
     title: "Technology",
@@ -58,7 +63,7 @@ Despite its potential, AI development and deployment come with challenges. Bias 
 
 The future of AI points towards even more integration into our daily lives. Advances in general AI, quantum computing, and neuromorphic chips could unlock capabilities we can only imagine today. Ensuring responsible innovation will be key to harnessing AI's full potential for the betterment of humanity.`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Dr. Eva Core",
     datePublished: "2025-06-26T10:00:00Z",
     readingTime: 7,
@@ -74,7 +79,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Exploring the potential of quantum networks to revolutionize secure communication.",
     content: `The quantum internet promises a new era of communication...`, // Content truncated for brevity
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Dr. Anya Sharma",
     datePublished: "2025-06-25T14:00:00Z",
     readingTime: 6,
@@ -88,7 +93,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "A deep dive into identifying and mitigating bias in AI to ensure fairness and equity.",
     content: `As AI systems become more integrated...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Prof. Ben Carter",
     datePublished: "2025-06-24T11:00:00Z",
     readingTime: 7,
@@ -102,7 +107,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Experts weigh in on the key economic trends, challenges, and opportunities for the coming year.",
     content: `The global economy in 2025 is poised at a crossroads...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "Marcus Finch",
     datePublished: "2025-06-23T14:30:00Z",
     readingTime: 5,
@@ -116,7 +121,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Smart rings, neural interfaces, and advanced biosensors are pushing the boundaries of wearable technology.",
     content: `Wearable technology is evolving far beyond simple fitness trackers...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Dr. Lena Hanson",
     datePublished: "2025-06-22T09:00:00Z",
     readingTime: 5,
@@ -130,7 +135,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "A look at the latest missions and technological advancements pushing the boundaries of human presence in space.",
     content: `Humanity is entering a new golden age of space exploration...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Science",
+    categoryId: "3",
     author: "Dr. Aris Thorne",
     datePublished: "2025-06-21T09:15:00Z",
     readingTime: 6,
@@ -144,7 +149,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Why forcing employees back to the office, even part-time, misses the point of true flexibility.",
     content: `The debate around remote versus office work rages on...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Opinion",
+    categoryId: "4",
     author: "Alex Chen, Workplace Strategist",
     datePublished: "2025-06-20T11:00:00Z",
     readingTime: 4,
@@ -158,7 +163,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Exploring innovative approaches to create greener, more resilient urban environments.",
     content: `As the world's population becomes increasingly urbanized...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "World",
+    categoryId: "5",
     author: "Kenji Tanaka",
     datePublished: "2025-06-19T16:45:00Z", // Made slightly older
     readingTime: 6,
@@ -172,7 +177,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Strategies for securing investment and managing cash flow in a challenging economic climate for tech.",
     content: `Navigating the 'Funding Winter' can be challenging...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology", // This is still Tech, might be excluded by Tech section
+    categoryId: "1", // This is still Tech, might be excluded by Tech section
     author: "Sarah Lee",
     datePublished: "2025-06-18T10:00:00Z", // Made older
     readingTime: 5,
@@ -186,7 +191,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "A critical look at how algorithms and echo chambers might be eroding constructive public discourse.",
     content: `Social media promised to connect the world...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Opinion",
+    categoryId: "4",
     author: "Dr. Ben Carter, Sociologist",
     datePublished: "2025-06-17T15:00:00Z", // Made older
     readingTime: 5,
@@ -201,7 +206,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "A new technique could pave the way for more reliable and powerful quantum computers.",
     content: `Researchers have made a significant breakthrough...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Science",
+    categoryId: "3",
     author: "Maria Gonzalez",
     datePublished: "2025-06-16T12:00:00Z", // Made older
     readingTime: 6,
@@ -215,7 +220,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Practical steps for businesses to adopt responsible AI practices and build trust.",
     content: `Implementing an ethical AI framework is crucial...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "David Miller",
     datePublished: "2025-06-15T09:00:00Z", // Made older
     readingTime: 5,
@@ -229,7 +234,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Latest expedition uncovers bizarre and fascinating creatures from the ocean's deepest point.",
     content: `The latest expedition to the Mariana Trench...`, // Content truncated
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Science",
+    categoryId: "3",
     author: "Oceanus Research Team",
     datePublished: "2025-06-14T08:00:00Z", // Made older
     readingTime: 4,
@@ -245,7 +250,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Examining the technical hurdles and cybersecurity concerns as 5G networks expand globally.",
     content: `The global rollout of 5G networks represents one of the most significant technological infrastructure projects of our time...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Dr. Rachel Kim",
     datePublished: "2025-06-25T16:00:00Z",
     readingTime: 6,
@@ -259,7 +264,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "From supply chain management to digital identity, blockchain technology is finding practical uses beyond digital currency.",
     content: `While cryptocurrency grabbed headlines, blockchain's true potential lies in its diverse applications...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Marcus Chen",
     datePublished: "2025-06-24T13:30:00Z",
     readingTime: 7,
@@ -273,7 +278,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "As digital transformation accelerates, cybersecurity professionals face evolving threats and must adapt their strategies.",
     content: `The cybersecurity landscape in 2025 is more complex than ever before...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Sarah Martinez",
     datePublished: "2025-06-23T10:15:00Z",
     readingTime: 8,
@@ -287,7 +292,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "How edge computing is reducing latency and improving performance for IoT devices and real-time applications.",
     content: `Edge computing is transforming how we process and analyze data...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Dr. James Liu",
     datePublished: "2025-06-22T14:45:00Z",
     readingTime: 6,
@@ -301,7 +306,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Companies are increasingly using VR for training, collaboration, and customer experiences beyond gaming.",
     content: `Virtual reality technology has matured beyond entertainment applications...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Emma Thompson",
     datePublished: "2025-06-21T11:20:00Z",
     readingTime: 5,
@@ -317,7 +322,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Solving climate change requires systemic thinking beyond Silicon Valley's typical approach to innovation.",
     content: `The climate crisis demands urgent action, but our current approach to climate technology funding is fundamentally flawed...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Opinion",
+    categoryId: "4",
     author: "Dr. Maria Santos, Climate Policy Expert",
     datePublished: "2025-06-24T09:00:00Z",
     readingTime: 6,
@@ -332,7 +337,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "The current model of trading privacy for convenience is unsustainable and fundamentally unfair.",
     content: `In our increasingly digital world, privacy has become a luxury good...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Opinion",
+    categoryId: "4",
     author: "Alex Rivera, Digital Rights Advocate",
     datePublished: "2025-06-23T15:30:00Z",
     readingTime: 5,
@@ -347,7 +352,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Remote learning has exposed how technology access determines educational outcomes more than ever before.",
     content: `The pandemic forced education online, revealing a harsh truth about digital inequality...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Opinion",
+    categoryId: "4",
     author: "Prof. Jennifer Walsh, Education Policy",
     datePublished: "2025-06-22T12:00:00Z",
     readingTime: 7,
@@ -361,7 +366,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Traditional employment protections don't fit the modern gig economy, leaving millions of workers vulnerable.",
     content: `The rise of the gig economy has fundamentally changed how we work...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Opinion",
+    categoryId: "4",
     author: "Robert Kim, Labor Economics",
     datePublished: "2025-06-21T16:45:00Z",
     readingTime: 6,
@@ -376,7 +381,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "The pandemic showed us what cities could be like with less traffic. We shouldn't go back to the old ways.",
     content: `The COVID-19 pandemic gave us an unexpected glimpse into what our cities could become...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Opinion",
+    categoryId: "4",
     author: "Dr. Lisa Chen, Urban Planning",
     datePublished: "2025-06-20T13:15:00Z",
     readingTime: 5,
@@ -393,7 +398,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "A new immunotherapy approach is showing unprecedented results in treating previously incurable cancers.",
     content: `Medical researchers have announced breakthrough results from a revolutionary cancer treatment...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Science",
+    categoryId: "3",
     author: "Dr. Michael Foster",
     datePublished: "2025-06-25T08:00:00Z",
     readingTime: 8,
@@ -407,7 +412,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "New propulsion system could cut travel time to Mars in half, making human missions more feasible.",
     content: `NASA scientists have developed a revolutionary propulsion system...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Science",
+    categoryId: "3",
     author: "Dr. Amanda Rodriguez",
     datePublished: "2025-06-24T12:30:00Z",
     readingTime: 6,
@@ -422,7 +427,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "For the first time in history, renewable sources account for half of all electricity generated worldwide.",
     content: `A historic milestone has been reached in the global transition to clean energy...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "World",
+    categoryId: "5",
     author: "Elena Petrov",
     datePublished: "2025-06-23T14:00:00Z",
     readingTime: 5,
@@ -436,7 +441,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Federal court orders major technology company to split into separate entities, marking biggest antitrust action in decades.",
     content: `In a landmark decision that could reshape the technology industry...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "Jonathan Hayes",
     datePublished: "2025-06-22T16:00:00Z",
     readingTime: 7,
@@ -450,7 +455,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "As AI capabilities rapidly advance, experts debate whether we're prepared for the implications of AGI.",
     content: `The prospect of Artificial General Intelligence (AGI) is no longer science fiction...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Technology",
+    categoryId: "1",
     author: "Dr. Priya Patel",
     datePublished: "2025-06-21T10:30:00Z",
     readingTime: 9,
@@ -466,7 +471,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Companies are rethinking their supply chain strategies to withstand future disruptions and uncertainties.",
     content: `The global supply chain disruptions of recent years have forced businesses to fundamentally rethink their approach...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "Patricia Wong",
     datePublished: "2025-06-25T11:00:00Z",
     readingTime: 6,
@@ -481,7 +486,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "New research shows that sustainable business practices deliver measurable financial returns alongside environmental benefits.",
     content: `Sustainability is no longer just about doing good for the planet—it's about doing well for business...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "Dr. Michael Chen",
     datePublished: "2025-06-24T15:45:00Z",
     readingTime: 7,
@@ -496,7 +501,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Traditional banks face unprecedented competition as fintech companies offer innovative, customer-centric solutions.",
     content: `The financial services industry is undergoing its most significant transformation in decades...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "Rachel Thompson",
     datePublished: "2025-06-23T09:30:00Z",
     readingTime: 6,
@@ -511,7 +516,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Companies are developing new ways to measure productivity and engagement in remote and hybrid work environments.",
     content: `As remote work becomes permanent for many organizations, traditional productivity metrics are proving inadequate...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "James Rodriguez",
     datePublished: "2025-06-22T13:15:00Z",
     readingTime: 5,
@@ -525,7 +530,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Environmental, Social, and Governance factors are becoming central to investment decisions and corporate planning.",
     content: `ESG investing has moved from niche to mainstream, fundamentally changing how companies approach strategy...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "Sarah Kim",
     datePublished: "2025-06-21T14:20:00Z",
     readingTime: 8,
@@ -540,7 +545,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Small businesses are leveraging affordable digital tools to compete with larger enterprises in unprecedented ways.",
     content: `The digital divide between small businesses and large enterprises is rapidly closing...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "Maria Gonzalez",
     datePublished: "2025-06-20T10:45:00Z",
     readingTime: 6,
@@ -554,7 +559,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Major corporations are exploring cryptocurrency for treasury management, employee payments, and customer rewards.",
     content: `Corporate adoption of cryptocurrency is expanding beyond simple payment processing...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Business",
+    categoryId: "2",
     author: "David Park",
     datePublished: "2025-06-19T12:00:00Z",
     readingTime: 7,
@@ -568,7 +573,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "City officials announce the start of a $50 million downtown development project aimed at boosting local economy.",
     content: `The long-awaited downtown revitalization project officially begins construction this month...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Local",
+    categoryId: "6",
     author: "Jennifer Martinez",
     datePublished: "2025-06-26T14:00:00Z",
     readingTime: 4,
@@ -582,7 +587,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Local school board unanimously approves $15 million budget increase focused on digital learning infrastructure.",
     content: `The school district has approved its largest budget increase in over a decade...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Local",
+    categoryId: "6",
     author: "Michael Chen",
     datePublished: "2025-06-25T16:30:00Z",
     readingTime: 5,
@@ -596,7 +601,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Transit authority announces expansion of public transportation to improve access for residents in outer districts.",
     content: `The metropolitan transit authority has announced plans for three new bus routes...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Local",
+    categoryId: "6",
     author: "Sarah Williams",
     datePublished: "2025-06-24T11:15:00Z",
     readingTime: 3,
@@ -610,7 +615,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "The $2.5 million park renovation project features new playgrounds, walking trails, and community gardens.",
     content: `After eight months of construction, the Central Park renovation has been completed...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Local",
+    categoryId: "6",
     author: "David Thompson",
     datePublished: "2025-06-23T09:45:00Z",
     readingTime: 4,
@@ -624,7 +629,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "GreenTech Solutions secures major funding round to expand their sustainable energy platform nationwide.",
     content: `A local technology startup focused on sustainable energy solutions has successfully raised...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Local",
+    categoryId: "6",
     author: "Lisa Rodriguez",
     datePublished: "2025-06-22T13:20:00Z",
     readingTime: 5,
@@ -638,7 +643,7 @@ The future of AI points towards even more integration into our daily lives. Adva
       "Popular farmers market program grows to serve more neighborhoods with fresh, local produce and artisan goods.",
     content: `The city's successful farmers market program is expanding to three additional locations...`,
     imageUrl: "/placeholder.svg?width=800&height=450",
-    category: "Local",
+    categoryId: "6",
     author: "Robert Kim",
     datePublished: "2025-06-21T10:00:00Z",
     readingTime: 3,
@@ -683,8 +688,10 @@ async function fetchContent<T = any>(
 }
 
 function reshapeToArticle(item: CMSArticle): Article {
+  const category = placeholderCategories.find((c) => c.id === item.categoryId);
   return {
     ...item,
+    category: category?.title,
     lastUpdated: new Date().toLocaleString(),
   };
 }
@@ -698,7 +705,7 @@ function reshapeToCategory(item: CMSCategory): Category {
 
 export async function getArticles({
   limit,
-  category,
+  skip,
   categoryId,
   location,
   sortBy,
@@ -709,7 +716,7 @@ export async function getArticles({
   searchQuery,
 }: {
   limit?: number;
-  category?: string;
+  skip?: number;
   categoryId?: string;
   location?: string;
   sortBy?: "datePublished" | "views";
@@ -722,20 +729,9 @@ export async function getArticles({
   const cmsArticles = await fetchContent<CMSArticle>("article");
   let articles = cmsArticles.map(reshapeToArticle);
 
-  // Handle category filtering by ID or title
-  let categoryFilter: string | undefined = category;
-  if (categoryId && !category) {
-    const categoryObj = await getCategoryById(categoryId);
-    if (categoryObj) {
-      categoryFilter = categoryObj.title;
-    }
-  }
-
-  if (categoryFilter) {
-    articles = articles.filter(
-      (article) =>
-        article.category.toLowerCase() === categoryFilter!.toLowerCase()
-    );
+  // Skip filtering if category is the "all" category (shows all articles)
+  if (categoryId && categoryId !== "0") {
+    articles = articles.filter((article) => article.categoryId === categoryId);
   }
 
   if (location) {
@@ -778,10 +774,10 @@ export async function getArticles({
     );
   }
 
-  if (limit) {
-    return articles.slice(0, limit);
-  }
-  return articles;
+  const startIndex = skip || 0;
+  const endIndex = limit ? startIndex + limit : undefined;
+
+  return articles.slice(startIndex, endIndex);
 }
 
 export async function getArticleBySlug(

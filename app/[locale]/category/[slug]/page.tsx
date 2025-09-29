@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getArticles, getCategories, getCategoryBySlug } from "@/lib/cms";
-import CategorySearchClient from "./category-search-client";
+import { getCategories, getCategoryBySlug } from "@/lib/cms";
+import CategoryHeader from "@/components/category/category-header";
+import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
+import CategoryArticles from "./category-articles";
 import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
 } from "next/cache";
-import { Category } from "@/lib/types";
+import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
-  searchParams: Promise<{
-    q?: string;
-  }>;
 };
 
 export async function generateMetadata({
@@ -30,15 +29,15 @@ export async function generateMetadata({
     notFound();
   }
 
+  const title = `${category.title} | The Platform Press`;
+  const description = `Stay updated with the latest ${category.title} news from The Platform Press.`;
+
   // revalidate if this category changes or via global tag
   cacheTag(category.id, "categories");
 
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
-
-  const description = `Stay updated with the latest ${category.title} news from The Platform Press.`;
-  const title = `${category.title} | The Platform Press`;
 
   return {
     title,
@@ -71,43 +70,26 @@ export async function generateStaticParams() {
   return categories.map((c) => ({ slug: c.slug }));
 }
 
-export default async function CategorySearchPage({
-  params,
-  searchParams,
-}: Props) {
+export default async function CategoryPage({ params }: Props) {
+  "use cache: remote";
+  cacheLife("max");
+
   const { slug, locale } = await params;
-  const { q } = await searchParams;
 
   const category = await getCategoryBySlug(slug);
+
   if (!category) {
     notFound();
   }
 
-  const articles = await getInitialArticles(category);
+  cacheTag(category.id);
 
   return (
-    <CategorySearchClient
-      initialArticles={articles}
-      totalCount={articles.length}
-      hasMore={articles.length > 9}
-      category={category.title}
-      searchParams={q ? { q } : {}}
-      locale={locale}
-    />
+    <div className="flex-1 min-w-0">
+      <CategoryHeader category={category} />
+      <Suspense fallback={<ArticlesGridSkeleton showSearchInput />}>
+        <CategoryArticles category={category} locale={locale} />
+      </Suspense>
+    </div>
   );
-}
-
-async function getInitialArticles(category: Category) {
-  "use cache: remote";
-  cacheLife("max");
-
-  const articles = await getArticles({
-    category: category.slug,
-    sortBy: "datePublished",
-    limit: 9,
-  });
-
-  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
-
-  return articles;
 }
