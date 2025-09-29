@@ -3,12 +3,12 @@ import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
 } from "next/cache";
-import { Article, Category } from "@/lib/types";
+import type { Article, Category } from "@/lib/types";
 import CategoryArticlesSearch from "./category-articles-search";
 
 interface CategoryArticlesProps {
-  category?: Category;
   locale: string;
+  category?: Category;
 }
 
 export default async function CategoryArticles({
@@ -27,8 +27,6 @@ export default async function CategoryArticles({
     articles = await getInitialArticles(category);
   }
 
-  const categoryName = category ? category.title : "all";
-
   const hasMore = articles.length === 10;
   const initialArticles = articles.slice(0, 9); // Only show first 9
 
@@ -37,7 +35,7 @@ export default async function CategoryArticles({
       initialArticles={initialArticles}
       totalCount={initialArticles.length}
       hasMore={hasMore}
-      category={categoryName}
+      category={category}
       locale={locale}
     />
   );

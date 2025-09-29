@@ -6,15 +6,15 @@ import ArticleCard from "@/components/ui/article-card";
 import { Button } from "@/components/ui/button";
 import CategorySearchInput from "@/components/category/category-search-input";
 import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
-import type { Article } from "@/lib/types";
+import type { Article, Category } from "@/lib/types";
 import { searchArticlesAction } from "../actions";
 
 interface CategoryArticlesSearchProps {
   initialArticles: Article[];
   totalCount: number;
   hasMore: boolean;
-  category: string;
   locale: string;
+  category?: Category;
 }
 
 export default function CategoryArticlesSearch({
@@ -36,12 +36,6 @@ export default function CategoryArticlesSearch({
   const [activeSearchQuery, setActiveSearchQuery] = useState(q || "");
   const [isPending, startTransition] = useTransition();
 
-  const getFetchCategory = () => {
-    return category === "all"
-      ? undefined
-      : category.charAt(0).toUpperCase() + category.slice(1);
-  };
-
   const triggerSearch = (query: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (query) {
@@ -55,7 +49,7 @@ export default function CategoryArticlesSearch({
 
     startTransition(async () => {
       const fetchedArticles = await searchArticlesAction({
-        category: getFetchCategory(),
+        category: category?.slug,
         sortBy: "datePublished",
         searchQuery: query,
         limit: 10, // Fetch 10 to check if there are more
@@ -82,7 +76,7 @@ export default function CategoryArticlesSearch({
   const loadMore = () => {
     startTransition(async () => {
       const nextArticles = await searchArticlesAction({
-        category: getFetchCategory(),
+        category: category?.slug,
         sortBy: "datePublished",
         searchQuery: activeSearchQuery || undefined,
         skip: articles.length,
@@ -113,7 +107,6 @@ export default function CategoryArticlesSearch({
       clearSearch();
     }
   };
-
 
   return (
     <>
@@ -184,7 +177,7 @@ function SearchResultsInfo({
 }: {
   totalCount: number;
   activeSearchQuery: string;
-  category: string;
+  category?: Category;
 }) {
   if (activeSearchQuery) {
     return (
@@ -195,11 +188,7 @@ function SearchResultsInfo({
     );
   }
 
-  // Show category article count when no search is active
-  const categoryDisplayName =
-    category === "all"
-      ? "All Categories"
-      : category.charAt(0).toUpperCase() + category.slice(1);
+  const categoryDisplayName = category ? category.title : "All Categories";
 
   return (
     <div className="mb-6 text-sm text-neutral-600">
