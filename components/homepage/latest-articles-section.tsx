@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import LatestArticleListItem from "./latest-article-list-item";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export default async function LatestArticlesSection({
   isHomepage = false,
@@ -11,6 +14,7 @@ export default async function LatestArticlesSection({
   locale: string;
 }) {
   "use cache: remote";
+  cacheLife("max");
 
   const articles = await getArticles({
     limit: 4,

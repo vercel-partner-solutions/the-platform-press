@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { getArticles, getCategoryById } from "@/lib/cms";
 import CategoryArticleCard from "./category-article-card";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export default async function CategoryArticlesSection({
   categoryId,
@@ -13,6 +16,7 @@ export default async function CategoryArticlesSection({
   isHomepage?: boolean;
 }) {
   "use cache: remote";
+  cacheLife("max");
 
   const category = await getCategoryById(categoryId);
   if (!category) return null;
@@ -30,10 +34,7 @@ export default async function CategoryArticlesSection({
   cacheTag(...articles.map((a) => a.id), "article-list", "articles");
 
   return (
-    <section
-      aria-labelledby={`${category.slug}-heading`}
-      className="mb-10"
-    >
+    <section aria-labelledby={`${category.slug}-heading`} className="mb-10">
       <div className="flex items-baseline justify-between border-b-2 border-black pb-2 mb-6">
         <h2
           id={`${category.slug}-heading`}

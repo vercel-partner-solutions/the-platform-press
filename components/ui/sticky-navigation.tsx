@@ -3,7 +3,10 @@ import { Subscribe } from "./subscribe";
 import Link from "next/link";
 import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export async function StickyNavigation({ locale }: { locale: string }) {
   const t = await getDictionary(locale);
@@ -20,7 +23,7 @@ export async function StickyNavigation({ locale }: { locale: string }) {
             </Link>
           </div>
 
-          <div className="justify-self-center">
+          <div className="justify-self-center relative z-10">
             <Categories />
           </div>
 
@@ -42,6 +45,7 @@ export async function StickyNavigation({ locale }: { locale: string }) {
 
 async function Categories() {
   "use cache: remote";
+  cacheLife("max");
 
   const categories = await getCategories();
 
@@ -53,7 +57,7 @@ async function Categories() {
       {categories.map((category) => (
         <Link
           key={category.slug}
-          href={`/category/${category.slug.toLowerCase()}`}
+          href={`/category/${category.slug}`}
           className="text-sm font-medium text-black hover:underline whitespace-nowrap"
         >
           {category.title}

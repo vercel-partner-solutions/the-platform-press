@@ -1,9 +1,13 @@
 import { getCategories } from "@/lib/cms";
 import CategoryNavigation from "./category-navigation";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
 
 export default async function CategorySidebar() {
   "use cache: remote";
+  cacheLife("max");
 
   const categories = await getCategories();
 

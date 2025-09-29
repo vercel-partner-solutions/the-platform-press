@@ -1,7 +1,6 @@
 "use client";
 
 import { Category } from "@/lib/types";
-import { Clock, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -23,40 +22,24 @@ export default function CategoryNavigation({
             <h3 className="font-bold text-black text-base">Categories</h3>
           </div>
           <nav className="space-y-2">
-            <Link
-              href="/category/all"
-              className={`block px-3 py-2 text-sm rounded-md transition-colors group ${
-                currentCategory === "all"
-                  ? "bg-blue-500 text-white"
-                  : "text-neutral-700 hover:text-black hover:bg-white"
-              }`}
-            >
-              <span
-                className={
-                  currentCategory === "all" ? "" : "group-hover:underline"
-                }
-              >
-                All
-              </span>
-            </Link>
-            {categories.map((cat) => (
+            {categories.map((category) => (
               <Link
-                key={cat.slug}
-                href={`/category/${cat.title.toLowerCase()}`}
+                key={category.slug}
+                href={`/category/${category.slug}`}
                 className={`block px-3 py-2 text-sm rounded-md transition-colors group ${
-                  cat.slug.toLowerCase() === currentCategory.toLowerCase()
+                  category.slug === currentCategory
                     ? "bg-blue-500 text-white"
-                    : "text-neutral-700 hover:text-black hover:bg-white"
+                    : "text-neutral-700 hover:text-black hover:bg-gray-200"
                 }`}
               >
                 <span
                   className={
-                    cat.slug.toLowerCase() === currentCategory.toLowerCase()
+                    category.slug === currentCategory
                       ? ""
                       : "group-hover:underline"
                   }
                 >
-                  {cat.title}
+                  {category.title}
                 </span>
               </Link>
             ))}

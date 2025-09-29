@@ -1,6 +1,9 @@
 import type { Article, Category } from "../types";
 import type { Document } from "@contentful/rich-text-types";
 
+// Special category ID for "ALL" category - shows all articles when selected
+const ALL_CATEGORY_ID = "6135cHC0KiZsW2dMOEuMHL";
+
 // Contentful-specific types
 interface ContentfulSys {
   id: string;
@@ -68,7 +71,6 @@ interface CategoryCollection {
     items: ContentfulCategory[];
   };
 }
-
 
 const GET_ARTICLES_QUERY = `
   query GetArticles($limit: Int, $skip: Int, $where: ArticleFilter, $preview: Boolean, $order: [ArticleOrder]) {
@@ -366,6 +368,7 @@ function reshapeToArticle(item: ContentfulArticle): Article {
     content: richTextDocument,
     imageUrl:
       item.featuredImage?.url || "/placeholder.svg?width=800&height=450",
+    categoryId: item.category?.sys?.id || "",
     category: item.category?.title || "Uncategorized",
     author: item.author?.name || "Unknown Author",
     datePublished:
@@ -408,7 +411,7 @@ export const homepageConfig = {
 
 export async function getArticles({
   limit,
-  category,
+  skip,
   categoryId,
   sortBy,
   excludeIds,
@@ -418,7 +421,7 @@ export async function getArticles({
   searchQuery,
 }: {
   limit?: number;
-  category?: string;
+  skip?: number;
   categoryId?: string;
   sortBy?: "datePublished" | "views";
   excludeIds?: string[];
@@ -438,11 +441,8 @@ export async function getArticles({
       where.isBreakingNews = isBreaking;
     }
 
-    if (category) {
-      where.category = { title: category };
-    }
-
-    if (categoryId) {
+    // Skip filtering if category is the "all" category (shows all articles)
+    if (categoryId && categoryId !== ALL_CATEGORY_ID) {
       where.category = { sys: { id: categoryId } };
     }
 
@@ -466,7 +466,7 @@ export async function getArticles({
 
     const response = await fetchContent<ArticleCollection>(GET_ARTICLES_QUERY, {
       limit: limit || 10,
-      skip: 0,
+      skip: skip || 0,
       where: Object.keys(where).length > 0 ? where : undefined,
       order,
       preview: false,

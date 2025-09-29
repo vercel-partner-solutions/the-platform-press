@@ -1,12 +1,20 @@
-export default function CategorySearchLoading() {
-  return (
-    <div className="space-y-6">
-      {/* Search Bar Loading */}
-      <div className="mb-8">
-        <div className="h-12 bg-neutral-200 rounded-lg animate-pulse"></div>
-      </div>
+interface ArticlesGridSkeletonProps {
+  showSearchInput?: boolean;
+}
 
-      {/* Articles Grid Loading */}
+export default function ArticlesGridSkeleton({
+  showSearchInput,
+}: ArticlesGridSkeletonProps) {
+  return (
+    <section>
+      {showSearchInput && (
+        <div className="mb-8">
+          <div className="h-12 bg-neutral-200 rounded-lg animate-pulse"></div>
+        </div>
+      )}
+      <div className="mb-8">
+        <div className="h-5 bg-neutral-200 rounded-lg w-[200px] animate-pulse"></div>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         {Array.from({ length: 9 }).map((_, i) => (
           <div key={i} className="animate-pulse">
@@ -24,6 +32,6 @@ export default function CategorySearchLoading() {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

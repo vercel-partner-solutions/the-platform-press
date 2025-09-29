@@ -40,6 +40,7 @@ export default async function Footer() {
 
 async function FooterCategories() {
   "use cache: remote";
+  cacheLife("max");
 
   const categories = await getCategories();
 
@@ -53,7 +54,7 @@ async function FooterCategories() {
         {categories.map((category) => (
           <Link
             key={category.slug}
-            href={`/category/${category.slug.toLowerCase()}`}
+            href={`/category/${category.slug}`}
             className="block text-sm text-neutral-600 hover:text-accent transition-colors"
           >
             {category.title}
