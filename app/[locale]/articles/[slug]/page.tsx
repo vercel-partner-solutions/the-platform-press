@@ -28,8 +28,8 @@ export async function generateMetadata({
     notFound();
   }
 
-  // revalidate if this article changes or via global tag
-  cacheTag(article.id, "articles");
+  // revalidate if this article changes, its category changes, or via global tag
+  cacheTag(article.id, article.categoryId, "articles");
 
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -88,8 +88,8 @@ export default async function ArticlePage({
     notFound();
   }
 
-  // revalidate if this article changes or via global tag
-  cacheTag(article.id, "articles");
+  // revalidate if this article changes, its category changes, or via global tag
+  cacheTag(article.id, article.categoryId, "articles");
 
   const date = new Date(article.datePublished);
   const dateTime = date.toLocaleDateString(locale, {

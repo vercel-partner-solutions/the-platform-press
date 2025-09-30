@@ -30,8 +30,13 @@ export default async function CategoryArticlesSection({
 
   if (!articles || articles.length === 0) return null;
 
-  // revalidate if any of these articles change, a list of articles may change, or via global tag
-  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
+  // revalidate if any of these articles change, their categories change, a list of articles may change, or global tag
+  cacheTag(
+    ...articles.map((a) => a.id),
+    ...articles.map((a) => a.categoryId),
+    "article-list",
+    "articles"
+  );
 
   return (
     <section aria-labelledby={`${category.slug}-heading`} className="mb-10">

@@ -42,7 +42,13 @@ async function getInitialArticles(category: Category) {
     limit: 10,
   });
 
-  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
+  // revalidate if any articles change, their categories change, article lists may change, or via global tag
+  cacheTag(
+    ...articles.map((a) => a.id),
+    ...articles.map((a) => a.categoryId),
+    "article-list",
+    "articles"
+  );
 
   return articles;
 }
