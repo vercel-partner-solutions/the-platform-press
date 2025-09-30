@@ -120,12 +120,22 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 0 0% 0%; /* Pure black for focus rings */
     --radius: 0.5rem;
   }
 
   body {
     @apply bg-white text-black;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible,
+  [role="button"]:focus-visible {
+    @apply outline-none ring-2 ring-black ring-offset-2;
   }
 
   .prose {
