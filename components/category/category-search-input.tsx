@@ -43,7 +43,7 @@ export default function CategorySearchInput({
         ref={inputRef}
         id="search"
         name="q"
-        className="peer block w-full rounded-md border border-neutral-200 py-3 pl-10 pr-10 text-base outline-2 placeholder:text-neutral-500 focus:border-accent focus:ring-1 focus:ring-accent"
+        className="peer block w-full rounded-md border border-neutral-200 py-3 pl-10 pr-10 text-base placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
         placeholder="Search within this category"
         value={value}
         onChange={(e) => onChange(e.target.value)}
