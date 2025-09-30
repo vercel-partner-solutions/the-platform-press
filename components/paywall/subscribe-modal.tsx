@@ -1,7 +1,8 @@
 "use client";
 
-import { Loader2, Mail, Shield, Star, Zap } from "lucide-react";
+import { ArrowLeft, Loader2, Mail, Shield, Star, Zap } from "lucide-react";
 import Form from "next/form";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
 import { useFormStatus } from "react-dom";
@@ -83,10 +84,14 @@ function SubscribeContent({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       {children}
-      <div className="text-center mt-4">
-        <p className="text-xs text-gray-500">
-          Free for 7 days, then $9.99/month. Cancel anytime.
-        </p>
+      <div className="mt-4">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <ArrowLeft className="w-3 h-3" />
+          Back to The Platform Press
+        </Link>
       </div>
     </div>
   );

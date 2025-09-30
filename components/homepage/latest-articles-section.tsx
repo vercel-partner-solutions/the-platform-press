@@ -24,8 +24,13 @@ export default async function LatestArticlesSection({
 
   if (articles?.length === 0) return null;
 
-  // revalidate if any of these articles changes, a list of articles may change, or via global tag
-  cacheTag(...articles.map((a) => a.id), "article-list", "articles");
+  // revalidate if any of these articles changes, their categories change, a list of articles may change, or via global tag
+  cacheTag(
+    ...articles.map((a) => a.id),
+    ...articles.map((a) => a.categoryId),
+    "article-list",
+    "articles"
+  );
 
   return (
     <section aria-labelledby="latest-news-heading">
