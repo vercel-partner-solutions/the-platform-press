@@ -1,8 +1,8 @@
-import { getArticles } from "@/lib/cms";
 import {
-  unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
 } from "next/cache";
+import { getArticles } from "@/lib/cms";
 import type { Category } from "@/lib/types";
 import CategoryArticlesSearch from "./category-articles-search";
 
@@ -49,7 +49,7 @@ async function getInitialArticles(category: Category, searchQuery?: string) {
     ...articles.map((a) => a.id),
     ...articles.map((a) => a.categoryId),
     "article-list",
-    "articles"
+    "articles",
   );
 
   return articles;

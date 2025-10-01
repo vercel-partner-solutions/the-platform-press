@@ -1,10 +1,10 @@
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
-import {
-  unstable_cacheTag as cacheTag,
-  unstable_cacheLife as cacheLife,
-} from "next/cache";
 
 export default async function PopularArticlesSection({
   isHomepage = false,
@@ -29,7 +29,7 @@ export default async function PopularArticlesSection({
     ...articles.map((a) => a.id),
     ...articles.map((a) => a.categoryId),
     "article-list",
-    "articles"
+    "articles",
   );
 
   return (

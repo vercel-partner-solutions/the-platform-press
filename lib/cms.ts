@@ -674,7 +674,7 @@ export const homepageConfig = {
 
 async function fetchContent<T = any>(
   query: string,
-  variables: Record<string, any> = {}
+  variables: Record<string, any> = {},
 ): Promise<T[]> {
   if (query === "article") {
     return placeholderArticles as T[];
@@ -736,7 +736,7 @@ export async function getArticles({
 
   if (location) {
     articles = articles.filter(
-      (article) => (article as any).location === location
+      (article) => (article as any).location === location,
     );
   }
 
@@ -746,7 +746,7 @@ export async function getArticles({
       (article) =>
         article.title.toLowerCase().includes(lowerQuery) ||
         article.excerpt.toLowerCase().includes(lowerQuery) ||
-        article.author.toLowerCase().includes(lowerQuery)
+        article.author.toLowerCase().includes(lowerQuery),
     );
   }
 
@@ -770,7 +770,7 @@ export async function getArticles({
     articles.sort(
       (a, b) =>
         new Date(b.datePublished).getTime() -
-        new Date(a.datePublished).getTime()
+        new Date(a.datePublished).getTime(),
     );
   }
 
@@ -781,7 +781,7 @@ export async function getArticles({
 }
 
 export async function getArticleBySlug(
-  slug: string
+  slug: string,
 ): Promise<Article | undefined> {
   const cmsArticles = await fetchContent<CMSArticle>("article");
   const articles = cmsArticles.map(reshapeToArticle);
@@ -794,7 +794,7 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getCategoryBySlug(
-  slug: string
+  slug: string,
 ): Promise<Category | undefined> {
   const cmsCategories = await fetchContent<CMSCategory>("category");
   const categories = cmsCategories.map(reshapeToCategory);
@@ -802,7 +802,7 @@ export async function getCategoryBySlug(
 }
 
 export async function getCategoryById(
-  id: string
+  id: string,
 ): Promise<Category | undefined> {
   const cmsCategories = await fetchContent<CMSCategory>("category");
   const categories = cmsCategories.map(reshapeToCategory);

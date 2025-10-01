@@ -32,7 +32,7 @@ export default async function Image({
         year: "numeric",
         month: "long",
         day: "numeric",
-      }
+      },
     );
     articleInfo.push(formattedDate);
   }

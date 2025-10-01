@@ -1,11 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getDictionary } from "@/dictionaries";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
 import { Today } from "../layout/today";
 import { SearchBox } from "./search-box";
 import { Subscribe } from "./subscribe";
-import { Suspense } from "react";
 
 export const DesktopHeader = async ({ locale }: { locale: string }) => {
   const t = await getDictionary(locale);

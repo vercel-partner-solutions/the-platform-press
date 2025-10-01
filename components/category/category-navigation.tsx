@@ -1,8 +1,8 @@
 "use client";
 
-import { Category } from "@/lib/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { Category } from "@/lib/types";
 
 interface CategorySidebarProps {
   categories: Category[];

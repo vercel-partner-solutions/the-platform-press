@@ -1,10 +1,10 @@
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Link from "next/link";
 import { getArticles, getCategoryById } from "@/lib/cms";
 import CategoryArticleCard from "./category-article-card";
-import {
-  unstable_cacheTag as cacheTag,
-  unstable_cacheLife as cacheLife,
-} from "next/cache";
 
 export default async function CategoryArticlesSection({
   categoryId,
@@ -35,7 +35,7 @@ export default async function CategoryArticlesSection({
     ...articles.map((a) => a.id),
     ...articles.map((a) => a.categoryId),
     "article-list",
-    "articles"
+    "articles",
   );
 
   return (

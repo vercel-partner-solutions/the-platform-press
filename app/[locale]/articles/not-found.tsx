@@ -4,7 +4,9 @@ export default function NotFound() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Article Not Found</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          Article Not Found
+        </h1>
         <p className="text-lg text-gray-600 mb-8">
           The article you're looking for doesn't exist or may have been moved.
         </p>

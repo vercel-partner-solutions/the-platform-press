@@ -1,5 +1,10 @@
 import { Menu, Search } from "lucide-react";
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,11 +18,6 @@ import {
 import { getCategories } from "@/lib/cms";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { Subscribe } from "./subscribe";
-import {
-  unstable_cacheTag as cacheTag,
-  unstable_cacheLife as cacheLife,
-} from "next/cache";
-import { Suspense } from "react";
 
 export async function MobileHeader({ locale }: { locale: string }) {
   return (

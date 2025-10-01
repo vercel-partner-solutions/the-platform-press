@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getCategories, getCategoryBySlug } from "@/lib/cms";
-import CategoryHeader from "@/components/category/category-header";
-import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
-import CategoryArticles from "./category-articles";
 import {
-  unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
 } from "next/cache";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
+import CategoryHeader from "@/components/category/category-header";
+import { getCategories, getCategoryBySlug } from "@/lib/cms";
+import CategoryArticles from "./category-articles";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;

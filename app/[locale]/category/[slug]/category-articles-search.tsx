@@ -2,10 +2,10 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, useEffect, useState, useTransition } from "react";
+import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
+import CategorySearchInput from "@/components/category/category-search-input";
 import ArticleCard from "@/components/ui/article-card";
 import { Button } from "@/components/ui/button";
-import CategorySearchInput from "@/components/category/category-search-input";
-import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
 import type { Article, Category } from "@/lib/types";
 import { searchArticlesAction } from "../actions";
 

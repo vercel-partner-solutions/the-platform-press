@@ -7,14 +7,16 @@ import { i18n } from "./i18n.config";
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
-  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
+  request.headers.forEach((value, key) => {
+    negotiatorHeaders[key] = value;
+  });
 
   // @ts-expect-error locales are readonly
   const locales: string[] = i18n.locales;
 
   // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
-    locales,
+    locales
   );
 
   const locale = matchLocale(languages, locales, i18n.defaultLocale);
@@ -24,7 +26,7 @@ function getLocale(request: NextRequest): string | undefined {
 
 function handleArticlePaywall(
   request: NextRequest,
-  pathname: string,
+  pathname: string
 ): NextResponse | null {
   // Check if the path contains /articles/ pattern (but not paywall routes)
   const articlesMatch = pathname.match(/\/articles\/([^/]+)(?!\/paywall)$/);
@@ -58,8 +60,7 @@ export function middleware(request: NextRequest) {
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
-    (locale) =>
-      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
   // Redirect if there is no locale
@@ -71,8 +72,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
-        request.url,
-      ),
+        request.url
+      )
     );
   }
 

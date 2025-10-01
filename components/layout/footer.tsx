@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { getCategories } from "@/lib/cms";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import { cacheLife } from "next/dist/server/use-cache/cache-life";
+import Link from "next/link";
+import { getCategories } from "@/lib/cms";
 
 export default async function Footer() {
   "use cache: remote";
