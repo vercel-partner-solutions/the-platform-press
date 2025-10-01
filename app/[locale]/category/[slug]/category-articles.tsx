@@ -9,14 +9,15 @@ import CategoryArticlesSearch from "./category-articles-search";
 interface CategoryArticlesProps {
   locale: string;
   category: Category;
+  searchParams: Promise<{ q?: string }>;
 }
 
 export default async function CategoryArticles({
   category,
   locale,
+  searchParams,
 }: CategoryArticlesProps) {
-  cacheTag(category.id);
-  const articles = await getInitialArticles(category);
+  const articles = await getInitialArticles(category, (await searchParams).q);
 
   const hasMore = articles.length === 10;
   const initialArticles = articles.slice(0, 9);
@@ -32,7 +33,7 @@ export default async function CategoryArticles({
   );
 }
 
-async function getInitialArticles(category: Category) {
+async function getInitialArticles(category: Category, searchQuery?: string) {
   "use cache: remote";
   cacheLife("max");
 
@@ -40,6 +41,7 @@ async function getInitialArticles(category: Category) {
     categoryId: category.id,
     sortBy: "datePublished",
     limit: 10,
+    searchQuery,
   });
 
   // revalidate if any articles change, their categories change, article lists may change, or via global tag

@@ -12,6 +12,7 @@ import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
+  searchParams: Promise<{ q: string | undefined }>;
 };
 
 export async function generateMetadata({
@@ -66,11 +67,37 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
+  "use cache: remote";
+  cacheLife("max");
+  cacheTag("categories");
+
   const categories = await getCategories();
+
   return categories.map((c) => ({ slug: c.slug }));
 }
 
-export default async function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
+  const { category, locale } = await getCategoryParams({ params });
+
+  return (
+    <div className="flex-1 min-w-0">
+      <CategoryHeader category={category} />
+      <Suspense fallback={<ArticlesGridSkeleton showSearchInput />}>
+        <CategoryArticles
+          category={category}
+          locale={locale}
+          searchParams={searchParams}
+        />
+      </Suspense>
+    </div>
+  );
+}
+
+async function getCategoryParams({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}) {
   "use cache: remote";
   cacheLife("max");
 
@@ -82,14 +109,7 @@ export default async function CategoryPage({ params }: Props) {
     notFound();
   }
 
-  cacheTag(category.id);
+  cacheTag(category.id, "categories");
 
-  return (
-    <div className="flex-1 min-w-0">
-      <CategoryHeader category={category} />
-      <Suspense fallback={<ArticlesGridSkeleton showSearchInput />}>
-        <CategoryArticles category={category} locale={locale} />
-      </Suspense>
-    </div>
-  );
+  return { category, locale };
 }
