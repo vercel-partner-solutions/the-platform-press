@@ -4,7 +4,7 @@ import {
   unstable_cacheLife as cacheLife,
 } from "next/cache";
 import type { Category } from "@/lib/types";
-import CategoryArticlesSearch from "./category-articles-search";
+import CategoryArticlesList from "@/components/category/category-articles-list";
 
 interface CategoryArticlesProps {
   locale: string;
@@ -17,23 +17,24 @@ export default async function CategoryArticles({
   locale,
   searchParams,
 }: CategoryArticlesProps) {
-  const articles = await getInitialArticles(category, (await searchParams).q);
+  const { q: searchQuery } = await searchParams;
+  const articles = await searchArticles(category, searchQuery);
 
   const hasMore = articles.length === 10;
   const initialArticles = articles.slice(0, 9);
 
   return (
-    <CategoryArticlesSearch
-      initialArticles={initialArticles}
-      totalCount={initialArticles.length}
+    <CategoryArticlesList
+      articles={initialArticles}
       hasMore={hasMore}
       category={category}
       locale={locale}
+      searchQuery={searchQuery}
     />
   );
 }
 
-async function getInitialArticles(category: Category, searchQuery?: string) {
+async function searchArticles(category: Category, searchQuery?: string) {
   "use cache: remote";
   cacheLife("max");
 

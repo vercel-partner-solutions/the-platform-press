@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCategories, getCategoryBySlug } from "@/lib/cms";
-import CategoryHeader from "@/components/category/category-header";
-import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
-import CategoryArticles from "./category-articles";
 import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
 } from "next/cache";
 import { Suspense } from "react";
+import CategoryArticles from "@/components/category/category-articles";
+import CategorySearchForm from "@/components/category/category-search-form";
+import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
@@ -77,18 +77,46 @@ export async function generateStaticParams() {
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
-  const { category, locale } = await getCategoryParams({ params });
+  // get cached slug and category from params to pass into CategoryArticles within Suspense
+  const { slug, category, locale } = await getCategoryParams({ params });
 
   return (
     <div className="flex-1 min-w-0">
-      <CategoryHeader category={category} />
-      <Suspense fallback={<ArticlesGridSkeleton showSearchInput />}>
+      <CategoryHeader params={params} />
+      <Suspense fallback={<CategoryPageSkeleton />}>
+        <CategorySearchForm categorySlug={slug} locale={locale} />
         <CategoryArticles
           category={category}
           locale={locale}
           searchParams={searchParams}
         />
       </Suspense>
+    </div>
+  );
+}
+
+async function CategoryHeader({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  "use cache: remote";
+  cacheLife("max");
+
+  const { slug } = await params;
+
+  const category = await getCategoryBySlug(slug);
+
+  if (!category) {
+    notFound();
+  }
+
+  cacheTag(category.id, "categories");
+
+  return (
+    <div className="mb-6">
+      <h1 className="text-3xl font-bold text-black mb-2">{category.title}</h1>
+      <div className="w-16 h-1 bg-blue-600 rounded"></div>
     </div>
   );
 }
@@ -111,5 +139,16 @@ async function getCategoryParams({
 
   cacheTag(category.id, "categories");
 
-  return { category, locale };
+  return { slug, category, locale };
+}
+
+function CategoryPageSkeleton() {
+  return (
+    <div>
+      <div className="mb-8">
+        <div className="h-12 bg-neutral-200 rounded-lg animate-pulse"></div>
+      </div>
+      <ArticlesGridSkeleton />
+    </div>
+  );
 }

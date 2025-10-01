@@ -1,17 +1,6 @@
-interface ArticlesGridSkeletonProps {
-  showSearchInput?: boolean;
-}
-
-export default function ArticlesGridSkeleton({
-  showSearchInput,
-}: ArticlesGridSkeletonProps) {
+export default function ArticlesGridSkeleton() {
   return (
     <section>
-      {showSearchInput && (
-        <div className="mb-8">
-          <div className="h-12 bg-neutral-200 rounded-lg animate-pulse"></div>
-        </div>
-      )}
       <div className="mb-8">
         <div className="h-5 bg-neutral-200 rounded-lg w-[200px] animate-pulse"></div>
       </div>
