@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { getDictionary } from "@/dictionaries";
 import { LocaleSwitcher } from "../layout/locale-switcher";
 import { StockTicker } from "../layout/stock-ticker";
@@ -37,10 +36,31 @@ export const DesktopHeader = async ({ locale }: { locale: string }) => {
             >
               The Platform Press
             </Link>
-            <StockTicker />
+            <Suspense fallback={<StockTickerSkeleton />}>
+              <StockTicker />
+            </Suspense>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+function StockTickerSkeleton() {
+  return (
+    <div className="hidden md:block text-right justify-self-end">
+      <div className="w-32 text-right">
+        <div className="relative text-sm font-medium text-neutral-700 text-center">
+          <div className="relative h-16 flex items-center justify-center overflow-hidden">
+            <div className="flex items-center gap-3">
+              {/* Stock symbol skeleton */}
+              <div className="h-4 w-12 bg-neutral-200 rounded animate-pulse" />
+              {/* Stock change skeleton */}
+              <div className="h-4 w-16 bg-neutral-200 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
