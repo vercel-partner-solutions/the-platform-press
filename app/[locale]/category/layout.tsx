@@ -3,10 +3,8 @@ import CategorySidebar from "@/components/category/category-sidebar";
 
 export default async function CategoryLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
   return (
     <div className="max-w-8xl mx-auto">
