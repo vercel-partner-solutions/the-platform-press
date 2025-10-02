@@ -16,7 +16,7 @@ function getLocale(request: NextRequest): string | undefined {
 
   // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
-    locales
+    locales,
   );
 
   const locale = matchLocale(languages, locales, i18n.defaultLocale);
@@ -26,7 +26,7 @@ function getLocale(request: NextRequest): string | undefined {
 
 function handleArticlePaywall(
   request: NextRequest,
-  pathname: string
+  pathname: string,
 ): NextResponse | null {
   // Check if the path contains /articles/ pattern (but not paywall routes)
   const articlesMatch = pathname.match(/\/articles\/([^/]+)(?!\/paywall)$/);
@@ -60,7 +60,8 @@ export function middleware(request: NextRequest) {
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+    (locale) =>
+      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
 
   // Redirect if there is no locale
@@ -72,8 +73,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
-        request.url
-      )
+        request.url,
+      ),
     );
   }
 
