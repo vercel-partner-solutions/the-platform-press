@@ -163,9 +163,7 @@
           "disabled": false,
           "validations": [
             {
-              "linkContentType": [
-                "author"
-              ]
+              "linkContentType": ["author"]
             }
           ]
         },
@@ -179,9 +177,7 @@
           "disabled": false,
           "validations": [
             {
-              "linkContentType": [
-                "category"
-              ]
+              "linkContentType": ["category"]
             }
           ]
         },
@@ -197,9 +193,7 @@
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "article"
-                ]
+                "linkContentType": ["article"]
               }
             ],
             "linkType": "Entry"

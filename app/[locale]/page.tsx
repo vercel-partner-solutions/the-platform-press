@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-
+import AuthoredArticlesSection from "@/components/homepage/authored-articles-section";
 import BreakingNewsBanner from "@/components/homepage/breaking-news-banner";
 import CategoryArticlesSection from "@/components/homepage/category-articles-section";
 import ContinueReading from "@/components/homepage/continue-reading";
 import HeroSection from "@/components/homepage/hero-section";
 import LatestArticlesSection from "@/components/homepage/latest-articles-section";
-import AuthoredArticlesSection from "@/components/homepage/authored-articles-section";
 import PopularArticlesSection from "@/components/homepage/popular-articles-section";
 import { getDictionary } from "@/dictionaries";
 import { homepageConfig } from "@/lib/cms";
@@ -56,7 +55,9 @@ export default async function HomePage({
 
         <CategoryArticlesSection
           categoryId={homepageConfig.sections.firstCategorySection.categoryId}
-          sectionTitle={homepageConfig.sections.firstCategorySection.sectionTitle}
+          sectionTitle={
+            homepageConfig.sections.firstCategorySection.sectionTitle
+          }
           isHomepage
         />
         {/* Two-column layout for Latest News and Popular This Week */}
@@ -75,7 +76,9 @@ export default async function HomePage({
         />
         <CategoryArticlesSection
           categoryId={homepageConfig.sections.secondCategorySection.categoryId}
-          sectionTitle={homepageConfig.sections.secondCategorySection.sectionTitle}
+          sectionTitle={
+            homepageConfig.sections.secondCategorySection.sectionTitle
+          }
           isHomepage
         />
       </div>

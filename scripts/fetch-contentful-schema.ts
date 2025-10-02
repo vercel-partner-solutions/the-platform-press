@@ -2,15 +2,15 @@
 
 /**
  * Contentful Schema Fetcher
- * 
- * This script fetches the current content types schema from Contentful 
+ *
+ * This script fetches the current content types schema from Contentful
  * and writes it to schema.json in the project root.
- * 
- * The schema.json file is used to inform AI tools like Claude about the 
+ *
+ * The schema.json file is used to inform AI tools like Claude about the
  * current Contentful schema structure for better code generation.
- * 
+ *
  * DO NOT manually edit schema.json - it should only be updated by this script.
- * 
+ *
  * Usage: npm run fetch-schema
  */
 
@@ -78,7 +78,7 @@ async function fetchSchema(): Promise<void> {
     // Get space and environment
     const space = await client.getSpace(process.env.CONTENTFUL_SPACE_ID);
     const environment = await space.getEnvironment("master");
-    
+
     console.log(`📡 Connected to space: ${space.name} (${space.sys.id})`);
 
     // Fetch content types
@@ -117,10 +117,11 @@ async function fetchSchema(): Promise<void> {
     // Write schema to file
     const schemaPath = join(process.cwd(), "schema.json");
     writeFileSync(schemaPath, JSON.stringify(schemaData, null, 2), "utf-8");
-    
+
     console.log("✅ Schema successfully written to schema.json");
-    console.log(`📊 Content types exported: ${schemaData.contentTypes.map(ct => ct.name).join(", ")}`);
-    
+    console.log(
+      `📊 Content types exported: ${schemaData.contentTypes.map((ct) => ct.name).join(", ")}`,
+    );
   } catch (error) {
     console.error("❌ Error fetching schema:", error);
     process.exit(1);

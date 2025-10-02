@@ -1,12 +1,12 @@
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
-import {
-  unstable_cacheTag as cacheTag,
-  unstable_cacheLife as cacheLife,
-} from "next/cache";
 
 export default async function HeroSection() {
   "use cache: remote";
@@ -40,7 +40,7 @@ export default async function HeroSection() {
     ...secondaryArticles.map((a) => a.id),
     ...secondaryArticles.map((a) => a.categoryId),
     "article-list",
-    "articles"
+    "articles",
   );
 
   return (

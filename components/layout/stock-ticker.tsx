@@ -1,5 +1,4 @@
 import type { Stock } from "@/lib/types";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 
 async function getStocks(): Promise<Stock[]> {
   try {
@@ -20,12 +19,8 @@ async function getStocks(): Promise<Stock[]> {
 }
 
 export async function StockTicker() {
-  "use cache: remote";
-  cacheLife("hours");
-
   const stocks = await getStocks();
 
-  // Total duration of animation
   // The delay between each item is the total duration divided by the number of items
   const totalDuration = 20;
 

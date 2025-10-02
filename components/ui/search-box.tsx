@@ -26,12 +26,12 @@ export function SearchBox() {
   const searchArticles = useCallback(
     async (searchQuery: string): Promise<Article[]> => {
       const response = await fetch(
-        `/api/search?q=${encodeURIComponent(searchQuery)}`
+        `/api/search?q=${encodeURIComponent(searchQuery)}`,
       );
       const data = await response.json();
       return data.articles || [];
     },
-    []
+    [],
   );
 
   // Handle search when query changes

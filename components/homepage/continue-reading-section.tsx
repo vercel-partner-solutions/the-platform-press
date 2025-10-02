@@ -88,7 +88,8 @@ export default async function ContinueReadingSection({
 
           // Filter out any undefined results
           articles = fetchedArticles.filter(
-            (article: Article | undefined): article is Article => article !== undefined,
+            (article: Article | undefined): article is Article =>
+              article !== undefined,
           );
 
           if (articles.length > 0) {

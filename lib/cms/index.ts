@@ -1,5 +1,5 @@
-import type { Article, Category } from "../types";
 import type { Document } from "@contentful/rich-text-types";
+import type { Article, Category } from "../types";
 
 // Special category ID for "ALL" category - shows all articles when selected
 const ALL_CATEGORY_ID = "6135cHC0KiZsW2dMOEuMHL";
@@ -266,7 +266,7 @@ const GET_CATEGORY_BY_ID_QUERY = `
 async function fetchContent<T = any>(
   query: string,
   variables: Record<string, any> = {},
-  preview = false
+  preview = false,
 ): Promise<T> {
   const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
   const CONTENTFUL_ACCESS_TOKEN = preview
@@ -286,17 +286,17 @@ async function fetchContent<T = any>(
         Authorization: `Bearer ${CONTENTFUL_ACCESS_TOKEN}`,
       },
       body: JSON.stringify({ query, variables }),
-    }
+    },
   );
 
   if (!response.ok) {
     const errorText = await response.text();
     console.error(
       `HTTP error! status: ${response.status}, response:`,
-      errorText
+      errorText,
     );
     throw new Error(
-      `HTTP error! status: ${response.status}, response: ${errorText}`
+      `HTTP error! status: ${response.status}, response: ${errorText}`,
     );
   }
 
@@ -322,7 +322,7 @@ function mergeRichTextLinks(content: any): Document {
   // If there are embedded assets, we need to map them
   if (links?.assets?.block?.length) {
     const assetMap = new Map(
-      links.assets.block.map((asset: any) => [asset.sys.id, asset])
+      links.assets.block.map((asset: any) => [asset.sys.id, asset]),
     );
 
     // Recursively process the document to replace asset references
@@ -477,7 +477,7 @@ export async function getArticles({
       return [];
     }
 
-    let articles = response.articleCollection.items.map(reshapeToArticle);
+    const articles = response.articleCollection.items.map(reshapeToArticle);
 
     return articles;
   } catch (error) {
@@ -487,7 +487,7 @@ export async function getArticles({
 }
 
 export async function getArticleBySlug(
-  slug: string
+  slug: string,
 ): Promise<Article | undefined> {
   try {
     const response = await fetchContent<ArticleCollection>(
@@ -495,7 +495,7 @@ export async function getArticleBySlug(
       {
         slug,
         preview: false,
-      }
+      },
     );
 
     if (!response?.articleCollection?.items?.length) {
@@ -516,7 +516,7 @@ export async function getCategories(): Promise<Category[]> {
       GET_CATEGORIES_QUERY,
       {
         preview: false,
-      }
+      },
     );
 
     if (!response?.categoryCollection?.items) {
@@ -534,7 +534,7 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getCategoryBySlug(
-  slug: string
+  slug: string,
 ): Promise<Category | undefined> {
   try {
     const response = await fetchContent<CategoryCollection>(
@@ -542,7 +542,7 @@ export async function getCategoryBySlug(
       {
         slug,
         preview: false,
-      }
+      },
     );
 
     if (!response?.categoryCollection?.items?.length) {
@@ -558,7 +558,7 @@ export async function getCategoryBySlug(
 }
 
 export async function getCategoryById(
-  id: string
+  id: string,
 ): Promise<Category | undefined> {
   try {
     const response = await fetchContent<CategoryCollection>(
@@ -566,7 +566,7 @@ export async function getCategoryById(
       {
         id,
         preview: false,
-      }
+      },
     );
 
     if (!response?.categoryCollection?.items?.length) {

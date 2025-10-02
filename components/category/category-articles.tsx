@@ -1,10 +1,10 @@
-import { getArticles } from "@/lib/cms";
 import {
-  unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
 } from "next/cache";
+import CategoryArticlesList from "@/components/category/category-articles-list";
+import { getArticles } from "@/lib/cms";
 import type { Category } from "@/lib/types";
-import CategoryArticlesSearch from "./category-articles-search";
 
 interface CategoryArticlesProps {
   locale: string;
@@ -17,23 +17,24 @@ export default async function CategoryArticles({
   locale,
   searchParams,
 }: CategoryArticlesProps) {
-  const articles = await getInitialArticles(category, (await searchParams).q);
+  const { q: searchQuery } = await searchParams;
+  const articles = await searchArticles(category, searchQuery);
 
   const hasMore = articles.length === 10;
   const initialArticles = articles.slice(0, 9);
 
   return (
-    <CategoryArticlesSearch
-      initialArticles={initialArticles}
-      totalCount={initialArticles.length}
+    <CategoryArticlesList
+      articles={initialArticles}
       hasMore={hasMore}
       category={category}
       locale={locale}
+      searchQuery={searchQuery}
     />
   );
 }
 
-async function getInitialArticles(category: Category, searchQuery?: string) {
+async function searchArticles(category: Category, searchQuery?: string) {
   "use cache: remote";
   cacheLife("max");
 
@@ -49,7 +50,7 @@ async function getInitialArticles(category: Category, searchQuery?: string) {
     ...articles.map((a) => a.id),
     ...articles.map((a) => a.categoryId),
     "article-list",
-    "articles"
+    "articles",
   );
 
   return articles;

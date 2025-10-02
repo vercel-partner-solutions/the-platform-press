@@ -1,14 +1,14 @@
 import type React from "react";
 import "@/app/globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { i18n } from "@/i18n.config";
 import { StickyNavigation } from "@/components/ui/sticky-navigation";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { i18n } from "@/i18n.config";
 
 const poppins = Poppins({
   subsets: ["latin"],
