@@ -1,16 +1,16 @@
 import { CalendarDays, Clock, UserCircle } from "lucide-react";
 import { marked } from "marked";
 import type { Metadata } from "next";
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
-import {
-  unstable_cacheTag as cacheTag,
-  unstable_cacheLife as cacheLife,
-} from "next/cache";
 
 export async function generateMetadata({
   params,
@@ -137,7 +137,7 @@ export default async function ArticlePage({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                "news article"
+                "news article",
               )}`
             }
             alt={article.title}

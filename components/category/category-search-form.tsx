@@ -1,9 +1,9 @@
 "use client";
 
-import Form from "next/form";
 import { Search, X } from "lucide-react";
+import Form from "next/form";
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface CategorySearchFormProps {
   categorySlug: string;

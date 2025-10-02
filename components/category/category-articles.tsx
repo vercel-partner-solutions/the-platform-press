@@ -1,10 +1,10 @@
-import { getArticles } from "@/lib/cms";
 import {
-  unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
 } from "next/cache";
-import type { Category } from "@/lib/types";
 import CategoryArticlesList from "@/components/category/category-articles-list";
+import { getArticles } from "@/lib/cms";
+import type { Category } from "@/lib/types";
 
 interface CategoryArticlesProps {
   locale: string;
@@ -50,7 +50,7 @@ async function searchArticles(category: Category, searchQuery?: string) {
     ...articles.map((a) => a.id),
     ...articles.map((a) => a.categoryId),
     "article-list",
-    "articles"
+    "articles",
   );
 
   return articles;

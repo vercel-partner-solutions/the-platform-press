@@ -1,12 +1,12 @@
-import { Suspense } from "react";
-import { Subscribe } from "./subscribe";
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getDictionary } from "@/dictionaries";
 import { getCategories } from "@/lib/cms";
-import {
-  unstable_cacheTag as cacheTag,
-  unstable_cacheLife as cacheLife,
-} from "next/cache";
+import { Subscribe } from "./subscribe";
 
 export async function StickyNavigation({ locale }: { locale: string }) {
   const t = await getDictionary(locale);

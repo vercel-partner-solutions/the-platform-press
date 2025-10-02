@@ -1,5 +1,5 @@
-import type { Locale } from "@/i18n.config";
 import { unstable_cacheLife as cacheLife } from "next/cache";
+import type { Locale } from "@/i18n.config";
 
 export interface WeatherData {
   temperature?: number;
@@ -62,10 +62,10 @@ export function renderWeatherIcon(condition: WeatherCondition): string {
 }
 
 async function getCoordinatesFromCity(
-  city: string
+  city: string,
 ): Promise<{ latitude: number; longitude: number } | null> {
   const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
-    city
+    city,
   )}&count=1&language=en&format=json`;
 
   const response = await fetch(geocodingUrl);
@@ -97,7 +97,7 @@ function getTemperatureSymbol(locale: Locale): "C" | "F" {
 async function getWeatherFromCoordinates(
   latitude: number,
   longitude: number,
-  locale: Locale
+  locale: Locale,
 ): Promise<WeatherData> {
   const temperatureUnit = getTemperatureUnit(locale);
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=${temperatureUnit}`;
@@ -119,7 +119,7 @@ async function getWeatherFromCoordinates(
 
 export async function getWeather(
   locale: string,
-  location: { city?: string }
+  location: { city?: string },
 ): Promise<WeatherData> {
   "use cache: remote";
   cacheLife("hours");
@@ -141,7 +141,7 @@ export async function getWeather(
     return await getWeatherFromCoordinates(
       coordinates.latitude,
       coordinates.longitude,
-      locale as Locale
+      locale as Locale,
     );
   } catch (error) {
     if (error instanceof Error) {

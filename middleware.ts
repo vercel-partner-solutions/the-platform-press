@@ -7,7 +7,9 @@ import { i18n } from "./i18n.config";
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
-  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
+  request.headers.forEach((value, key) => {
+    negotiatorHeaders[key] = value;
+  });
 
   // @ts-expect-error locales are readonly
   const locales: string[] = i18n.locales;

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { searchArticlesAction } from "@/app/[locale]/category/actions";
+import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
 import ArticleCard from "@/components/ui/article-card";
 import { Button } from "@/components/ui/button";
-import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
 import type { Article, Category } from "@/lib/types";
-import { searchArticlesAction } from "@/app/[locale]/category/actions";
 
 interface CategoryArticlesListProps {
   articles: Article[];

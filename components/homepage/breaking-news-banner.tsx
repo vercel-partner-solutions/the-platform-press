@@ -1,9 +1,9 @@
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
-import {
-  unstable_cacheTag as cacheTag,
-  unstable_cacheLife as cacheLife,
-} from "next/cache";
 
 export default async function BreakingNewsBanner() {
   "use cache: remote";
