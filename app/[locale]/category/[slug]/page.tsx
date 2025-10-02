@@ -67,12 +67,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  "use cache: remote";
-  cacheLife("max");
-  cacheTag("categories");
-
   const categories = await getCategories();
-
   return categories.map((c) => ({ slug: c.slug }));
 }
 
