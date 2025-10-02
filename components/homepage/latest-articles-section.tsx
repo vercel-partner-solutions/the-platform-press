@@ -42,7 +42,7 @@ export default async function LatestArticlesSection({
           Latest News
         </h2>
         <Link
-          href="/category/latest"
+          href="/category/all"
           className="text-sm font-medium text-black hover:underline"
         >
           View all &rarr;
