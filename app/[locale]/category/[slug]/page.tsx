@@ -34,7 +34,7 @@ export async function generateMetadata({
   const description = `Stay updated with the latest ${category.title} news from The Platform Press.`;
 
   // revalidate if this category changes or via global tag
-  cacheTag(category.id, "categories");
+  cacheTag(`category:${category.id}`, "category:all");
 
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -106,7 +106,8 @@ async function CategoryHeader({
     notFound();
   }
 
-  cacheTag(category.id, "categories");
+  // revalidate if this category changes or via the global tag
+  cacheTag(`category:${category.id}`, "category:all");
 
   return (
     <div className="mb-6">
@@ -132,7 +133,8 @@ async function getCategoryParams({
     notFound();
   }
 
-  cacheTag(category.id, "categories");
+  // revalidate if lists of articles may change or via global tag
+  cacheTag(`category:${category.id}`, "category:all");
 
   return { slug, category, locale };
 }

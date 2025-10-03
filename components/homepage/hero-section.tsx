@@ -33,14 +33,12 @@ export default async function HeroSection() {
 
   if (!featuredArticle) return null;
 
-  // revalidate if the featured or secondary articles change, their categories change, if a list of articles may change, or via global tag
+  // revalidate if article categories change, article lists may change, or via global tag
   cacheTag(
-    featuredArticle.id,
     featuredArticle.categoryId,
-    ...secondaryArticles.map((a) => a.id),
     ...secondaryArticles.map((a) => a.categoryId),
-    "article-list",
-    "articles",
+    "article:list",
+    "article:all",
   );
 
   return (

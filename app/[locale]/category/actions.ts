@@ -20,7 +20,11 @@ export async function searchArticlesAction(
 ): Promise<Article[]> {
   "use cache";
   cacheLife("max");
-  cacheTag("article-list");
+
+  // revalidate if lists of articles may change or via global tag
+  cacheTag("article:list");
+  cacheTag("article:all");
+
   return getArticles({
     categoryId: params.categoryId,
     sortBy: params.sortBy,

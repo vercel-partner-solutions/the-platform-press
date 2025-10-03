@@ -45,12 +45,11 @@ async function searchArticles(category: Category, searchQuery?: string) {
     searchQuery,
   });
 
-  // revalidate if any articles change, their categories change, article lists may change, or via global tag
+  // revalidate if article categories change, article lists may change, or via global tag
   cacheTag(
-    ...articles.map((a) => a.id),
-    ...articles.map((a) => a.categoryId),
-    "article-list",
-    "articles",
+    ...articles.map((a) => `category:${a.categoryId}`),
+    "article:list",
+    "article:all",
   );
 
   return articles;

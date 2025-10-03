@@ -19,8 +19,8 @@ export default async function BreakingNewsBanner() {
 
   if (!article) return null;
 
-  // revalidate if this article changes, its category changes, a list of articles may change (since this grabs the top 1), or via global tag
-  cacheTag(article.id, article.categoryId, "article-list", "articles");
+  // revalidate if article categories change, article lists may change, or via global tag
+  cacheTag(`category:${article.categoryId}`, "article:list", "article:all");
 
   return (
     <div className="px-4 py-4">
