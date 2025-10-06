@@ -40,7 +40,7 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   return (
-    <>
+    <div>
       <BreakingNewsBanner />
 
       <div className="space-y-16 pt-0">
@@ -82,6 +82,6 @@ export default async function HomePage({
           isHomepage
         />
       </div>
-    </>
+    </div>
   );
 }
