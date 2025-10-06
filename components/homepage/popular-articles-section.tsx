@@ -24,12 +24,11 @@ export default async function PopularArticlesSection({
 
   if (!articles || articles.length === 0) return null;
 
-  // revalidate if any of these articles changes, their categories change, a list of articles may change, or via global tag
+  // revalidate if article categories change, article lists may change, or via global tag
   cacheTag(
-    ...articles.map((a) => a.id),
-    ...articles.map((a) => a.categoryId),
-    "article-list",
-    "articles",
+    ...articles.map((a) => `category:${a.categoryId}`),
+    "article:list",
+    "article:all",
   );
 
   return (
