@@ -266,10 +266,10 @@ const GET_CATEGORY_BY_ID_QUERY = `
 async function fetchContent<T = any>(
   query: string,
   variables: Record<string, any> = {},
-  preview = false,
+  draft = false
 ): Promise<T> {
   const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
-  const CONTENTFUL_ACCESS_TOKEN = preview
+  const CONTENTFUL_ACCESS_TOKEN = draft
     ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
     : process.env.CONTENTFUL_ACCESS_TOKEN;
 
@@ -285,18 +285,24 @@ async function fetchContent<T = any>(
         "Content-Type": "application/json",
         Authorization: `Bearer ${CONTENTFUL_ACCESS_TOKEN}`,
       },
-      body: JSON.stringify({ query, variables }),
-    },
+      body: JSON.stringify({
+        query,
+        variables: {
+          ...variables,
+          preview: draft,
+        },
+      }),
+    }
   );
 
   if (!response.ok) {
     const errorText = await response.text();
     console.error(
       `HTTP error! status: ${response.status}, response:`,
-      errorText,
+      errorText
     );
     throw new Error(
-      `HTTP error! status: ${response.status}, response: ${errorText}`,
+      `HTTP error! status: ${response.status}, response: ${errorText}`
     );
   }
 
@@ -322,7 +328,7 @@ function mergeRichTextLinks(content: any): Document {
   // If there are embedded assets, we need to map them
   if (links?.assets?.block?.length) {
     const assetMap = new Map(
-      links.assets.block.map((asset: any) => [asset.sys.id, asset]),
+      links.assets.block.map((asset: any) => [asset.sys.id, asset])
     );
 
     // Recursively process the document to replace asset references
@@ -419,6 +425,7 @@ export async function getArticles({
   isBreaking,
   excludeFeatured,
   searchQuery,
+  draft = false,
 }: {
   limit?: number;
   skip?: number;
@@ -429,6 +436,7 @@ export async function getArticles({
   isBreaking?: boolean;
   excludeFeatured?: boolean;
   searchQuery?: string;
+  draft?: boolean;
 } = {}): Promise<Article[]> {
   try {
     const where: any = {};
@@ -464,13 +472,16 @@ export async function getArticles({
     // Determine sort order
     const order = sortBy === "views" ? ["views_DESC"] : ["publishDate_DESC"];
 
-    const response = await fetchContent<ArticleCollection>(GET_ARTICLES_QUERY, {
-      limit: limit || 10,
-      skip: skip || 0,
-      where: Object.keys(where).length > 0 ? where : undefined,
-      order,
-      preview: false,
-    });
+    const response = await fetchContent<ArticleCollection>(
+      GET_ARTICLES_QUERY,
+      {
+        limit: limit || 10,
+        skip: skip || 0,
+        where: Object.keys(where).length > 0 ? where : undefined,
+        order,
+      },
+      draft
+    );
 
     if (!response?.articleCollection?.items) {
       console.warn("No articles found in Contentful response");
@@ -488,14 +499,15 @@ export async function getArticles({
 
 export async function getArticleBySlug(
   slug: string,
+  draft = false
 ): Promise<Article | undefined> {
   try {
     const response = await fetchContent<ArticleCollection>(
       GET_ARTICLE_BY_SLUG_QUERY,
       {
         slug,
-        preview: false,
       },
+      draft
     );
 
     if (!response?.articleCollection?.items?.length) {
@@ -510,13 +522,12 @@ export async function getArticleBySlug(
   }
 }
 
-export async function getCategories(): Promise<Category[]> {
+export async function getCategories(draft = false): Promise<Category[]> {
   try {
     const response = await fetchContent<CategoryCollection>(
       GET_CATEGORIES_QUERY,
-      {
-        preview: false,
-      },
+      {},
+      draft
     );
 
     if (!response?.categoryCollection?.items) {
@@ -535,14 +546,15 @@ export async function getCategories(): Promise<Category[]> {
 
 export async function getCategoryBySlug(
   slug: string,
+  draft = false
 ): Promise<Category | undefined> {
   try {
     const response = await fetchContent<CategoryCollection>(
       GET_CATEGORY_BY_SLUG_QUERY,
       {
         slug,
-        preview: false,
       },
+      draft
     );
 
     if (!response?.categoryCollection?.items?.length) {
@@ -559,14 +571,15 @@ export async function getCategoryBySlug(
 
 export async function getCategoryById(
   id: string,
+  draft = false
 ): Promise<Category | undefined> {
   try {
     const response = await fetchContent<CategoryCollection>(
       GET_CATEGORY_BY_ID_QUERY,
       {
         id,
-        preview: false,
       },
+      draft
     );
 
     if (!response?.categoryCollection?.items?.length) {
