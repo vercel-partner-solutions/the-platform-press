@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     if (!contentType || !entryId) {
       return new Response(
         "Invalid webhook payload: missing contentType or entryId",
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 
   try {
     for (const tagToRevalidate of tagsToRevalidate) {
-      revalidateTag(tagToRevalidate);
+      revalidateTag(tagToRevalidate, "max");
     }
 
     const response = {
