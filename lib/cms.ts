@@ -675,6 +675,7 @@ export const homepageConfig = {
 async function fetchContent<T = any>(
   query: string,
   variables: Record<string, any> = {},
+  draft?: boolean,
 ): Promise<T[]> {
   if (query === "article") {
     return placeholderArticles as T[];
@@ -714,6 +715,7 @@ export async function getArticles({
   isBreaking,
   excludeFeatured,
   searchQuery,
+  draft,
 }: {
   limit?: number;
   skip?: number;
@@ -725,8 +727,9 @@ export async function getArticles({
   isBreaking?: boolean;
   excludeFeatured?: boolean;
   searchQuery?: string;
+  draft?: boolean;
 } = {}): Promise<Article[]> {
-  const cmsArticles = await fetchContent<CMSArticle>("article");
+  const cmsArticles = await fetchContent<CMSArticle>("article", {}, draft);
   let articles = cmsArticles.map(reshapeToArticle);
 
   // Skip filtering if category is the "all" category (shows all articles)
@@ -782,29 +785,32 @@ export async function getArticles({
 
 export async function getArticleBySlug(
   slug: string,
+  draft?: boolean,
 ): Promise<Article | undefined> {
-  const cmsArticles = await fetchContent<CMSArticle>("article");
+  const cmsArticles = await fetchContent<CMSArticle>("article", {}, draft);
   const articles = cmsArticles.map(reshapeToArticle);
   return articles.find((article) => article.slug === slug);
 }
 
-export async function getCategories(): Promise<Category[]> {
-  const cmsCategories = await fetchContent<CMSCategory>("category");
+export async function getCategories(draft?: boolean): Promise<Category[]> {
+  const cmsCategories = await fetchContent<CMSCategory>("category", {}, draft);
   return cmsCategories.map(reshapeToCategory);
 }
 
 export async function getCategoryBySlug(
   slug: string,
+  draft?: boolean,
 ): Promise<Category | undefined> {
-  const cmsCategories = await fetchContent<CMSCategory>("category");
+  const cmsCategories = await fetchContent<CMSCategory>("category", {}, draft);
   const categories = cmsCategories.map(reshapeToCategory);
   return categories.find((category) => category.slug === slug);
 }
 
 export async function getCategoryById(
   id: string,
+  draft?: boolean,
 ): Promise<Category | undefined> {
-  const cmsCategories = await fetchContent<CMSCategory>("category");
+  const cmsCategories = await fetchContent<CMSCategory>("category", {}, draft);
   const categories = cmsCategories.map(reshapeToCategory);
   return categories.find((category) => category.id === id);
 }
