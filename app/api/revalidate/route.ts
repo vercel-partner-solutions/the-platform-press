@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     const revalidated = [];
 
     if (tag) {
-      revalidateTag(tag);
+      revalidateTag(tag, "max");
       revalidated.push(`tag: ${tag}`);
     }
 

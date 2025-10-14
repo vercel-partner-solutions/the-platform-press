@@ -678,13 +678,6 @@ async function fetchContent<T = any>(
   variables: Record<string, any> = {},
   draft?: boolean
 ): Promise<T[]> {
-  const { isEnabled } = await draftMode();
-  const isDraft = draft ?? isEnabled;
-
-  // TODO: When integrating with a real CMS, use isDraft to fetch
-  // either published or draft content based on this flag
-  // For now, we're using placeholder data which doesn't differentiate
-
   if (query === "article") {
     return placeholderArticles as T[];
   }
