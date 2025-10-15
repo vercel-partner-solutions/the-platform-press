@@ -676,7 +676,7 @@ export const homepageConfig = {
 async function fetchContent<T = any>(
   query: string,
   variables: Record<string, any> = {},
-  draft?: boolean
+  draft?: boolean,
 ): Promise<T[]> {
   if (query === "article") {
     return placeholderArticles as T[];
@@ -740,7 +740,7 @@ export async function getArticles({
 
   if (location) {
     articles = articles.filter(
-      (article) => (article as any).location === location
+      (article) => (article as any).location === location,
     );
   }
 
@@ -750,7 +750,7 @@ export async function getArticles({
       (article) =>
         article.title.toLowerCase().includes(lowerQuery) ||
         article.excerpt.toLowerCase().includes(lowerQuery) ||
-        article.author.toLowerCase().includes(lowerQuery)
+        article.author.toLowerCase().includes(lowerQuery),
     );
   }
 
@@ -774,7 +774,7 @@ export async function getArticles({
     articles.sort(
       (a, b) =>
         new Date(b.datePublished).getTime() -
-        new Date(a.datePublished).getTime()
+        new Date(a.datePublished).getTime(),
     );
   }
 
@@ -786,7 +786,7 @@ export async function getArticles({
 
 export async function getArticleBySlug(
   slug: string,
-  draft?: boolean
+  draft?: boolean,
 ): Promise<Article | undefined> {
   const cmsArticles = await fetchContent<CMSArticle>("article", {}, draft);
   const articles = cmsArticles.map(reshapeToArticle);
@@ -800,7 +800,7 @@ export async function getCategories(draft?: boolean): Promise<Category[]> {
 
 export async function getCategoryBySlug(
   slug: string,
-  draft?: boolean
+  draft?: boolean,
 ): Promise<Category | undefined> {
   const cmsCategories = await fetchContent<CMSCategory>("category", {}, draft);
   const categories = cmsCategories.map(reshapeToCategory);
@@ -809,7 +809,7 @@ export async function getCategoryBySlug(
 
 export async function getCategoryById(
   id: string,
-  draft?: boolean
+  draft?: boolean,
 ): Promise<Category | undefined> {
   const cmsCategories = await fetchContent<CMSCategory>("category", {}, draft);
   const categories = cmsCategories.map(reshapeToCategory);

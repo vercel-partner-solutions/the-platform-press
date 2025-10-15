@@ -8,7 +8,11 @@ import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 import CategoryBadge from "../ui/category-badge";
 
-export default async function HeroSection() {
+export default async function HeroSection({
+  draft = false,
+}: {
+  draft?: boolean;
+}) {
   "use cache: remote";
   cacheLife("max");
 
@@ -16,6 +20,7 @@ export default async function HeroSection() {
     isFeatured: true,
     limit: 1,
     sortBy: "datePublished",
+    draft,
   });
   const featuredArticle = featuredArticles[0];
 
@@ -29,6 +34,7 @@ export default async function HeroSection() {
     limit: 3,
     excludeIds: excludedIds,
     sortBy: "datePublished",
+    draft,
   });
 
   if (!featuredArticle) return null;

@@ -58,14 +58,16 @@ async function ContinueReadingCard({
 export default async function ContinueReadingSection({
   fallbackCategoryId,
   locale,
+  draft = false,
 }: {
   fallbackCategoryId: string;
   locale: string;
+  draft?: boolean;
 }) {
   const subscribed = await isSubscribed();
   let articles: Article[] = [];
 
-  const fallbackCategory = await getCategoryById(fallbackCategoryId);
+  const fallbackCategory = await getCategoryById(fallbackCategoryId, draft);
   if (!fallbackCategory) return null;
 
   let sectionTitle = fallbackCategory.title;
@@ -82,7 +84,7 @@ export default async function ContinueReadingSection({
         if (visitedSlugs.length > 0) {
           // Fetch articles by slug in parallel
           const articlePromises = visitedSlugs.map((slug) =>
-            getArticleBySlug(slug),
+            getArticleBySlug(slug, draft),
           );
           const fetchedArticles = await Promise.all(articlePromises);
 
@@ -103,7 +105,11 @@ export default async function ContinueReadingSection({
 
   // If no visited articles or not subscribed, use fallback category
   if (articles.length === 0) {
-    articles = await getArticles({ categoryId: fallbackCategoryId, limit: 3 });
+    articles = await getArticles({
+      categoryId: fallbackCategoryId,
+      limit: 3,
+      draft,
+    });
   }
 
   if (!articles || articles.length === 0) return null;

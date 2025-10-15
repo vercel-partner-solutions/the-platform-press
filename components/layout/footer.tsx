@@ -4,10 +4,6 @@ import Link from "next/link";
 import { getCategories } from "@/lib/cms";
 
 export default async function Footer() {
-  "use cache: remote";
-  cacheLife("days");
-
-  const currentYear = new Date().getFullYear();
   return (
     <footer className="bg-neutral-50 py-12 border-t border-neutral-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -24,10 +20,9 @@ export default async function Footer() {
           <FooterCategories />
         </div>
 
-        {/* Copyright */}
         <div className="pt-8 border-t border-neutral-200 text-center">
           <p className="text-sm text-neutral-700">
-            &copy; {currentYear} The Platform Press. All rights reserved.
+            &copy; {getCurrentYear()} The Platform Press. All rights reserved.
           </p>
         </div>
       </div>
@@ -60,4 +55,10 @@ async function FooterCategories() {
       </nav>
     </div>
   );
+}
+
+async function getCurrentYear() {
+  "use cache: remote";
+  cacheLife("days");
+  return new Date().getFullYear();
 }

@@ -11,6 +11,7 @@ import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
+import { draftMode } from "next/headers";
 
 export async function generateMetadata({
   params,
@@ -86,7 +87,9 @@ export default async function ArticlePage({
 
   const { slug, locale } = await params;
 
-  const article = await getArticleBySlug(slug);
+  const { isEnabled: draftEnabled } = await draftMode();
+
+  const article = await getArticleBySlug(slug, draftEnabled);
 
   if (!article) {
     notFound();
@@ -112,6 +115,7 @@ export default async function ArticlePage({
     categoryId: article.categoryId,
     excludeIds: [article.id],
     limit: 2,
+    draft: draftEnabled,
   });
 
   return (

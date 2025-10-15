@@ -10,23 +10,24 @@ import type { Article } from "@/lib/types";
 export default async function AuthoredArticlesSection({
   categoryId,
   sectionTitle,
-  isHomepage = false,
+  draft = false,
 }: {
   categoryId: string;
   sectionTitle: string;
-  isHomepage?: boolean;
+  draft?: boolean;
 }) {
   "use cache: remote";
   cacheLife("max");
 
-  const category = await getCategoryById(categoryId);
+  const category = await getCategoryById(categoryId, draft);
   if (!category) return null;
 
   const articles = await getArticles({
     limit: 3,
     categoryId: categoryId,
     sortBy: "datePublished",
-    ...(isHomepage && { excludeFeatured: true }),
+    excludeFeatured: true,
+    draft,
   });
 
   if (!articles || articles.length === 0) return null;

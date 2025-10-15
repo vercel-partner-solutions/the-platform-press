@@ -7,11 +7,11 @@ import { getArticles } from "@/lib/cms";
 import type { Article } from "@/lib/types";
 
 export default async function PopularArticlesSection({
-  isHomepage = false,
   locale,
+  draft = false,
 }: {
-  isHomepage?: boolean;
   locale: string;
+  draft?: boolean;
 }) {
   "use cache: remote";
   cacheLife("max");
@@ -19,7 +19,8 @@ export default async function PopularArticlesSection({
   const articles = await getArticles({
     limit: 5,
     sortBy: "views",
-    ...(isHomepage && { excludeFeatured: true }),
+    excludeFeatured: true,
+    draft,
   });
 
   if (!articles || articles.length === 0) return null;

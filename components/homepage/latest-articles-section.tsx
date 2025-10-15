@@ -7,11 +7,11 @@ import { getArticles } from "@/lib/cms";
 import LatestArticleListItem from "./latest-article-list-item";
 
 export default async function LatestArticlesSection({
-  isHomepage = false,
   locale,
+  draft = false,
 }: {
-  isHomepage?: boolean;
   locale: string;
+  draft?: boolean;
 }) {
   "use cache: remote";
   cacheLife("max");
@@ -19,7 +19,8 @@ export default async function LatestArticlesSection({
   const articles = await getArticles({
     limit: 4,
     sortBy: "datePublished",
-    ...(isHomepage && { excludeFeatured: true }),
+    excludeFeatured: true,
+    draft,
   });
 
   if (articles?.length === 0) return null;
