@@ -76,7 +76,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const { isEnabled: draftEnabled } = await draftMode();
 
   // get cached slug and category from params to pass into CategoryArticles within Suspense
-  const { slug, category, locale } = await getCategoryParams({ params, draft: draftEnabled });
+  const { slug, category, locale } = await getCategoryParams({
+    params,
+    draft: draftEnabled,
+  });
 
   return (
     <div className="flex-1 min-w-0">

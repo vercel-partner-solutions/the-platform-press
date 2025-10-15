@@ -37,7 +37,11 @@ export default async function CategoryArticles({
   );
 }
 
-async function searchArticles(category: Category, searchQuery?: string, draft = false) {
+async function searchArticles(
+  category: Category,
+  searchQuery?: string,
+  draft = false,
+) {
   "use cache: remote";
   cacheLife("max");
 

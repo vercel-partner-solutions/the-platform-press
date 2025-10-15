@@ -105,7 +105,11 @@ export default async function ContinueReadingSection({
 
   // If no visited articles or not subscribed, use fallback category
   if (articles.length === 0) {
-    articles = await getArticles({ categoryId: fallbackCategoryId, limit: 3, draft });
+    articles = await getArticles({
+      categoryId: fallbackCategoryId,
+      limit: 3,
+      draft,
+    });
   }
 
   if (!articles || articles.length === 0) return null;
