@@ -29,7 +29,7 @@ export async function GET(request: Request) {
   const draft = await draftMode();
   draft.enable();
 
-  // If a slug is provided, validate the article exists and redirect to preview page
+  // If a slug is provided, validate the article exists and redirect to it
   if (slug) {
     const article = await getArticleBySlug(slug, true);
 
