@@ -30,14 +30,14 @@ export async function POST(request: Request) {
 
     if (contentType === "article") {
       // Revalidate the specific article by its ID
-      tagsToRevalidate.push(entryId);
+      tagsToRevalidate.push(`article:${entryId}`);
       // Revalidate article-list tag (for homepage sections, category pages)
-      tagsToRevalidate.push("article-list");
+      tagsToRevalidate.push("article:list");
     } else if (contentType === "category") {
       // Revalidate the specific category by its ID
-      tagsToRevalidate.push(entryId);
+      tagsToRevalidate.push(`category:${entryId}`);
       // Revalidate categories tag (for navigation, footer - acceptable since few categories)
-      tagsToRevalidate.push("categories");
+      tagsToRevalidate.push("category:list");
     } else {
       return new Response(`Unsupported content type: ${contentType}`, {
         status: 400,
