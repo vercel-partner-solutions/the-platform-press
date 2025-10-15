@@ -13,6 +13,7 @@ interface SearchArticlesParams {
   searchQuery?: string;
   skip?: number;
   limit?: number;
+  draft?: boolean;
 }
 
 export async function searchArticlesAction(
@@ -31,5 +32,6 @@ export async function searchArticlesAction(
     searchQuery: params.searchQuery,
     skip: params.skip,
     limit: params.limit,
+    draft: params.draft,
   });
 }

@@ -10,15 +10,17 @@ interface CategoryArticlesProps {
   locale: string;
   category: Category;
   searchParams: Promise<{ q?: string }>;
+  draft?: boolean;
 }
 
 export default async function CategoryArticles({
   category,
   locale,
   searchParams,
+  draft = false,
 }: CategoryArticlesProps) {
   const { q: searchQuery } = await searchParams;
-  const articles = await searchArticles(category, searchQuery);
+  const articles = await searchArticles(category, searchQuery, draft);
 
   const hasMore = articles.length === 10;
   const initialArticles = articles.slice(0, 9);
@@ -30,11 +32,16 @@ export default async function CategoryArticles({
       category={category}
       locale={locale}
       searchQuery={searchQuery}
+      draft={draft}
     />
   );
 }
 
-async function searchArticles(category: Category, searchQuery?: string) {
+async function searchArticles(
+  category: Category,
+  searchQuery?: string,
+  draft = false,
+) {
   "use cache: remote";
   cacheLife("max");
 
@@ -43,6 +50,7 @@ async function searchArticles(category: Category, searchQuery?: string) {
     sortBy: "datePublished",
     limit: 10,
     searchQuery,
+    draft,
   });
 
   // revalidate if article categories change, article lists may change, or via global tag

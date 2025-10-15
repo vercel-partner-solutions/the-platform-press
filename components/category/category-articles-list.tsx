@@ -13,6 +13,7 @@ interface CategoryArticlesListProps {
   locale: string;
   category: Category;
   searchQuery?: string;
+  draft?: boolean;
 }
 
 export default function CategoryArticlesList({
@@ -21,6 +22,7 @@ export default function CategoryArticlesList({
   category,
   locale,
   searchQuery,
+  draft = false,
 }: CategoryArticlesListProps) {
   const [additionalArticles, setAdditionalArticles] = useState<Article[]>([]);
   const [hasMore, setHasMore] = useState(initialHasMore);
@@ -43,6 +45,7 @@ export default function CategoryArticlesList({
         searchQuery: searchQuery || undefined,
         skip: allArticles.length,
         limit: 9,
+        draft,
       });
 
       setAdditionalArticles((prev) => [...prev, ...nextArticles]);

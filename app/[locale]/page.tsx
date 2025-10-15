@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import AuthoredArticlesSection from "@/components/homepage/authored-articles-section";
 import BreakingNewsBanner from "@/components/homepage/breaking-news-banner";
 import CategoryArticlesSection from "@/components/homepage/category-articles-section";
@@ -39,18 +40,21 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const { isEnabled: draftEnabled } = await draftMode();
+
   return (
     <div>
-      <BreakingNewsBanner />
+      <BreakingNewsBanner draft={draftEnabled} />
 
       <div className="space-y-16 pt-0">
-        <HeroSection />
+        <HeroSection draft={draftEnabled} />
 
         <ContinueReading
           locale={locale}
           fallbackCategoryId={
             homepageConfig.sections.continueReadingFallback.categoryId
           }
+          draft={draftEnabled}
         />
 
         <CategoryArticlesSection
@@ -58,28 +62,28 @@ export default async function HomePage({
           sectionTitle={
             homepageConfig.sections.firstCategorySection.sectionTitle
           }
-          isHomepage
+          draft={draftEnabled}
         />
         {/* Two-column layout for Latest News and Popular This Week */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-10">
           <div className="lg:col-span-2">
-            <LatestArticlesSection isHomepage locale={locale} />
+            <LatestArticlesSection locale={locale} draft={draftEnabled} />
           </div>
           <div>
-            <PopularArticlesSection isHomepage locale={locale} />
+            <PopularArticlesSection locale={locale} draft={draftEnabled} />
           </div>
         </div>
         <AuthoredArticlesSection
           categoryId={homepageConfig.sections.authoredSection.categoryId}
           sectionTitle={homepageConfig.sections.authoredSection.sectionTitle}
-          isHomepage
+          draft={draftEnabled}
         />
         <CategoryArticlesSection
           categoryId={homepageConfig.sections.secondCategorySection.categoryId}
           sectionTitle={
             homepageConfig.sections.secondCategorySection.sectionTitle
           }
-          isHomepage
+          draft={draftEnabled}
         />
       </div>
     </div>

@@ -5,7 +5,11 @@ import {
 import Link from "next/link";
 import { getArticles } from "@/lib/cms";
 
-export default async function BreakingNewsBanner() {
+export default async function BreakingNewsBanner({
+  draft = false,
+}: {
+  draft?: boolean;
+}) {
   "use cache: remote";
   cacheLife("max");
 
@@ -13,6 +17,7 @@ export default async function BreakingNewsBanner() {
     isBreaking: true,
     limit: 1,
     sortBy: "datePublished",
+    draft,
   });
 
   const article = breakingArticles[0];
