@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Important Next.js Updates
+
+- **Middleware**: Next.js now uses `proxy.ts` instead of `middleware.ts` for middleware functionality. All middleware logic should be implemented in the `proxy.ts` file at the root of the project.
+- **Draft Mode**: The site supports draft mode via the `__prerender_bypass` cookie. When this cookie is present, article pages are routed to `/[locale]/articles/[slug]/preview` and fetch draft content from Contentful.
+
 ## Development Commands
 
 - **Development server**: `npm run dev` - Start Next.js development server
