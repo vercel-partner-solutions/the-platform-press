@@ -145,7 +145,7 @@ async function getCategoryParams({
   }
 
   // revalidate if lists of articles may change or via global tag
-  cacheTag(`category:${category.id}`, "category:all");
+  cacheTag("category:list", "category:all");
 
   return { slug, category, locale };
 }

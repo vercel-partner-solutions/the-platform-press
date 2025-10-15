@@ -80,7 +80,7 @@ async function MobileCategories() {
   const categories = await getCategories();
 
   // revalidate if any of the categories change or with the global tag
-  cacheTag(...categories.map((c) => `category:${c.id}`), "category");
+  cacheTag(...categories.map((c) => `category:${c.id}`), "category:all");
 
   return (
     <div>

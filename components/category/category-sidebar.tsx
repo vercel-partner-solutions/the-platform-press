@@ -16,7 +16,7 @@ export default async function CategorySidebar({
   const categories = await getCategories(draft);
 
   // revalidate if any of the categories change or via the global tag
-  cacheTag(...categories.map((c) => `category:${c.id}`), "category:all");
+  cacheTag("category:list", "category:all");
 
   return <CategoryNavigation categories={categories} />;
 }

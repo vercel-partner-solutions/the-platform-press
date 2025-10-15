@@ -41,10 +41,10 @@ export default async function HeroSection({
 
   // revalidate if article categories change, article lists may change, or via global tag
   cacheTag(
-    featuredArticle.categoryId,
-    ...secondaryArticles.map((a) => a.categoryId),
+    `category:${featuredArticle.categoryId}`,
+    ...secondaryArticles.map((a) => `category:${a.categoryId}`),
     "article:list",
-    "article:all",
+    "article:all"
   );
 
   return (

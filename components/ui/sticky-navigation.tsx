@@ -50,7 +50,7 @@ async function Categories() {
   const categories = await getCategories();
 
   // revalidate if any of the categories change or with the global tag
-  cacheTag(...categories.map((c) => `category:${c.id}`), "category");
+  cacheTag(...categories.map((c) => `category:${c.id}`), "category:all");
 
   return (
     <nav className="flex items-center gap-6 overflow-x-auto">
