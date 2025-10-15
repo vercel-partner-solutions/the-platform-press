@@ -3,6 +3,7 @@ import {
   unstable_cacheLife as cacheLife,
   unstable_cacheTag as cacheTag,
 } from "next/cache";
+import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import ArticlesGridSkeleton from "@/components/category/articles-grid-skeleton";
@@ -72,18 +73,21 @@ export async function generateStaticParams() {
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
+  const { isEnabled: draftEnabled } = await draftMode();
+
   // get cached slug and category from params to pass into CategoryArticles within Suspense
-  const { slug, category, locale } = await getCategoryParams({ params });
+  const { slug, category, locale } = await getCategoryParams({ params, draft: draftEnabled });
 
   return (
     <div className="flex-1 min-w-0">
-      <CategoryHeader params={params} />
+      <CategoryHeader params={params} draft={draftEnabled} />
       <Suspense fallback={<CategoryPageSkeleton />}>
         <CategorySearchForm categorySlug={slug} locale={locale} />
         <CategoryArticles
           category={category}
           locale={locale}
           searchParams={searchParams}
+          draft={draftEnabled}
         />
       </Suspense>
     </div>
@@ -92,15 +96,17 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
 async function CategoryHeader({
   params,
+  draft = false,
 }: {
   params: Promise<{ slug: string }>;
+  draft?: boolean;
 }) {
   "use cache: remote";
   cacheLife("max");
 
   const { slug } = await params;
 
-  const category = await getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug, draft);
 
   if (!category) {
     notFound();
@@ -119,15 +125,17 @@ async function CategoryHeader({
 
 async function getCategoryParams({
   params,
+  draft = false,
 }: {
   params: Promise<{ slug: string; locale: string }>;
+  draft?: boolean;
 }) {
   "use cache: remote";
   cacheLife("max");
 
   const { slug, locale } = await params;
 
-  const category = await getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug, draft);
 
   if (!category) {
     notFound();

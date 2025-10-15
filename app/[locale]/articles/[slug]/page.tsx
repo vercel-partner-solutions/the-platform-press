@@ -11,6 +11,7 @@ import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
+import { draftMode } from "next/headers";
 
 export async function generateMetadata({
   params,
@@ -32,7 +33,7 @@ export async function generateMetadata({
   cacheTag(
     `article:${article.id}`,
     `category:${article.categoryId}`,
-    "article:all",
+    "article:all"
   );
 
   const baseUrl = process.env.VERCEL_URL
@@ -86,7 +87,9 @@ export default async function ArticlePage({
 
   const { slug, locale } = await params;
 
-  const article = await getArticleBySlug(slug);
+  const { isEnabled: draftEnabled } = await draftMode();
+
+  const article = await getArticleBySlug(slug, draftEnabled);
 
   if (!article) {
     notFound();
@@ -96,7 +99,7 @@ export default async function ArticlePage({
   cacheTag(
     `article:${article.id}`,
     `category:${article.categoryId}`,
-    "article:all",
+    "article:all"
   );
 
   const date = new Date(article.datePublished);
@@ -112,6 +115,7 @@ export default async function ArticlePage({
     categoryId: article.categoryId,
     excludeIds: [article.id],
     limit: 2,
+    draft: draftEnabled,
   });
 
   return (
@@ -145,7 +149,7 @@ export default async function ArticlePage({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                "news article",
+                "news article"
               )}`
             }
             alt={article.title}

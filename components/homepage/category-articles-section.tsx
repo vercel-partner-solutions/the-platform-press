@@ -9,23 +9,24 @@ import CategoryArticleCard from "./category-article-card";
 export default async function CategoryArticlesSection({
   categoryId,
   sectionTitle,
-  isHomepage = false,
+  draft = false,
 }: {
   categoryId: string;
   sectionTitle: string;
-  isHomepage?: boolean;
+  draft?: boolean;
 }) {
   "use cache: remote";
   cacheLife("max");
 
-  const category = await getCategoryById(categoryId);
+  const category = await getCategoryById(categoryId, draft);
   if (!category) return null;
 
   const articles = await getArticles({
     categoryId: categoryId,
     limit: 4,
     sortBy: "datePublished",
-    ...(isHomepage && { excludeFeatured: true }),
+    excludeFeatured: true,
+    draft,
   });
 
   if (!articles || articles.length === 0) return null;

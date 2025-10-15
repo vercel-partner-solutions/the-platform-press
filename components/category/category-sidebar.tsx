@@ -5,11 +5,15 @@ import {
 import { getCategories } from "@/lib/cms";
 import CategoryNavigation from "./category-navigation";
 
-export default async function CategorySidebar() {
+export default async function CategorySidebar({
+  draft = false,
+}: {
+  draft?: boolean;
+}) {
   "use cache: remote";
   cacheLife("max");
 
-  const categories = await getCategories();
+  const categories = await getCategories(draft);
 
   // revalidate if any of the categories change or via the global tag
   cacheTag(...categories.map((c) => `category:${c.id}`), "category:all");

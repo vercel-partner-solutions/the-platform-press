@@ -4,6 +4,44 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { i18n } from "./i18n.config";
 
+export function proxy(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Check if there is any supported locale in the pathname
+  const pathnameIsMissingLocale = i18n.locales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  );
+
+  // Redirect if there is no locale
+  if (pathnameIsMissingLocale) {
+    const locale = getLocale(request);
+
+    // e.g. incoming request is /products
+    // The new URL is now /en/products
+    return NextResponse.redirect(
+      new URL(
+        `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
+        request.url
+      )
+    );
+  }
+
+  // Check for article paywall after locale is guaranteed
+  const paywallResponse = handleArticlePaywall(request, pathname);
+
+  if (paywallResponse) {
+    return paywallResponse;
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|placeholder.svg).*)",
+  ],
+};
+
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
@@ -16,7 +54,7 @@ function getLocale(request: NextRequest): string | undefined {
 
   // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
-    locales,
+    locales
   );
 
   const locale = matchLocale(languages, locales, i18n.defaultLocale);
@@ -26,9 +64,9 @@ function getLocale(request: NextRequest): string | undefined {
 
 function handleArticlePaywall(
   request: NextRequest,
-  pathname: string,
+  pathname: string
 ): NextResponse | null {
-  // Check if the path contains /articles/ pattern (but not paywall routes)
+  // Check if the path contains /articles/ pattern (but not paywall)
   const articlesMatch = pathname.match(/\/articles\/([^/]+)(?!\/paywall)$/);
 
   if (!articlesMatch || !articlesMatch[1]) {
@@ -54,43 +92,3 @@ function handleArticlePaywall(
 
   return NextResponse.rewrite(paywallUrl);
 }
-
-export function proxy(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
-
-  // Check if there is any supported locale in the pathname
-  const pathnameIsMissingLocale = i18n.locales.every(
-    (locale) =>
-      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
-  );
-
-  // Redirect if there is no locale
-  if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
-
-    // e.g. incoming request is /products
-    // The new URL is now /en-US/products
-    return NextResponse.redirect(
-      new URL(
-        `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
-        request.url,
-      ),
-    );
-  }
-
-  // Check for article paywall after locale is guaranteed
-  const paywallResponse = handleArticlePaywall(request, pathname);
-  if (paywallResponse) {
-    return paywallResponse;
-  }
-
-  // Continue with normal request
-  return NextResponse.next();
-}
-
-export const config = {
-  // Matcher ignoring `/_next/` and `/api/`
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|placeholder.svg).*)",
-  ],
-};
