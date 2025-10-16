@@ -1,4 +1,4 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-partner-solutions%2Fthe-platform-press&env=DRAFT_MODE_SECRET_TOKEN,REVALIDATE_SECRET&project-name=the-platform-press&repository-name=the-platform-press&demo-title=The%20Platform%20Press&demo-description=A%20high%20performance%20content-driven%20Next.js%20application&demo-url=https%3A%2F%2Fthe-platform-press.vercel.app)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-partner-solutions%2Fthe-platform-press&env=DRAFT_MODE_SECRET,REVALIDATE_SECRET&project-name=the-platform-press&repository-name=the-platform-press&demo-title=The%20Platform%20Press&demo-description=A%20high%20performance%20content-driven%20Next.js%20application&demo-url=https%3A%2F%2Fthe-platform-press.vercel.app)
 
 # The Platform Press
 
@@ -102,6 +102,6 @@ Your app should now be running on [http://localhost:3000](http://localhost:3000)
 
 Key environment variables for configuration:
 
-- `DRAFT_MODE_SECRET_TOKEN` - Secret token for draft mode authentication
+- `DRAFT_MODE_SECRET` - Secret token for draft mode authentication
 - `REVALIDATE_SECRET` - Secret token for on-demand revalidation
 - `ENABLE_DRAFT_MODE_DEV` - Uncomment to enable draft mode API in development (optional)
