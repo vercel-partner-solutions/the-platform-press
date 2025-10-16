@@ -18,11 +18,11 @@ export async function GET(request: Request) {
   const slug = searchParams.get("slug");
   const locale = searchParams.get("locale") || "en";
 
-  if (!process.env.DRAFT_MODE_SECRET_TOKEN) {
+  if (!process.env.DRAFT_MODE_SECRET) {
     return new Response("Draft mode secret not configured", { status: 500 });
   }
 
-  if (secret !== process.env.DRAFT_MODE_SECRET_TOKEN) {
+  if (secret !== process.env.DRAFT_MODE_SECRET) {
     return new Response("Invalid token", { status: 401 });
   }
 
