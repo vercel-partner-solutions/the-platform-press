@@ -9,7 +9,7 @@ import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { StickyNavigation } from "@/components/ui/sticky-navigation";
 import { i18n } from "@/i18n.config";
-import { LivePreviewProvider } from "@/components/contentful-live-preview-provider";
+import { LivePreviewProvider } from "@/lib/cms/contentful-live-preview-provider";
 import { draftMode } from "next/headers";
 
 const poppins = Poppins({
