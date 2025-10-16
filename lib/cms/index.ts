@@ -1,4 +1,5 @@
 import type { Document } from "@contentful/rich-text-types";
+import { encodeGraphQLResponse } from "@contentful/live-preview";
 import type { Article, Category } from "../types";
 
 // Special category ID for "ALL" category - shows all articles when selected
@@ -56,6 +57,7 @@ interface ContentfulArticle {
 interface ContentfulResponse<T> {
   data: T;
   errors?: any[];
+  extensions?: any;
 }
 
 interface ArticleCollection {
@@ -73,7 +75,7 @@ interface CategoryCollection {
 }
 
 const GET_ARTICLES_QUERY = `
-  query GetArticles($limit: Int, $skip: Int, $where: ArticleFilter, $preview: Boolean, $order: [ArticleOrder]) {
+  query GetArticles($limit: Int, $skip: Int, $where: ArticleFilter, $preview: Boolean, $order: [ArticleOrder]) @contentSourceMaps {
     articleCollection(limit: $limit, skip: $skip, where: $where, preview: $preview, order: $order) {
       total
       items {
@@ -142,7 +144,7 @@ const GET_ARTICLES_QUERY = `
 `;
 
 const GET_ARTICLE_BY_SLUG_QUERY = `
-  query GetArticleBySlug($slug: String!, $preview: Boolean) {
+  query GetArticleBySlug($slug: String!, $preview: Boolean) @contentSourceMaps {
     articleCollection(where: { slug: $slug }, limit: 1, preview: $preview) {
       items {
         sys {
@@ -220,7 +222,7 @@ const GET_ARTICLE_BY_SLUG_QUERY = `
 `;
 
 const GET_CATEGORIES_QUERY = `
-  query GetCategories($preview: Boolean) {
+  query GetCategories($preview: Boolean) @contentSourceMaps {
     categoryCollection(preview: $preview, order: [title_ASC]) {
       total
       items {
@@ -235,7 +237,7 @@ const GET_CATEGORIES_QUERY = `
 `;
 
 const GET_CATEGORY_BY_SLUG_QUERY = `
-  query GetCategoryBySlug($slug: String!, $preview: Boolean) {
+  query GetCategoryBySlug($slug: String!, $preview: Boolean) @contentSourceMaps {
     categoryCollection(where: { slug: $slug }, limit: 1, preview: $preview) {
       items {
         sys {
@@ -249,7 +251,7 @@ const GET_CATEGORY_BY_SLUG_QUERY = `
 `;
 
 const GET_CATEGORY_BY_ID_QUERY = `
-  query GetCategoryById($id: String!, $preview: Boolean) {
+  query GetCategoryById($id: String!, $preview: Boolean) @contentSourceMaps {
     categoryCollection(where: { sys: { id: $id } }, limit: 1, preview: $preview) {
       items {
         sys {
@@ -311,6 +313,15 @@ async function fetchContent<T = any>(
   if (json.errors) {
     console.error("GraphQL errors:", json.errors);
     throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`);
+  }
+
+  // Apply content source maps encoding in draft mode
+  if (draft && json.extensions) {
+    const encodedResponse = encodeGraphQLResponse({
+      data: json.data,
+      extensions: json.extensions,
+    });
+    return encodedResponse.data;
   }
 
   return json.data;

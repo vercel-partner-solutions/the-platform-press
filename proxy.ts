@@ -9,8 +9,7 @@ export function proxy(request: NextRequest) {
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
-    (locale) =>
-      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
   // Redirect if there is no locale
@@ -22,8 +21,8 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
-        request.url,
-      ),
+        request.url
+      )
     );
   }
 
@@ -55,7 +54,7 @@ function getLocale(request: NextRequest): string | undefined {
 
   // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
-    locales,
+    locales
   );
 
   const locale = matchLocale(languages, locales, i18n.defaultLocale);
@@ -65,7 +64,7 @@ function getLocale(request: NextRequest): string | undefined {
 
 function handleArticlePaywall(
   request: NextRequest,
-  pathname: string,
+  pathname: string
 ): NextResponse | null {
   // Check if the path contains /articles/ pattern (but not paywall)
   const articlesMatch = pathname.match(/\/articles\/([^/]+)(?!\/paywall)$/);
@@ -75,6 +74,14 @@ function handleArticlePaywall(
   }
 
   const slug = articlesMatch[1];
+
+  // Check for preview/draft mode bypass cookie first
+  const previewBypassCookie = request.cookies.get("__prerender_bypass");
+  if (previewBypassCookie) {
+    // Allow access to full article page in draft mode
+    return null;
+  }
+
   const subscriptionCookie = request.cookies.get("platform-press-subscription");
   const hasSubscription = subscriptionCookie?.value === "true";
 
