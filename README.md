@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-partner-solutions%2Fthe-platform-press%2Ftree%2Fcontentful&env=CONTENTFUL_SPACE_ID,CONTENTFUL_ACCESS_TOKEN,CONTENTFUL_PREVIEW_ACCESS_TOKEN,DRAFT_MODE_SECRET_TOKEN,REVALIDATE_SECRET,CONTENTFUL_CMA_TOKEN,ENABLE_DRAFT_MODE_DEV&project-name=the-platform-press&repository-name=the-platform-press&demo-title=The%20Platform%20Press&demo-description=A%20high%20performance%20content-driven%20Next.js%20application&demo-url=https%3A%2F%2Fthe-platform-press.vercel.app)
-=======
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-partner-solutions%2Fthe-platform-press&env=DRAFT_MODE_SECRET,REVALIDATE_SECRET&project-name=the-platform-press&repository-name=the-platform-press&demo-title=The%20Platform%20Press&demo-description=A%20high%20performance%20content-driven%20Next.js%20application&demo-url=https%3A%2F%2Fthe-platform-press.vercel.app)
->>>>>>> main
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-partner-solutions%2Fthe-platform-press%2Ftree%2Fcontentful&env=CONTENTFUL_SPACE_ID,CONTENTFUL_ACCESS_TOKEN,CONTENTFUL_PREVIEW_ACCESS_TOKEN,DRAFT_MODE_SECRET,REVALIDATE_SECRET,CONTENTFUL_CMA_TOKEN,ENABLE_DRAFT_MODE_DEV&project-name=the-platform-press&repository-name=the-platform-press&demo-title=The%20Platform%20Press&demo-description=A%20high%20performance%20content-driven%20Next.js%20application&demo-url=https%3A%2F%2Fthe-platform-press.vercel.app)
 
 # The Platform Press
 
@@ -113,7 +109,6 @@ The following is required to configure Contentful with this repository:
 
 ### Import Content with the Contentful CLI
 
-<<<<<<< HEAD
 This repository includes a Contentful space export with content model and sample content. Follow these steps to import it:
 
 ```bash
@@ -142,7 +137,7 @@ After importing the content, configure these environment variables:
 CONTENTFUL_SPACE_ID="your-space-id"
 CONTENTFUL_ACCESS_TOKEN="your-content-delivery-api-token"
 CONTENTFUL_PREVIEW_ACCESS_TOKEN="your-preview-api-token"
-DRAFT_MODE_SECRET_TOKEN="your-draft-mode-secret"
+DRAFT_MODE_SECRET="your-draft-mode-secret"
 REVALIDATE_SECRET="your-revalidation-secret"
 # Optional: For schema fetching
 CONTENTFUL_CMA_TOKEN="your-management-api-token"
@@ -176,7 +171,7 @@ To configure live preview in your Contentful space:
     ```
     https://your-domain.vercel.app/api/draft?secret={secret}&slug={entry.fields.slug}
     ```
-  - Replace `{secret}` with your actual `DRAFT_MODE_SECRET_TOKEN`
+  - Replace `{secret}` with your actual `DRAFT_MODE_SECRET`
   - The `{entry.fields.slug}` and `{locale}` placeholders will be automatically populated by Contentful
 - Select the article content type to have preview enabled
 - Save the configuration
@@ -195,8 +190,3 @@ This command:
 - Fetches all content type definitions
 - Saves them to `schema.json` for AI development tool awareness
 - Should be run whenever you update content types in Contentful
-=======
-- `DRAFT_MODE_SECRET` - Secret token for draft mode authentication
-- `REVALIDATE_SECRET` - Secret token for on-demand revalidation
-- `ENABLE_DRAFT_MODE_DEV` - Uncomment to enable draft mode API in development (optional)
->>>>>>> main
