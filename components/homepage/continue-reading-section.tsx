@@ -27,13 +27,14 @@ async function ContinueReadingCard({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=400&height=225&query=${encodeURIComponent(
-                "news",
+                "news"
               )}`
             }
             alt={article.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
+            priority
           />
         </div>
       </Link>
@@ -84,13 +85,13 @@ export default async function ContinueReadingSection({
         if (visitedSlugs.length > 0) {
           // Fetch articles by slug in parallel
           const articlePromises = visitedSlugs.map((slug) =>
-            getArticleBySlug(slug, draft),
+            getArticleBySlug(slug, draft)
           );
           const fetchedArticles = await Promise.all(articlePromises);
 
           // Filter out any undefined results
           articles = fetchedArticles.filter(
-            (article): article is Article => article !== undefined,
+            (article): article is Article => article !== undefined
           );
 
           if (articles.length > 0) {
