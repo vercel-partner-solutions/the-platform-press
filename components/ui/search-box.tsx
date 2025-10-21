@@ -4,6 +4,7 @@ import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { searchArticlesAction } from "@/app/actions/search";
 
 interface Article {
   id: number;
@@ -25,11 +26,8 @@ export function SearchBox() {
 
   const searchArticles = useCallback(
     async (searchQuery: string): Promise<Article[]> => {
-      const response = await fetch(
-        `/api/search?q=${encodeURIComponent(searchQuery)}`,
-      );
-      const data = await response.json();
-      return data.articles || [];
+      const articles = await searchArticlesAction(searchQuery);
+      return articles;
     },
     [],
   );
