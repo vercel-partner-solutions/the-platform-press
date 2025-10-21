@@ -1,25 +1,7 @@
-import type { Stock } from "@/lib/types";
-
-async function getStocks(): Promise<Stock[]> {
-  try {
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000";
-
-    const res = await fetch(`${baseUrl}/api/stocks`);
-
-    if (!res.ok) return [];
-
-    const data = await res.json();
-
-    return Array.isArray(data?.stocks) ? data.stocks : [];
-  } catch {
-    return [];
-  }
-}
+import { getStocksAction } from "@/app/actions/stocks";
 
 export async function StockTicker() {
-  const stocks = await getStocks();
+  const stocks = await getStocksAction();
 
   // The delay between each item is the total duration divided by the number of items
   const totalDuration = 20;
