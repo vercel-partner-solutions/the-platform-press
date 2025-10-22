@@ -1,5 +1,4 @@
-import { unstable_cacheTag as cacheTag } from "next/cache";
-import { cacheLife } from "next/dist/server/use-cache/cache-life";
+import { cacheTag, cacheLife } from "next/cache";
 import Link from "next/link";
 import { getCategories } from "@/lib/cms";
 

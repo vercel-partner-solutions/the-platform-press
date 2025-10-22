@@ -2,8 +2,8 @@ import { CalendarDays, Clock, UserCircle } from "lucide-react";
 import { marked } from "marked";
 import type { Metadata } from "next";
 import {
-  unstable_cacheLife as cacheLife,
-  unstable_cacheTag as cacheTag,
+  cacheLife,
+  cacheTag,
 } from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
