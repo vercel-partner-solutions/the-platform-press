@@ -1,7 +1,7 @@
 import { Menu, Search } from "lucide-react";
 import {
-  unstable_cacheLife as cacheLife,
-  unstable_cacheTag as cacheTag,
+  cacheLife,
+  cacheTag,
 } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";

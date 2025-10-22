@@ -1,7 +1,7 @@
 "use server";
 
 import type { Stock } from "@/lib/types";
-import { unstable_cacheLife as cacheLife } from "next/cache";
+import { cacheLife } from "next/cache";
 
 function getRandomDelta() {
   return (Math.random() - 0.5) * 0.1;

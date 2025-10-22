@@ -1,8 +1,8 @@
 "use server";
 
 import {
-  unstable_cacheLife as cacheLife,
-  unstable_cacheTag as cacheTag,
+  cacheLife,
+  cacheTag,
 } from "next/cache";
 import { getArticles, getCategoryBySlug } from "@/lib/cms";
 

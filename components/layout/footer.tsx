@@ -1,7 +1,7 @@
-import { unstable_cacheTag as cacheTag } from "next/cache";
-import { cacheLife } from "next/dist/server/use-cache/cache-life";
+import { cacheTag, cacheLife } from "next/cache";
 import Link from "next/link";
 import { getCategories } from "@/lib/cms";
+import YearDisplay from "./year-display";
 
 export default async function Footer() {
   return (
@@ -22,7 +22,7 @@ export default async function Footer() {
 
         <div className="pt-8 border-t border-neutral-200 text-center">
           <p className="text-sm text-neutral-700">
-            &copy; {getCurrentYear()} The Platform Press. All rights reserved.
+            &copy; <YearDisplay /> The Platform Press. All rights reserved.
           </p>
         </div>
       </div>
@@ -57,8 +57,3 @@ async function FooterCategories() {
   );
 }
 
-async function getCurrentYear() {
-  "use cache: remote";
-  cacheLife("days");
-  return new Date().getFullYear();
-}

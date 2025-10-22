@@ -1,6 +1,6 @@
 import {
-  unstable_cacheLife as cacheLife,
-  unstable_cacheTag as cacheTag,
+  cacheLife,
+  cacheTag,
 } from "next/cache";
 import CategoryArticlesList from "@/components/category/category-articles-list";
 import { getArticles } from "@/lib/cms";

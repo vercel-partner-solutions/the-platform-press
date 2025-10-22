@@ -1,4 +1,4 @@
-import { unstable_cacheLife as cacheLife } from "next/cache";
+import { cacheLife } from "next/cache";
 import type { Locale } from "@/i18n.config";
 
 export interface WeatherData {
