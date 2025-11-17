@@ -1,27 +1,15 @@
 "use server";
 
 import type { Stock } from "@/lib/types";
-import { cacheLife } from "next/cache";
-
-function getRandomDelta() {
-  return (Math.random() - 0.5) * 0.1;
-}
 
 export async function getStocksAction(): Promise<Stock[]> {
-  "use cache: remote";
-  cacheLife("seconds");
-
-  const stockSymbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
-
-  const stocks = stockSymbols.map((symbol) => {
-    const delta = getRandomDelta();
-
-    return {
-      symbol,
-      change: Number(delta.toFixed(4)),
-      isPositive: delta >= 0,
-    };
-  });
+  const stocks = [
+    { symbol: "AAPL", change: 0.0147, isPositive: true },
+    { symbol: "GOOGL", change: -0.0098, isPositive: false },
+    { symbol: "MSFT", change: 0.002, isPositive: true },
+    { symbol: "AMZN", change: 0.0071, isPositive: true },
+    { symbol: "TSLA", change: -0.005, isPositive: false },
+  ];
 
   return stocks;
 }
