@@ -31,6 +31,7 @@ export async function GET(request: Request) {
 
   // If a slug is provided, validate the article exists and redirect to it
   if (slug) {
+    // Pass draft = true to fetch draft content
     const article = await getArticleBySlug(slug, true);
 
     if (article?.slug) {

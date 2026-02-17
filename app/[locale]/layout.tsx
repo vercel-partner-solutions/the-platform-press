@@ -9,6 +9,8 @@ import Footer from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { StickyNavigation } from "@/components/ui/sticky-navigation";
 import { i18n } from "@/i18n.config";
+import { LivePreviewProvider } from "@/lib/cms/contentful-live-preview-provider";
+import { draftMode } from "next/headers";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -41,21 +43,25 @@ export default async function Layout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const { isEnabled: draftEnabled } = await draftMode();
+
   return (
     <html
       className={`${GeistSans.className} ${poppins.variable}`}
       lang={locale}
     >
-      <body className="bg-white text-black antialiased min-h-screen flex flex-col">
-        <Header locale={locale} />
-        <StickyNavigation locale={locale} />
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
-          {children}
-        </main>
-        <Footer />
-        <Analytics />
-        <SpeedInsights />
-      </body>
+      <LivePreviewProvider locale={locale} enabled={draftEnabled}>
+        <body className="bg-white text-black antialiased min-h-screen flex flex-col">
+          <Header locale={locale} />
+          <StickyNavigation locale={locale} />
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
+            {children}
+          </main>
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+        </body>
+      </LivePreviewProvider>
     </html>
   );
 }

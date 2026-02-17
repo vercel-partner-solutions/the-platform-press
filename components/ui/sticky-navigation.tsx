@@ -23,7 +23,7 @@ export async function StickyNavigation({ locale }: { locale: string }) {
             </Link>
           </div>
 
-          <div className="justify-self-center">
+          <div className="justify-self-center relative z-10">
             <Categories />
           </div>
 
@@ -57,7 +57,7 @@ async function Categories() {
       {categories.map((category) => (
         <Link
           key={category.slug}
-          href={`/category/${category.slug.toLowerCase()}`}
+          href={`/category/${category.slug}`}
           className="text-sm font-medium text-black hover:underline whitespace-nowrap"
         >
           {category.title}

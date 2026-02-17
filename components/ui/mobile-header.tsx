@@ -90,7 +90,7 @@ async function MobileCategories() {
           key={category.slug}
         >
           <Link
-            href={`/category/${category.slug.toLowerCase()}`}
+            href={`/category/${category.slug}`}
             className="w-full h-full block"
           >
             <SheetClose>{category.title}</SheetClose>

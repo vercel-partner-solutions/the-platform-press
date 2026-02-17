@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
   experimental: {
     cacheComponents: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.ctfassets.net",
+        pathname: "/**",
+      },
+    ],
+  },
   async redirects() {
     return [
       {

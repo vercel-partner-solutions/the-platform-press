@@ -1,0 +1,308 @@
+{
+  "generatedAt": "2025-09-26T21:25:51.788Z",
+  "space": "flmdq7nsj9z6",
+  "environment": "master",
+  "contentTypes": [
+    {
+      "sys": {
+        "id": "article",
+        "type": "ContentType",
+        "createdAt": "2025-09-11T22:52:28.404Z",
+        "updatedAt": "2025-09-26T21:17:44.038Z"
+      },
+      "displayField": "title",
+      "name": "Article",
+      "description": "News article content type",
+      "fields": [
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "size": {
+                "min": null,
+                "max": 256
+              }
+            }
+          ]
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "required": true,
+          "localized": true,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "excerpt",
+          "name": "Excerpt",
+          "type": "Symbol",
+          "required": true,
+          "localized": true,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "RichText",
+          "required": true,
+          "localized": true,
+          "disabled": false,
+          "validations": [
+            {
+              "enabledMarks": [
+                "bold",
+                "italic",
+                "underline",
+                "code",
+                "superscript",
+                "subscript",
+                "strikethrough"
+              ],
+              "message": "Only bold, italic, underline, code, superscript, subscript, and strikethrough marks are allowed"
+            },
+            {
+              "enabledNodeTypes": [
+                "heading-1",
+                "heading-2",
+                "heading-3",
+                "heading-4",
+                "heading-5",
+                "heading-6",
+                "ordered-list",
+                "unordered-list",
+                "hr",
+                "blockquote",
+                "embedded-entry-block",
+                "embedded-asset-block",
+                "table",
+                "asset-hyperlink",
+                "embedded-entry-inline",
+                "entry-hyperlink",
+                "hyperlink"
+              ],
+              "message": "Only heading 1, heading 2, heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to asset, inline entry, link to entry, and link to Url nodes are allowed"
+            },
+            {
+              "nodes": {}
+            }
+          ]
+        },
+        {
+          "id": "featuredImage",
+          "name": "Featured Image",
+          "type": "Link",
+          "linkType": "Asset",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "publishDate",
+          "name": "Published Date",
+          "type": "Date",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "readingTime",
+          "name": "Reading Time",
+          "type": "Integer",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "isBreakingNews",
+          "name": "Is Breaking News",
+          "type": "Boolean",
+          "required": false,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "metaDescription",
+          "name": "Meta Description",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "metaKeywords",
+          "name": "Meta Keywords",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "author",
+          "name": "Author",
+          "type": "Link",
+          "linkType": "Entry",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": [
+            {
+              "linkContentType": ["author"]
+            }
+          ]
+        },
+        {
+          "id": "category",
+          "name": "Category",
+          "type": "Link",
+          "linkType": "Entry",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": [
+            {
+              "linkContentType": ["category"]
+            }
+          ]
+        },
+        {
+          "id": "relatedArticles",
+          "name": "Related Articles",
+          "type": "Array",
+          "required": false,
+          "localized": false,
+          "disabled": false,
+          "validations": [],
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": ["article"]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "isFeatured",
+          "name": "Is Featured",
+          "type": "Boolean",
+          "required": false,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "views",
+          "name": "Views",
+          "type": "Integer",
+          "required": false,
+          "localized": false,
+          "disabled": false,
+          "validations": []
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "author",
+        "type": "ContentType",
+        "createdAt": "2025-09-11T22:55:04.413Z",
+        "updatedAt": "2025-09-11T22:55:04.627Z"
+      },
+      "displayField": "name",
+      "name": "Author",
+      "description": "",
+      "fields": [
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": [
+            {
+              "unique": true
+            }
+          ]
+        },
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "required": true,
+          "localized": true,
+          "disabled": false,
+          "validations": []
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "required": true,
+          "localized": true,
+          "disabled": false,
+          "validations": []
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "category",
+        "type": "ContentType",
+        "createdAt": "2025-09-11T22:53:55.109Z",
+        "updatedAt": "2025-09-11T22:53:55.341Z"
+      },
+      "displayField": "title",
+      "name": "Category",
+      "description": "",
+      "fields": [
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "disabled": false,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "size": {
+                "min": 1,
+                "max": 256
+              }
+            }
+          ]
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "required": true,
+          "localized": true,
+          "disabled": false,
+          "validations": []
+        }
+      ]
+    }
+  ]
+}

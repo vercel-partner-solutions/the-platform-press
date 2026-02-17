@@ -1,9 +1,12 @@
+// Opaque type to hide CMS implementation details
+export type RichTextContent = unknown;
+
 export interface Article {
   id: string;
   slug: string;
   title: string;
   excerpt: string;
-  content: string;
+  content: RichTextContent;
   imageUrl: string;
   categoryId: string;
   category?: string;
@@ -33,22 +36,4 @@ export interface Stock {
   symbol: string;
   change: number;
   isPositive: boolean;
-}
-
-export interface CMSData {
-  articles: Article[];
-}
-
-export interface CMSArticle extends Article {}
-
-export interface CMSCategory {
-  id: string;
-  slug: string;
-  title: string;
-}
-
-export interface CMSAuthor {
-  slug: string;
-  name: string;
-  title: string;
 }

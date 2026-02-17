@@ -1,5 +1,4 @@
 import { CalendarDays, Clock, UserCircle } from "lucide-react";
-import { marked } from "marked";
 import type { Metadata } from "next";
 import {
   cacheLife,
@@ -11,6 +10,7 @@ import { ArticleTracker } from "@/components/article-tracker";
 import ArticleCard from "@/components/ui/article-card";
 import CategoryBadge from "@/components/ui/category-badge";
 import { getArticleBySlug, getArticles } from "@/lib/cms";
+import { ArticleContent } from "@/lib/cms/article-content";
 import { draftMode } from "next/headers";
 
 export async function generateMetadata({
@@ -33,7 +33,7 @@ export async function generateMetadata({
   cacheTag(
     `article:${article.id}`,
     `category:${article.categoryId}`,
-    "article:all",
+    "article:all"
   );
 
   const baseUrl = process.env.VERCEL_URL
@@ -99,7 +99,7 @@ export default async function ArticlePage({
   cacheTag(
     `article:${article.id}`,
     `category:${article.categoryId}`,
-    "article:all",
+    "article:all"
   );
 
   const date = new Date(article.datePublished);
@@ -108,8 +108,6 @@ export default async function ArticlePage({
     month: "short",
     day: "numeric",
   });
-
-  const parsedContent = await marked.parse(article.content);
 
   const relatedArticles = await getArticles({
     categoryId: article.categoryId,
@@ -149,7 +147,7 @@ export default async function ArticlePage({
             src={
               article.imageUrl ||
               `/placeholder.svg?width=1200&height=675&query=${encodeURIComponent(
-                "news article",
+                "news article"
               )}`
             }
             alt={article.title}
@@ -159,13 +157,7 @@ export default async function ArticlePage({
           />
         </div>
 
-        {!previewOnly && (
-          <div
-            className="prose prose-neutral lg:prose-lg max-w-none"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: <we want to use the parsed HTML>
-            dangerouslySetInnerHTML={{ __html: parsedContent }} // Use the parsed HTML
-          />
-        )}
+        {!previewOnly && <ArticleContent content={article.content} />}
       </article>
 
       {relatedArticles.length > 0 && (
