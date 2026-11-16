@@ -3,11 +3,15 @@ import ArticlePage, { generateMetadata, generateStaticParams } from "../page";
 
 export { generateMetadata, generateStaticParams };
 
-export default function PaywalledArticlePage(props: any) {
+export default function PaywalledArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}) {
   return (
     <div>
       <PaywallWrapper previewLength={500}>
-        <ArticlePage {...props} previewOnly />
+        <ArticlePage params={params} previewOnly />
       </PaywallWrapper>
       <SubscribeModal />
     </div>
